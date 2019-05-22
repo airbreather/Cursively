@@ -4,7 +4,7 @@
   <PropertyGroup>
     <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(MSBuildThisFileDirectory)</SolutionDir>
 
-    <WarningsAsErrors>true</WarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentation>true</GenerateDocumentation>
 
     <LangVersion>7.3</LangVersion>
