@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(MSBuildThisFileDirectory)</SolutionDir>
+
+    <WarningsAsErrors>true</WarningsAsErrors>
+    <GenerateDocumentation>true</GenerateDocumentation>
+
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+</Project>
