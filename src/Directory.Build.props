@@ -4,7 +4,15 @@
   <Import Project="../Directory.Build.props" />
 
   <PropertyGroup>
-    <GenerateDocumentation>true</GenerateDocumentation>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <Company>airbreather</Company>
+    <Copyright>Copyright © 2019 - $([System.DateTime]::UtcNow.Year) airbreather</Copyright>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
