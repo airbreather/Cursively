@@ -7,6 +7,7 @@
   <PropertyGroup>
     <PackageId>Cursively</PackageId>
     <Title>Cursively - Fast CSV Processing</Title>
+    <Description>A .NET library for RFC4180-compliant CSV processing that's still fast and fault-tolerant.</Description>
     <Authors>airbreather</Authors>
     <Owners>airbreather</Owners>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
