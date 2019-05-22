@@ -146,10 +146,10 @@ namespace Cursively
         private enum ParserFlags : byte
         {
             None,
-            ReadAnythingOnCurrentLine           = 0b00000001,
-            ReadAnythingInCurrentField          = 0b00000010,
-            CurrentFieldStartedWithQuote        = 0b00000100,
-            QuotedFieldDataEnded                = 0b00001000,
+            ReadAnythingOnCurrentLine = 0b00000001,
+            ReadAnythingInCurrentField = 0b00000010,
+            CurrentFieldStartedWithQuote = 0b00000100,
+            QuotedFieldDataEnded = 0b00001000,
             CutAtPotentiallyTerminalDoubleQuote = 0b00010000,
         }
 

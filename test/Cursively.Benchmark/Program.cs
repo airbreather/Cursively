@@ -58,7 +58,7 @@ namespace Cursively.Benchmark
             }
         }
 
-        static int Main()
+        private static int Main()
         {
             var prog = new Program();
             foreach (var csvFile in CsvFiles)
@@ -88,11 +88,9 @@ namespace Cursively.Benchmark
             public override string ToString() => FileName;
         }
 
-        static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null)
-        {
-            return Array.ConvertAll(Directory.GetFiles(Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files"), "*.csv"),
-                                    fullPath => new CsvFile(fullPath));
-        }
+        private static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null) =>
+            Array.ConvertAll(Directory.GetFiles(Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files"), "*.csv"),
+                             fullPath => new CsvFile(fullPath));
 
         private sealed class RowCountingVisitor : CsvReaderVisitorBase
         {
@@ -100,7 +98,7 @@ namespace Cursively.Benchmark
 
             public long RowCount { get; private set; }
 
-            public override void VisitEndOfRecord() => ++this.RowCount;
+            public override void VisitEndOfRecord() => ++RowCount;
 
             public override void VisitEndOfField(ReadOnlySpan<byte> chunk) { }
 
