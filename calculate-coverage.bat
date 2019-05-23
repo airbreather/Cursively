@@ -2,8 +2,8 @@ pushd %~dp0
 nuget install OpenCover -Version 4.7.922 -OutputDirectory OpenCover\tools
 nuget install ReportGenerator -Version 4.1.4 -OutputDirectory OpenCover\tools
 dotnet build -c Release
-FOR /F "tokens=* USEBACKQ" %%D IN (`where dotnet`) DO (
-SET DotNetPath=%%D
+for /F "tokens=* USEBACKQ" %%D in (`where dotnet`) do (
+set DotNetPath=%%D
 )
 OpenCover\tools\OpenCover.4.7.922\tools\OpenCover.Console.exe ^
     "-target:%DotNetPath%" ^
