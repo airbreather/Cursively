@@ -10,9 +10,9 @@ namespace Cursively
     /// <para>
     /// The byte stream is tokenized according to the rules of the ASCII encoding.  This makes it
     /// compatible with any encoding that encodes 0x0A, 0x0D, 0x22, and 0x2C the same way that ASCII
-    /// encodes them.  Windows code pages and UTF-8 are notable examples of acceptable encodings.
+    /// encodes them.  UTF-8 and Extended ASCII SBCS are notable examples of acceptable encodings.
     /// UTF-16 is a notable example of an unacceptable encoding; trying to use this class to process
-    /// text encoded in any other encoding will yield undesirable results without any errors.
+    /// text encoded in an unacceptable encoding will yield undesirable results without any errors.
     /// </para>
     /// <para>
     /// All bytes that appear in the stream except 0x0A, 0x0D, 0x22, and 0x2C are unconditionally
