@@ -369,8 +369,8 @@ namespace Cursively
             {
                 case QUOTE:
                     // the previous double quote was actually there to escape this double quote.  we
-                    // didn't copy the double quote into our cut buffer last time because we weren't
-                    // sure.  well, we're sure now, so go ahead copy it.
+                    // didn't visit the double-quote last time because we weren't sure.  well, we're
+                    // sure now, so go ahead and do it.
                     visitor.VisitPartialFieldContents(readBuffer.Slice(0, 1));
 
                     // we processed the double quote, so main loop should resume at the next byte.
