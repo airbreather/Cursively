@@ -185,7 +185,7 @@ namespace Cursively
                 {
                     // most of the time, we should be able to fully process each field in the same
                     // loop iteration that we first start reading it.  the most prominent exception
-                    // is that 
+                    // is when we encounter a quoted field.
                     PickUpFromLastTime(ref chunk, visitor);
                     continue;
                 }
