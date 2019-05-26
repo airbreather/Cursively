@@ -69,7 +69,7 @@ public sealed class MyVisitor : CsvReaderVisitorBase
     private void VisitFieldContents(ReadOnlySpan<byte> chunk, bool flush)
     {
         int charCount = _utf8Decoder.GetCharCount(chunk, flush);
-        if (charCount + _bufferConsumed < _buffer.Length)
+        if (charCount + _bufferConsumed <= _buffer.Length)
         {
             _utf8Decoder.GetChars(chunk, new Span<char>(_buffer, _bufferConsumed, charCount), flush);
             _bufferConsumed += charCount;
