@@ -10,7 +10,7 @@ A fast, [RFC 4180](https://tools.ietf.org/html/rfc4180)-conforming CSV reading l
     - Call `CsvTokenizer.ProcessEndOfStream` after the last chunk of the file.
 
 ## Example
-This demonstrates using Cursively to asynchronously write the details of a particular UTF-8 encoded file to the console.
+This demonstrates using Cursively to write the details of a particular UTF-8 encoded file to the console.
 
 ```csharp
 public static void ProcessCsvFile(string csvFilePath)
