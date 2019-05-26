@@ -166,7 +166,7 @@ any of the tokens.</p>
     <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvReaderVisitorBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L74">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L80">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorBase_VisitEndOfField_" data-uid="Cursively.CsvReaderVisitorBase.VisitEndOfField*"></a>
   <h4 id="Cursively_CsvReaderVisitorBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})">VisitEndOfField(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -212,7 +212,7 @@ call, if the field&apos;s entire data is contained within the given chunk.
     <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvReaderVisitorBase_VisitEndOfRecord.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorBase.VisitEndOfRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L89">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L95">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorBase_VisitEndOfRecord_" data-uid="Cursively.CsvReaderVisitorBase.VisitEndOfRecord*"></a>
   <h4 id="Cursively_CsvReaderVisitorBase_VisitEndOfRecord" data-uid="Cursively.CsvReaderVisitorBase.VisitEndOfRecord">VisitEndOfRecord()</h4>
@@ -238,7 +238,7 @@ called directly after a call to this method.
     <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L54">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvReaderVisitorBase.cs/#L60">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_" data-uid="Cursively.CsvReaderVisitorBase.VisitPartialFieldContents*"></a>
   <h4 id="Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})">VisitPartialFieldContents(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -279,7 +279,16 @@ called directly after a call to this method.
 There are multiple reasons why this method may be called instead of going straight to
 calling <a class="xref" href="Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__">VisitEndOfField(ReadOnlySpan&lt;Byte&gt;)</a>:
 </p>
-<ol><li></li><li></li><li></li></ol>
+<ol><li>
+Field is split across multiple read buffer chunks, or else it runs up to the very end of
+a read buffer chunk, but we can&apos;t prove it without the first byte of the next chunk or a
+<a class="xref" href="Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_">ProcessEndOfStream(CsvReaderVisitorBase)</a> call.
+</li><li>
+Quoted field contains a literal quote that was escaped in the original stream, and so we
+cannot yield the entire field data as-is.
+</li><li>
+Stream does not conform to RFC 4180, and optimizing such streams to avoid this case.
+</li></ol>
 </div>
 </article>
           </div>
