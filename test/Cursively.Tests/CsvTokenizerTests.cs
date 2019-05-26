@@ -94,7 +94,7 @@ namespace Cursively.Tests
 
         private static byte[][] VaryLineEndings(ReadOnlySpan<byte> fileData, int randomSeed)
         {
-            var resultLists = new List<byte>[]
+            List<byte>[] resultLists =
             {
                 new List<byte>(),
                 new List<byte>(),
@@ -104,7 +104,7 @@ namespace Cursively.Tests
                 new List<byte>(),
             };
 
-            var lineEndings = new byte[][]
+            byte[][] lineEndings =
             {
                 new byte[] { (byte)'\r' },
                 new byte[] { (byte)'\n' },

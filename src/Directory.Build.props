@@ -4,7 +4,26 @@
   <Import Project="../Directory.Build.props" />
 
   <PropertyGroup>
-    <GenerateDocumentation>true</GenerateDocumentation>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <Company>airbreather</Company>
+    <Copyright>Copyright © 2019 - $([System.DateTime]::UtcNow.Year) airbreather</Copyright>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Turn off build log spam from GitVersionTask. -->
+    <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
+
+    <!-- Turn off the internal static class that GitVersionTask embeds, which we don't use. -->
+    <GenerateGitVersionInformation>false</GenerateGitVersionInformation>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="5.0.0-beta3-4" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>

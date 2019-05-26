@@ -4,6 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>Cursively</PackageId>
+    <Title>Cursively - Fast CSV Processing</Title>
+    <Description>A .NET library for RFC4180-compliant CSV processing that's still fast and fault-tolerant.</Description>
+    <Authors>airbreather</Authors>
+    <Owners>airbreather</Owners>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>csv;comma;separated;value</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.Memory" Version="4.5.3" />
   </ItemGroup>

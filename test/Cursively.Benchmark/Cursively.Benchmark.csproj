@@ -4,8 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.2;net472</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
