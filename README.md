@@ -1,13 +1,12 @@
 # Cursively
 A fast, [RFC 4180](https://tools.ietf.org/html/rfc4180)-conforming CSV reading library for .NET.  Written in C#.
 
-## Documentation
-Documentation is currently being published as [GitHub Pages](https://airbreather.github.io/Cursively/index.html).
-
-## Project status
 | License | CI (AppVeyor) | NuGet | MyGet (pre-release) |
 | ------- | ------------- | ----- | ------------------- |
 | [![License](https://img.shields.io/github/license/airbreather/Cursively.svg)](https://github.com/airbreather/Cursively/blob/develop/LICENSE.md) | [![CI](https://ci.appveyor.com/api/projects/status/aqr1kmj9qqfx6ple?svg=true)](https://ci.appveyor.com/project/airbreather/Cursively) | [![NuGet](https://img.shields.io/nuget/v/Cursively.svg)](https://www.nuget.org/packages/Cursively/) | [![MyGet](https://img.shields.io/myget/airbreather/vpre/Cursively.svg?style=flat)](https://myget.org/feed/airbreather/package/nuget/Cursively) |
+
+## Documentation
+Documentation is currently being published as [GitHub Pages](https://airbreather.github.io/Cursively/index.html).
 
 ## Usage
 1. Create a subclass of `CsvReaderVisitorBase` with your own logic.
