@@ -19,12 +19,16 @@ namespace Cursively.Tests
 
         public static IEnumerable<object[]> TestCsvFiles =>
             from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv")
+            select new object[] { filePath };
+
+        public static IEnumerable<object[]> TestCsvFilesWithChunkLengths =>
+            from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv")
             let fileName = Path.GetFileNameWithoutExtension(filePath)
             from chunkLength in TestChunkLengths
             select new object[] { fileName, chunkLength };
 
         [Theory]
-        [MemberData(nameof(TestCsvFiles))]
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
         public void NullVisitorShouldBeFine(string fileName, int chunkLength)
         {
             // arrange
@@ -46,7 +50,7 @@ namespace Cursively.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TestCsvFiles))]
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
         public void CsvTokenizationShouldMatchCsvHelper(string fileName, int chunkLength)
         {
             // arrange
@@ -62,6 +66,22 @@ namespace Cursively.Tests
                 var expected = TokenizeCsvFileUsingCsvHelper(fileData);
                 Assert.Equal(expected, actual);
             }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCsvFiles))]
+        public void MemoryMappedCsvShouldMatchCsvHelper(string filePath)
+        {
+            // arrange
+            var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
+
+            // act
+            Csv.ProcessMemoryMappedFile(filePath, visitor);
+            var actual = visitor.Lines;
+
+            // assert
+            var expected = TokenizeCsvFileUsingCsvHelper(File.ReadAllBytes(filePath));
+            Assert.Equal(expected, actual);
         }
 
         private static List<string[]> TokenizeCsvFileUsingMine(ReadOnlySpan<byte> fileData, int chunkLength)

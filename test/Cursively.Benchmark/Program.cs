@@ -11,32 +11,28 @@ using CsvHelper.Configuration;
 
 namespace Cursively.Benchmark
 {
-    [ClrJob]
-    [CoreJob]
-    [CoreRtJob]
-    [GcServer(true)]
-    [MemoryDiagnoser]
+    [ClrJob, CoreJob, GcServer(true), MemoryDiagnoser]
     public class Program
     {
         public static CsvFile[] CsvFiles => GetCsvFiles();
 
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(CsvFiles))]
-        public void NopUsingCursively(CsvFile csvFile)
-        {
-            var tokenizer = new CsvTokenizer();
-            tokenizer.ProcessNextChunk(csvFile.FileData, null);
-            tokenizer.ProcessEndOfStream(null);
-        }
-
-        [Benchmark]
-        [ArgumentsSource(nameof(CsvFiles))]
-        public long CountRowsUsingCursively(CsvFile csvFile)
+        public long CountRowsUsingCursivelyByteArray(CsvFile csvFile)
         {
             var visitor = new RowCountingVisitor();
             var tokenizer = new CsvTokenizer();
             tokenizer.ProcessNextChunk(csvFile.FileData, visitor);
             tokenizer.ProcessEndOfStream(visitor);
+            return visitor.RowCount;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(CsvFiles))]
+        public long CountRowsUsingCursivelyWithMemoryMappedFile(CsvFile csvFile)
+        {
+            var visitor = new RowCountingVisitor();
+            Csv.ProcessMemoryMappedFile(csvFile.FullPath, visitor);
             return visitor.RowCount;
         }
 
@@ -63,7 +59,7 @@ namespace Cursively.Benchmark
             var prog = new Program();
             foreach (var csvFile in CsvFiles)
             {
-                if (prog.CountRowsUsingCursively(csvFile) != prog.CountRowsUsingCsvHelper(csvFile))
+                if (prog.CountRowsUsingCursivelyByteArray(csvFile) != prog.CountRowsUsingCsvHelper(csvFile))
                 {
                     Console.Error.WriteLine($"Failed on {csvFile}.");
                     return 1;
