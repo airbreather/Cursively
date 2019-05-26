@@ -38,16 +38,22 @@ namespace Cursively
         /// </para>
         /// <list type="number">
         /// <item>
+        /// <description>
         /// Field is split across multiple read buffer chunks, or else it runs up to the very end of
         /// a read buffer chunk, but we can't prove it without the first byte of the next chunk or a
         /// <see cref="CsvTokenizer.ProcessEndOfStream"/> call.
+        /// </description>
         /// </item>
         /// <item>
+        /// <description>
         /// Quoted field contains a literal quote that was escaped in the original stream, and so we
         /// cannot yield the entire field data as-is.
+        /// </description>
         /// </item>
         /// <item>
+        /// <description>
         /// Stream does not conform to RFC 4180, and optimizing such streams to avoid this case.
+        /// </description>
         /// </item>
         /// </list>
         /// </remarks>
