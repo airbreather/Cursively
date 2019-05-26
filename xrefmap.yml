@@ -1,0 +1,101 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: Cursively
+  name: Cursively
+  href: api/Cursively.html
+  commentId: N:Cursively
+  fullName: Cursively
+  nameWithType: Cursively
+- uid: Cursively.CsvReaderVisitorBase
+  name: CsvReaderVisitorBase
+  href: api/Cursively.CsvReaderVisitorBase.html
+  commentId: T:Cursively.CsvReaderVisitorBase
+  fullName: Cursively.CsvReaderVisitorBase
+  nameWithType: CsvReaderVisitorBase
+- uid: Cursively.CsvReaderVisitorBase.Null
+  name: "Null"
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_Null
+  commentId: F:Cursively.CsvReaderVisitorBase.Null
+  fullName: Cursively.CsvReaderVisitorBase.Null
+  nameWithType: CsvReaderVisitorBase.Null
+- uid: Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})
+  name: VisitEndOfField(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitEndOfField(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorBase.VisitEndOfField(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorBase.VisitEndOfField(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorBase.VisitEndOfField(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorBase.VisitEndOfField*
+  name: VisitEndOfField
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitEndOfField_
+  commentId: Overload:Cursively.CsvReaderVisitorBase.VisitEndOfField
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorBase.VisitEndOfField
+  nameWithType: CsvReaderVisitorBase.VisitEndOfField
+- uid: Cursively.CsvReaderVisitorBase.VisitEndOfRecord
+  name: VisitEndOfRecord()
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitEndOfRecord
+  commentId: M:Cursively.CsvReaderVisitorBase.VisitEndOfRecord
+  fullName: Cursively.CsvReaderVisitorBase.VisitEndOfRecord()
+  nameWithType: CsvReaderVisitorBase.VisitEndOfRecord()
+- uid: Cursively.CsvReaderVisitorBase.VisitEndOfRecord*
+  name: VisitEndOfRecord
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitEndOfRecord_
+  commentId: Overload:Cursively.CsvReaderVisitorBase.VisitEndOfRecord
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorBase.VisitEndOfRecord
+  nameWithType: CsvReaderVisitorBase.VisitEndOfRecord
+- uid: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})
+  name: VisitPartialFieldContents(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitPartialFieldContents(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorBase.VisitPartialFieldContents(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorBase.VisitPartialFieldContents(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents*
+  name: VisitPartialFieldContents
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_
+  commentId: Overload:Cursively.CsvReaderVisitorBase.VisitPartialFieldContents
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents
+  nameWithType: CsvReaderVisitorBase.VisitPartialFieldContents
+- uid: Cursively.CsvTokenizer
+  name: CsvTokenizer
+  href: api/Cursively.CsvTokenizer.html
+  commentId: T:Cursively.CsvTokenizer
+  fullName: Cursively.CsvTokenizer
+  nameWithType: CsvTokenizer
+- uid: Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)
+  name: ProcessEndOfStream(CsvReaderVisitorBase)
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvTokenizer.ProcessEndOfStream(CsvReaderVisitorBase)
+- uid: Cursively.CsvTokenizer.ProcessEndOfStream*
+  name: ProcessEndOfStream
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_
+  commentId: Overload:Cursively.CsvTokenizer.ProcessEndOfStream
+  isSpec: "True"
+  fullName: Cursively.CsvTokenizer.ProcessEndOfStream
+  nameWithType: CsvTokenizer.ProcessEndOfStream
+- uid: Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan{System.Byte},Cursively.CsvReaderVisitorBase)
+  name: ProcessNextChunk(ReadOnlySpan<Byte>, CsvReaderVisitorBase)
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan{System.Byte},Cursively.CsvReaderVisitorBase)
+  name.vb: ProcessNextChunk(ReadOnlySpan(Of Byte), CsvReaderVisitorBase)
+  fullName: Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan<System.Byte>, Cursively.CsvReaderVisitorBase)
+  fullName.vb: Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan(Of System.Byte), Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvTokenizer.ProcessNextChunk(ReadOnlySpan<Byte>, CsvReaderVisitorBase)
+  nameWithType.vb: CsvTokenizer.ProcessNextChunk(ReadOnlySpan(Of Byte), CsvReaderVisitorBase)
+- uid: Cursively.CsvTokenizer.ProcessNextChunk*
+  name: ProcessNextChunk
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessNextChunk_
+  commentId: Overload:Cursively.CsvTokenizer.ProcessNextChunk
+  isSpec: "True"
+  fullName: Cursively.CsvTokenizer.ProcessNextChunk
+  nameWithType: CsvTokenizer.ProcessNextChunk

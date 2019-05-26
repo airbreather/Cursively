@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Cursively | Cursively </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Cursively | Cursively ">
+    <meta name="generator" content="docfx 2.42.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="cursively">Cursively</h1>
+
+<p>A fast, <a href="https://tools.ietf.org/html/rfc4180">RFC 4180</a>-conforming CSV reading library for .NET.  Written in C#.</p>
+<p>Fully supports all UTF-8 encoded byte streams.</p>
+<ul>
+<li>Other encodings will work as well, as long as the bytes <code>0x0A</code>, <code>0x0D</code>, <code>0x22</code>, and <code>0x2C</code> are all guaranteed to mean the same thing that they mean in ASCII / UTF-8, and as long as the encoding defines no other byte sequences which identify the Unicode code points for <code>'\n'</code>, <code>'\r'</code>, <code>'&quot;'</code>, or <code>','</code>, respectively.</li>
+<li>In practice, this means that most &quot;Extended ASCII&quot; code pages will probably work, probably including all SBCS.  Many &quot;Extended ASCII&quot; DBCS will probably work too, but it looks like Shift-JIS will <em>not</em> work.</li>
+<li>Notably, this library will fail to yield the correct result when used with byte streams encoded in any variant of UTF-16 or UTF-32, even with a BOM header.  If you require that support, there are other libraries that should work for you.</li>
+</ul>
+<p>Fully supports all streams that completely conform to the RFC 4180 format, and defines rules for how to handle streams that break certain rules of RFC 4180 in a way that seems to be consistent with other popular tools, at a minor speed penalty.</p>
+<p>This library exists because the original developer was unsatisfied with the performance characteristics of raw CSV processing tools.  Everything out there seemed to have some combination of these flaws:</p>
+<ol>
+<li>Tons of managed heap allocations on hot paths, often baked into the API requirements</li>
+<li>Decoding to UTF-16LE <strong>before</strong> scanning for critical bytes, which could be considered a subset of:</li>
+<li>The design forces a ton of processing to happen on the input which the caller might not even care about</li>
+<li>Omitting important parts of RFC 4180</li>
+<li>Disappointing options for mitigating DDoS risk</li>
+</ol>
+<p>&quot;RFC 4180 over UTF-8&quot; is a very simple byte stream format, and the state machine requires only a few extra states to define how to handle all UTF-8 streams that are non-RFC 4180, so it seemed odd that there wasn't a reader without these flaws.</p>
+<p>With Cursively,</p>
+<ol>
+<li>each stream only strictly requires a grand total of two objects to be allocated on the managed heap*,
+<ul>
+<li>*in case this is too much, both could be reset and put into a pool to be reused for processing other streams</li>
+</ul>
+</li>
+<li>processing happens directly on the input bytes (no decoding is done by Cursively itself),</li>
+<li>the only processing that Cursively necessarily does is the bare minimum needed to describe the data to the caller,</li>
+<li>inputs that conform to RFC 4180* are processed according to all the rules of RFC 4180, and
+<ul>
+<li>*inputs that do not conform to RFC 4180 are handled according to consistent, intuitive rules</li>
+</ul>
+</li>
+<li>there is a very low risk* of DDoS directly from using Cursively, and the caller has the tools that they need in order to prevent (or respond to) attacks in a more &quot;natural&quot; way than other CSV libraries that the developer has seen.
+<ul>
+<li>*There is no such thing as &quot;risk-free&quot; in our world.  Cursively itself cannot eliminate the risk of attacks that use it as a vector to exploit defects in CoreFX / C# compiler / runtime / OS / hardware.</li>
+</ul>
+</li>
+</ol>
+<p>Future enhancements may add support for byte streams in other encodings if there's demand for it, but not at the expense of anything that matters to the &quot;RFC 4180 over UTF-8&quot; use case.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/airbreather/Cursively/blob/develop/doc/index.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

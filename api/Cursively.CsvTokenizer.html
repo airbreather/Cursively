@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CsvTokenizer
+   | Cursively </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CsvTokenizer
+   | Cursively ">
+    <meta name="generator" content="docfx 2.42.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Cursively.CsvTokenizer">
+  
+  
+  <h1 id="Cursively_CsvTokenizer" data-uid="Cursively.CsvTokenizer" class="text-break">Class CsvTokenizer
+  </h1>
+  <div class="markdown level0 summary"><p>Tokenizes a byte stream into CSV fields.  The processing follows the guidelines set out in
+RFC 4180 unless and until the stream proves to be in an incompatible format, in which case a
+set of additional rules kick in to ensure that all streams are still compatible.</p>
+<p>
+The byte stream is tokenized according to the rules of the ASCII encoding.  This makes it
+compatible with any encoding that encodes 0x0A, 0x0D, 0x22, and 0x2C the same way that ASCII
+encodes them.  UTF-8 and Extended ASCII SBCS are notable examples of acceptable encodings.
+UTF-16 is a notable example of an unacceptable encoding; trying to use this class to process
+text encoded in an unacceptable encoding will yield undesirable results without any errors.
+</p>
+<p>
+All bytes that appear in the stream except 0x0A, 0x0D, 0x22, and 0x2C are unconditionally
+treated as data and passed through as-is.  It is the consumer&apos;s responsibility to handle (or
+not handle) NUL bytes, invalid UTF-8, leading UTF-8 BOM, or any other quirks that come with
+the territory of text processing.
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">CsvTokenizer</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#System_Object_Equals_System_Object_System_Object_">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#System_Object_GetHashCode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#System_Object_GetType">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#System_Object_MemberwiseClone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#System_Object_ReferenceEquals_System_Object_System_Object_">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#System_Object_ToString">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Cursively.html">Cursively</a></h6>
+  <h6><strong>Assembly</strong>: Cursively.dll</h6>
+  <h5 id="Cursively_CsvTokenizer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CsvTokenizer</code></pre>
+  </div>
+  <h5 id="Cursively_CsvTokenizer_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>
+Each instance of this class expects to process all data from one stream, represented as zero
+or more <a class="xref" href="Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase_">ProcessNextChunk(ReadOnlySpan&lt;Byte&gt;, CsvReaderVisitorBase)</a> followed by one <a class="xref" href="Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_">ProcessEndOfStream(CsvReaderVisitorBase)</a>,
+before moving on to another stream.  An instance may be reused after a stream has been fully
+processed, but each instance is also <strong>very</strong> lightweight, so it is recommended
+that callers simply create a new instance for each stream that needs to be processed.
+</p>
+<p>
+RFC 4180 leaves a lot of wiggle room for implementers.  The following section explains how
+this implementation resolves ambiguities in the spec, explains where and why we deviate from
+it, and offers clarifying notes where the spec appears to have &quot;gotchas&quot;, in the order that
+the relevant items appear in the spec, primarily modeled off of how Josh Close&apos;s CsvHelper
+library handles the same situations:
+</p>
+<ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
+<p>
+Finally, the spec has a lot to say about double quotes.  This implementation follows the
+rules that it expressly lays out, but there are some &quot;gotchas&quot; that follow from the spec
+leaving it open-ended how implementations should deal with various streams that include
+double quotes which do not completely enclose fields, resolved as follows:
+</p>
+<p>
+If a double quote is encountered at the very beginning of a field, then all characters up
+until the next unescaped double quote or the end of the stream (whichever comes first) are
+considered to be part of the data for that field (we do translate escaped double quotes for
+convenience).  This includes line ending characters, even though Excel seems to only make
+that happen if the field counts matching up.  If parsing stopped at an unescaped double
+quote, but there are still more bytes after that double quote before the next delimiter,
+then all those bytes will be treated verbatim as part of the field&apos;s data (double quotes are
+no longer special at all for the remainder of the field).
+</p>
+<p>
+Double quotes encountered at any other point are included verbatim as part of the field with
+no special processing.
+</p>
+<p>
+<example>
+<pre><code>var visitor = new MyVisitorSubclass();
+var tokenizer = new CsvTokenizer();
+tokenizer.ProcessNextChunk(File.ReadAllBytes(&quot;...&quot;), visitor);
+tokenizer.ProcessEndOfStream(visitor);</code></pre>
+</example>
+</p>
+<p>
+<example>
+<pre><code>using (var stream = File.OpenRead(&quot;...&quot;))
+{
+    var visitor = new MyVisitorSubclass();
+    var tokenizer = new CsvTokenizer();
+    var buffer = new byte[81920];
+    int lastRead;
+    while ((lastRead = stream.Read(buffer, 0, buffer.Length)) != 0)
+    {
+        tokenizer.ProcessNextChunk(new ReadOnlySpan&lt;byte>(buffer, 0, lastRead), visitor);
+    }
+<pre><code>tokenizer.ProcessEndOfStream(visitor);
+</code></pre>
+<p>}</code></pre>
+</example></p>
+<p>
+</div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_.md&amp;value=---%0Auid%3A%20Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvTokenizer.cs/#L248">View Source</a>
+  </span>
+  <a id="Cursively_CsvTokenizer_ProcessEndOfStream_" data-uid="Cursively.CsvTokenizer.ProcessEndOfStream*"></a>
+  <h4 id="Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_" data-uid="Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)">ProcessEndOfStream(CsvReaderVisitorBase)</h4>
+  <div class="markdown level1 summary"><p>Informs this tokenizer that the last chunk of data in the stream has been read, and so
+we should make any final interactions with the <a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a> and
+reset our state to prepare for the next stream.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessEndOfStream(CsvReaderVisitorBase visitor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a></td>
+        <td><span class="parametername">visitor</span></td>
+        <td><p>The <a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a> to interact with, or <span class="xref">null</span> if we
+should simply advance the parser state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>
+If <a class="xref" href="Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase_">ProcessNextChunk(ReadOnlySpan&lt;Byte&gt;, CsvReaderVisitorBase)</a> has never been called (or has not been called since
+the last time that this method was called), then this method will do nothing.
+</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase_.md&amp;value=---%0Auid%3A%20Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan%7BSystem.Byte%7D%2CCursively.CsvReaderVisitorBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvTokenizer.cs/#L170">View Source</a>
+  </span>
+  <a id="Cursively_CsvTokenizer_ProcessNextChunk_" data-uid="Cursively.CsvTokenizer.ProcessNextChunk*"></a>
+  <h4 id="Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase_" data-uid="Cursively.CsvTokenizer.ProcessNextChunk(System.ReadOnlySpan{System.Byte},Cursively.CsvReaderVisitorBase)">ProcessNextChunk(ReadOnlySpan&lt;Byte&gt;, CsvReaderVisitorBase)</h4>
+  <div class="markdown level1 summary"><p>Accepts the next (or first) chunk of data in the CSV stream, and informs an instance of
+<a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a> what it contains.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessNextChunk(ReadOnlySpan&lt;byte&gt; chunk, CsvReaderVisitorBase visitor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>&gt;</td>
+        <td><span class="parametername">chunk</span></td>
+        <td><p>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.readonlyspan-1">ReadOnlySpan&lt;T&gt;</a> containing the next chunk of data.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a></td>
+        <td><span class="parametername">visitor</span></td>
+        <td><p>The <a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a> to interact with, or <span class="xref">null</span> if we
+should simply advance the parser state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Cursively_CsvTokenizer_ProcessNextChunk_System_ReadOnlySpan_System_Byte__Cursively_CsvReaderVisitorBase__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">chunk</code> is empty, this method will do nothing.</p>
+</div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/airbreather/Cursively/new/develop/doc/overwrite/new?filename=Cursively_CsvTokenizer.md&amp;value=---%0Auid%3A%20Cursively.CsvTokenizer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/airbreather/Cursively/blob/develop/src/Cursively/CsvTokenizer.cs/#L129" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
