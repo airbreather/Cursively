@@ -1,0 +1,10 @@
+- name: Home
+  href: index.md
+- name: API Documentation
+  href: obj/api/
+- name: Release Notes
+  href: release-notes.md
+- name: NuGet Package
+  href: https://www.nuget.org/packages/Cursively
+- name: GitHub
+  href: https://github.com/airbreather/Cursively
