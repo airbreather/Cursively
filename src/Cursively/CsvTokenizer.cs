@@ -38,38 +38,52 @@ namespace Cursively
     /// </para>
     /// <list type="bullet">
     /// <item>
+    /// <description>
     /// The spec says that separate lines are delimited by CRLF line breaks.  This implementation
     /// accepts line breaks of any format (CRLF, LF, CR).
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// The spec says that there may or may not be a line break at the end of the last record in the
     /// stream.  This implementation does not require there to be a line break, and it would not
     /// hurt to add one either.
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// The spec refers to an optional header line at the beginning.  This implementation does not
     /// include any special treatment for the first line of fields; if they need to be treated as
     /// headers, then the consumer needs to know that and respond accordingly.
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// The spec says each record may contain "one or more fields".  This implementation interprets
     /// that to mean strictly that any number of consecutive newline characters in a row are treated
     /// as one.
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// Many implementations allow the delimiter character to be configured to be something else
     /// other than a comma.  This implementation does not currently offer that flexibility.
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// Many implementations allow automatically trimming whitespace at the beginning and/or end of
     /// each field (sometimes optionally).  The spec expressly advises against doing that, and this
     /// implementation follows suit.  It is our opinion that consumers ought to be more than capable
     /// of trimming spaces at the beginning or end as part of their processing if this is desired.
+    /// </description>
     /// </item>
     /// <item>
+    /// <description>
     /// The spec says that the last field in a record must not be followed by a comma.  This
     /// implementation interprets that to mean that if we do see a comma followed immediately by a
     /// line ending character, then that represents the data for an empty field.
+    /// </description>
     /// </item>
     /// </list>
     /// <para>
