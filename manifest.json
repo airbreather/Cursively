@@ -14,23 +14,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/benchmark-1.0.0.md",
+      "source_relative_path": "benchmark-1.0.0.md",
       "output": {
         ".html": {
-          "relative_path": "articles/benchmark-1.0.0.html",
-          "hash": "2/vDQ0kZo6RgS8jBLqlinw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Toc",
-      "source_relative_path": "articles/toc.yml",
-      "output": {
-        ".html": {
-          "relative_path": "articles/toc.html",
-          "hash": "LQSHHmntVqfQszryLseEyw=="
+          "relative_path": "benchmark-1.0.0.html",
+          "hash": "ClZeAOCUW4Cx9ZVDZp3R5A=="
         }
       },
       "is_incremental": false,
@@ -114,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "bcgujP2H3dK//ewOb0/qfQ=="
+          "hash": "ehQVHO///by+4It0O1H40w=="
         }
       },
       "is_incremental": false,
