@@ -27,7 +27,7 @@ namespace Cursively.Benchmark
             return visitor.RowCount;
         }
 
-        [Benchmark]
+        ////[Benchmark]
         [ArgumentsSource(nameof(CsvFiles))]
         public long CountRowsUsingCursivelyWithMemoryMappedFile(CsvFile csvFile)
         {
@@ -36,7 +36,7 @@ namespace Cursively.Benchmark
             return visitor.RowCount;
         }
 
-        [Benchmark]
+        ////[Benchmark]
         [ArgumentsSource(nameof(CsvFiles))]
         public long CountRowsUsingCsvHelper(CsvFile csvFile)
         {

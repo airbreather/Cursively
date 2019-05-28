@@ -142,19 +142,49 @@ namespace Cursively
     /// </remarks>
     public class CsvTokenizer
     {
-        private const byte COMMA = (byte)',';
-
         private const byte CR = (byte)'\r';
 
         private const byte LF = (byte)'\n';
 
         private const byte QUOTE = (byte)'"';
 
-        private static readonly byte[] AllStopBytes = { COMMA, QUOTE, CR, LF };
-
-        private static readonly byte[] AllStopBytesExceptQuote = { COMMA, CR, LF };
+        private readonly byte _delimiter;
 
         private ParserFlags _parserFlags;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTokenizer"/> class.
+        /// </summary>
+        public CsvTokenizer()
+            : this((byte)',')
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTokenizer"/> class.
+        /// </summary>
+        /// <param name="delimiter">
+        /// The single byte to expect to see between fields of the same record.  This may not be an
+        /// end-of-line or double-quote character, as those have special meanings.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="delimiter"/> is <code>0x0A</code>, <code>0x0D</code>, or
+        /// <code>0x22</code>.
+        /// </exception>
+        public CsvTokenizer(byte delimiter)
+        {
+            switch (delimiter)
+            {
+                case CR:
+                case LF:
+                case QUOTE:
+                    throw new ArgumentException("Must not be a carriage return, linefeed, or double-quote.", nameof(delimiter));
+
+                default:
+                    _delimiter = delimiter;
+                    break;
+            }
+        }
 
         [Flags]
         private enum ParserFlags : byte
@@ -189,8 +219,7 @@ namespace Cursively
                 visitor = CsvReaderVisitorBase.Null;
             }
 
-            // cache the implicit conversion for the sake of "portable span" targets.
-            ReadOnlySpan<byte> allStopBytes = AllStopBytes;
+            byte delimiter = _delimiter;
 
             // we're going to consume the entire buffer that was handed to us.
             while (!chunk.IsEmpty)
@@ -204,17 +233,11 @@ namespace Cursively
                     continue;
                 }
 
-                int idx = chunk.IndexOfAny(allStopBytes);
-                if (idx < 0)
+                for (int idx = 0; idx < chunk.Length; idx++)
                 {
-                    visitor.VisitPartialFieldContents(chunk);
-                    _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
-                    break;
-                }
-
-                switch (chunk[idx])
-                {
-                    case QUOTE:
+                    byte c = chunk[idx];
+                    if (c == QUOTE)
+                    {
                         if (idx == 0)
                         {
                             _parserFlags = ParserFlags.CurrentFieldStartedWithQuote | ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
@@ -227,20 +250,30 @@ namespace Cursively
                             visitor.VisitPartialFieldContents(chunk.Slice(0, idx + 1));
                             _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
                         }
-
-                        break;
-
-                    case COMMA:
+                    }
+                    else if (c == delimiter)
+                    {
                         visitor.VisitEndOfField(chunk.Slice(0, idx));
                         _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
-                        break;
-
-                    default:
+                    }
+                    else if (c == CR || c == LF)
+                    {
                         ProcessEndOfLine(chunk.Slice(0, idx), visitor);
-                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    chunk = chunk.Slice(idx + 1);
+                    goto nextLoop;
                 }
 
-                chunk = chunk.Slice(idx + 1);
+                visitor.VisitPartialFieldContents(chunk);
+                _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
+                break;
+
+                nextLoop:;
             }
         }
 
@@ -303,69 +336,69 @@ namespace Cursively
                 }
 
                 // we have at least one more byte, so let's see what the double quote actually means
-                switch (readBuffer[idx + 1])
+                byte b = readBuffer[idx + 1];
+                if (b == QUOTE)
                 {
-                    case QUOTE:
-                        // the double quote we stopped at was escaping a literal double quote, so we
-                        // send everything up to and including the escaping quote.
-                        visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx + 1));
-                        break;
-
-                    case COMMA:
-                        // the double quote was the end of a quoted field, so send the entire data
-                        // from the beginning of this quoted field data chunk up to the double quote
-                        // that terminated it (excluding, of course, the double quote itself).
-                        visitor.VisitEndOfField(readBuffer.Slice(0, idx));
-                        _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
-                        break;
-
-                    case CR:
-                    case LF:
-                        // same thing as the COMMA case, just the field ended at the end of a line
-                        // instead of the end of a field on the current line.
-                        ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
-                        break;
-
-                    default:
-                        // the double quote was the end of the quoted part of the field data, but
-                        // then it continues on with more data; don't spend too much time optimizing
-                        // this case since it's not RFC 4180, just do the parts we need to do in
-                        // order to behave the way we said we would.
-                        _parserFlags |= ParserFlags.QuotedFieldDataEnded;
-                        visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx));
-                        visitor.VisitPartialFieldContents(readBuffer.Slice(idx + 1, 1));
-                        break;
+                    // the double quote we stopped at was escaping a literal double quote, so we
+                    // send everything up to and including the escaping quote.
+                    visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx + 1));
+                }
+                else if (b == _delimiter)
+                {
+                    // the double quote was the end of a quoted field, so send the entire data from
+                    // the beginning of this quoted field data chunk up to the double quote that
+                    // terminated it (excluding, of course, the double quote itself).
+                    visitor.VisitEndOfField(readBuffer.Slice(0, idx));
+                    _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                }
+                else if (b == CR || b == LF)
+                {
+                    // same thing as the delimiter case, just the field ended at the end of a line
+                    // instead of the end of a field on the current line.
+                    ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
+                }
+                else
+                {
+                    // the double quote was the end of the quoted part of the field data, but then
+                    // it continues on with more data; don't spend too much time optimizing this
+                    // case since it's not RFC 4180, just do the parts we need to do in order to
+                    // behave the way we said we would.
+                    _parserFlags |= ParserFlags.QuotedFieldDataEnded;
+                    visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx));
+                    visitor.VisitPartialFieldContents(readBuffer.Slice(idx + 1, 1));
                 }
 
                 // slice off the data up to the quote and the next byte that we read.
                 readBuffer = readBuffer.Slice(idx + 2);
-                return;
             }
-
-            // this is expected to be rare: either we were cut between field reads, or we're reading
-            // nonstandard field data where there's a quote that neither starts nor ends the field.
+            else
             {
-                int idx = readBuffer.IndexOfAny(AllStopBytesExceptQuote);
-                if (idx < 0)
+                // this is expected to be rare: either we were cut between field reads, or we're
+                // reading nonstandard field data where there's a quote that neither starts nor ends
+                // the field.
+                for (int idx = 0; idx < readBuffer.Length; idx++)
                 {
-                    visitor.VisitPartialFieldContents(readBuffer);
-                    readBuffer = default;
+                    byte b = readBuffer[idx];
+                    if (b == _delimiter)
+                    {
+                        visitor.VisitEndOfField(readBuffer.Slice(0, idx));
+                        _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                    }
+                    else if (b == CR || b == LF)
+                    {
+                        ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    readBuffer = readBuffer.Slice(idx + 1);
                     return;
                 }
 
-                switch (readBuffer[idx])
-                {
-                    case COMMA:
-                        visitor.VisitEndOfField(readBuffer.Slice(0, idx));
-                        _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
-                        break;
-
-                    default:
-                        ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
-                        break;
-                }
-
-                readBuffer = readBuffer.Slice(idx + 1);
+                visitor.VisitPartialFieldContents(readBuffer);
+                readBuffer = default;
             }
         }
 
@@ -379,24 +412,22 @@ namespace Cursively
             // the minimum amount that we need to do in order to clear this flag and get back into
             // the normal swing of things.
             _parserFlags &= ~ParserFlags.CutAtPotentiallyTerminalDoubleQuote;
-            switch (readBuffer[0])
+            if (readBuffer[0] == QUOTE)
             {
-                case QUOTE:
-                    // the previous double quote was actually there to escape this double quote.  we
-                    // didn't visit the double-quote last time because we weren't sure.  well, we're
-                    // sure now, so go ahead and do it.
-                    visitor.VisitPartialFieldContents(readBuffer.Slice(0, 1));
+                // the previous double quote was actually there to escape this double quote.  we
+                // didn't visit the double-quote last time because we weren't sure.  well, we're
+                // sure now, so go ahead and do it.
+                visitor.VisitPartialFieldContents(readBuffer.Slice(0, 1));
 
-                    // we processed the double quote, so main loop should resume at the next byte.
-                    readBuffer = readBuffer.Slice(1);
-                    break;
-
-                default:
-                    // the previous double quote did in fact terminate the quoted part of the field
-                    // data, and so all we need to do is set this flag..  main loop will re-process
-                    // this buffer and go about its merry way.
-                    _parserFlags |= ParserFlags.QuotedFieldDataEnded;
-                    break;
+                // we processed the double quote, so main loop should resume at the next byte.
+                readBuffer = readBuffer.Slice(1);
+            }
+            else
+            {
+                // the previous double quote did in fact terminate the quoted part of the field
+                // data, and so all we need to do is set this flag..  main loop will re-process this
+                // buffer and go about its merry way.
+                _parserFlags |= ParserFlags.QuotedFieldDataEnded;
             }
         }
 

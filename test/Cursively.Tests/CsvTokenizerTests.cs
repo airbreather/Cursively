@@ -17,32 +17,37 @@ namespace Cursively.Tests
 
         private static readonly int[] TestChunkLengths = { 1, 2, 3, 5, 8, 13, 21, 34 };
 
+        private static readonly byte[] TestDelimiters = { (byte)',', (byte)'\t' };
+
         public static IEnumerable<object[]> TestCsvFiles =>
             from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv")
             select new object[] { filePath };
 
-        public static IEnumerable<object[]> TestCsvFilesWithChunkLengths =>
+        public static IEnumerable<object[]> TestCsvFilesWithChunkLengthsAndDelimiters =>
             from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv")
             let fileName = Path.GetFileNameWithoutExtension(filePath)
             from chunkLength in TestChunkLengths
-            select new object[] { fileName, chunkLength };
+            from delimiter in TestDelimiters
+            select new object[] { fileName, chunkLength, delimiter };
 
         [Theory]
-        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public void NullVisitorShouldBeFine(string fileName, int chunkLength)
+        [InlineData((byte)0x0A)]
+        [InlineData((byte)0x0D)]
+        [InlineData((byte)0x22)]
+        public void ConstructorShouldRejectInvalidDelimiters(byte delimiter)
+        {
+            Assert.Throws<ArgumentException>("delimiter", () => new CsvTokenizer(delimiter));
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCsvFiles))]
+        public void NullVisitorShouldBeFine(string filePath)
         {
             // arrange
-            string fullCsvFilePath = Path.Combine(TestCsvFilesFolderPath, fileName + ".csv");
-            ReadOnlySpan<byte> fileData = File.ReadAllBytes(fullCsvFilePath);
+            ReadOnlySpan<byte> fileData = File.ReadAllBytes(filePath);
             var tokenizer = new CsvTokenizer();
 
             // act
-            while (fileData.Length >= chunkLength)
-            {
-                tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), null);
-                fileData = fileData.Slice(chunkLength);
-            }
-
             tokenizer.ProcessNextChunk(fileData, null);
             tokenizer.ProcessEndOfStream(null);
 
@@ -50,20 +55,27 @@ namespace Cursively.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public void CsvTokenizationShouldMatchCsvHelper(string fileName, int chunkLength)
+        [MemberData(nameof(TestCsvFilesWithChunkLengthsAndDelimiters))]
+        public void CsvTokenizationShouldMatchCsvHelper(string fileName, int chunkLength, byte delimiter)
         {
             // arrange
             byte[] fileDataTemplate = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, fileName + ".csv"));
+            for (int i = 0; i < fileDataTemplate.Length; i++)
+            {
+                if (fileDataTemplate[i] == (byte)',')
+                {
+                    fileDataTemplate[i] = delimiter;
+                }
+            }
 
-            int randomSeed = HashCode.Combine(fileName, chunkLength);
+            int randomSeed = HashCode.Combine(fileName, chunkLength, delimiter);
             foreach (byte[] fileData in VaryLineEndings(fileDataTemplate, randomSeed))
             {
                 // act
-                var actual = TokenizeCsvFileUsingMine(fileData, chunkLength);
+                var actual = TokenizeCsvFileUsingCursively(fileData, chunkLength, delimiter);
 
                 // assert
-                var expected = TokenizeCsvFileUsingCsvHelper(fileData);
+                var expected = TokenizeCsvFileUsingCsvHelper(fileData, $"{(char)delimiter}");
                 Assert.Equal(expected, actual);
             }
         }
@@ -80,13 +92,13 @@ namespace Cursively.Tests
             var actual = visitor.Lines;
 
             // assert
-            var expected = TokenizeCsvFileUsingCsvHelper(File.ReadAllBytes(filePath));
+            var expected = TokenizeCsvFileUsingCsvHelper(File.ReadAllBytes(filePath), ",");
             Assert.Equal(expected, actual);
         }
 
-        private static List<string[]> TokenizeCsvFileUsingMine(ReadOnlySpan<byte> fileData, int chunkLength)
+        private static List<string[]> TokenizeCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
         {
-            var tokenizer = new CsvTokenizer();
+            var tokenizer = new CsvTokenizer(delimiter);
             var visitor = new StringBufferingVisitor(fileData.Length);
             while (fileData.Length >= chunkLength)
             {
@@ -99,11 +111,11 @@ namespace Cursively.Tests
             return visitor.Lines;
         }
 
-        private static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData)
+        private static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData, string delimiter)
         {
             using (var stream = new MemoryStream(csvData, false))
             using (var streamReader = new StreamReader(stream, new UTF8Encoding(false, false), false))
-            using (var csvReader = new CsvReader(streamReader, new Configuration { BadDataFound = null }))
+            using (var csvReader = new CsvReader(streamReader, new Configuration { BadDataFound = null, Delimiter = delimiter }))
             {
                 while (csvReader.Read())
                 {
