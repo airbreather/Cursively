@@ -1,0 +1,4 @@
+extraction:
+  csharp:
+    after_prepare:
+      - export LGTM=true
