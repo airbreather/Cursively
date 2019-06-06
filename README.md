@@ -79,14 +79,12 @@ public sealed class MyVisitor : CsvReaderVisitorBase
             throw new InvalidDataException($"Field is longer than {_buffer.Length} characters.");
         }
 
-        if (!flush)
+        if (flush)
         {
-            return;
+            Console.Write("Field: ");
+            Console.WriteLine(_buffer, 0, _bufferConsumed);
+            _bufferConsumed = 0;
         }
-
-        Console.Write("Field: ");
-        Console.WriteLine(_buffer, 0, _bufferConsumed);
-        _bufferConsumed = 0;
     }
 }
 ```
