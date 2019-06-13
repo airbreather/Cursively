@@ -32,15 +32,6 @@ namespace Cursively.Benchmark
 
         [Benchmark]
         [ArgumentsSource(nameof(CsvFiles))]
-        public long CountRowsUsingCursivelyWithMemoryMappedFile(CsvFile csvFile)
-        {
-            var visitor = new RowCountingVisitor();
-            Csv.ProcessMemoryMappedFile(csvFile.FullPath, visitor);
-            return visitor.RowCount;
-        }
-
-        [Benchmark]
-        [ArgumentsSource(nameof(CsvFiles))]
         public long CountRowsUsingCsvHelper(CsvFile csvFile)
         {
             using (var ms = new MemoryStream(csvFile.FileData, false))
@@ -63,8 +54,7 @@ namespace Cursively.Benchmark
             foreach (var csvFile in CsvFiles)
             {
                 long rowCount = prog.CountRowsUsingCursivelyByteArray(csvFile);
-                if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount ||
-                    prog.CountRowsUsingCursivelyWithMemoryMappedFile(csvFile) != rowCount)
+                if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount)
                 {
                     Console.Error.WriteLine($"Failed on {csvFile}.");
                     return 1;

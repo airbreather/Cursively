@@ -88,7 +88,7 @@ namespace Cursively.Tests
             var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
 
             // act
-            Csv.ProcessMemoryMappedFile(filePath, visitor);
+            Csv.ProcessEntireFile(filePath, visitor);
             var actual = visitor.Lines;
 
             // assert
