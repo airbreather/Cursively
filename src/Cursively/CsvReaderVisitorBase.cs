@@ -109,9 +109,10 @@ namespace Cursively
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method may only be called after a call to <see cref="VisitPartialFieldContents"/>,
-        /// at most once per field (i.e., once it is called, it may not be called again until after
-        /// the next time that <see cref="VisitEndOfField"/> is called).
+        /// This method may only be called as the very next method that gets called after a call to
+        /// <see cref="VisitPartialFieldContents"/>, and only at most once per field (i.e., once it
+        /// is called, it may not be called again until a <see cref="VisitEndOfField"/> call brings
+        /// the tokenizer back to a state where RFC 4180 rules are expected).
         /// </para>
         /// <para>
         /// Only <see cref="VisitPartialFieldContents"/> and <see cref="VisitEndOfField"/> may be
