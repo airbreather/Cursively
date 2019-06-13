@@ -29,8 +29,9 @@ namespace Cursively
         /// This method may be called at any time.
         /// </para>
         /// <para>
-        /// Only <see cref="VisitPartialFieldContents"/> and <see cref="VisitEndOfField"/> may be
-        /// called directly after a call to this method.
+        /// Only <see cref="VisitPartialFieldContents"/>, <see cref="VisitEndOfField"/>, and
+        /// <see cref="VisitNonstandardQuotedField"/> may be called directly after a call to this
+        /// method.
         /// </para>
         /// <para>
         /// There are multiple reasons why this method may be called instead of going straight to
@@ -93,6 +94,37 @@ namespace Cursively
         /// </para>
         /// </remarks>
         public abstract void VisitEndOfRecord();
+
+        /// <summary>
+        /// <para>
+        /// Notifies that the current field contains double-quote characters that do not comply with
+        /// RFC 4180, and so it is being processed according to this library's extra rules.
+        /// </para>
+        /// <para>
+        /// The default behavior of this method is to do nothing.  Subclasses may wish to override
+        /// to add warnings / errors when processing streams that do not follow RFC 4180 and are
+        /// therefore in danger of being processed differently than other tools.
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method may only be called after a call to <see cref="VisitPartialFieldContents"/>,
+        /// at most once per field (i.e., once it is called, it may not be called again until the
+        /// next call to <see cref="VisitEndOfField"/>).
+        /// </para>
+        /// <para>
+        /// Only <see cref="VisitPartialFieldContents"/> and <see cref="VisitEndOfField"/> may be
+        /// called directly after a call to this method.
+        /// </para>
+        /// <para>
+        /// Once called, the entire field described by all preceding consecutive calls to
+        /// <see cref="VisitPartialFieldContents"/> calls, and all successive calls up to the next
+        /// <see cref="VisitEndOfField"/>, are considered to be "nonstandard".  That means that this
+        /// method may be considered to affect the correctness of previous method calls, depending
+        /// on the semantics of the override.
+        /// </para>
+        /// </remarks>
+        public virtual void VisitNonstandardQuotedField() { }
 
         private sealed class NullVisitor : CsvReaderVisitorBase
         {

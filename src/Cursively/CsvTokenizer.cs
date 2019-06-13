@@ -253,6 +253,9 @@ namespace Cursively
                             // choose to treat all such quotes as just regular data.
                             _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
                             visitor.VisitPartialFieldContents(chunk.Slice(0, idx + 1));
+
+                            // let the visitor know that this was nonstandard.
+                            visitor.VisitNonstandardQuotedField();
                         }
                     }
                     else if (c == delimiter)
@@ -370,6 +373,9 @@ namespace Cursively
                     _parserFlags |= ParserFlags.QuotedFieldDataEnded;
                     visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx));
                     visitor.VisitPartialFieldContents(readBuffer.Slice(idx + 1, 1));
+
+                    // let the visitor know that this was nonstandard.
+                    visitor.VisitNonstandardQuotedField();
                 }
 
                 // slice off the data up to the quote and the next byte that we read.
@@ -379,7 +385,9 @@ namespace Cursively
             {
                 // this is expected to be rare: either we were cut between field reads, or we're
                 // reading nonstandard field data where there's a quote that neither starts nor ends
-                // the field.
+                // the field; by this point, we don't save enough state to remember which case we're
+                // in, so VisitNonstandardQuotedField **MUST** have been correctly called (or not)
+                // before entering this section.
                 for (int idx = 0; idx < readBuffer.Length; idx++)
                 {
                     byte b = readBuffer[idx];
@@ -416,7 +424,9 @@ namespace Cursively
             // the minimum amount that we need to do in order to clear this flag and get back into
             // the normal swing of things.
             _parserFlags &= ~ParserFlags.CutAtPotentiallyTerminalDoubleQuote;
-            if (readBuffer[0] == QUOTE)
+
+            byte c = readBuffer[0];
+            if (c == QUOTE)
             {
                 // the previous double quote was actually there to escape this double quote.  we
                 // didn't visit the double-quote last time because we weren't sure.  well, we're
@@ -432,6 +442,14 @@ namespace Cursively
                 // data, and so all we need to do is set this flag..  main loop will re-process this
                 // buffer and go about its merry way.
                 _parserFlags |= ParserFlags.QuotedFieldDataEnded;
+
+                if (c != _delimiter && c != CR && c != LF)
+                {
+                    // let the visitor know that this was nonstandard, since this is our last
+                    // opportunity to do so before our state machine can longer distinguish between
+                    // the current state and the state for a standard field that spans chunks.
+                    visitor.VisitNonstandardQuotedField();
+                }
             }
         }
 
