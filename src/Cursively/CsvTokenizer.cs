@@ -233,6 +233,10 @@ namespace Cursively
                     continue;
                 }
 
+                // loop one-by-one, instead of doing an IndexOfAny, greedily assuming that the most
+                // performance-sensitive applications will tend to have few enough bytes in each
+                // unquoted field that this manual inlining will benefit those applications **much**
+                // more than practically any IndexOfAny implementation would.
                 for (int idx = 0; idx < chunk.Length; idx++)
                 {
                     byte c = chunk[idx];
@@ -247,14 +251,14 @@ namespace Cursively
                             // RFC 4180 forbids quotes that show up anywhere but the beginning of a
                             // field, so it's up to us to decide what we want to do about this.  We
                             // choose to treat all such quotes as just regular data.
-                            visitor.VisitPartialFieldContents(chunk.Slice(0, idx + 1));
                             _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
+                            visitor.VisitPartialFieldContents(chunk.Slice(0, idx + 1));
                         }
                     }
                     else if (c == delimiter)
                     {
-                        visitor.VisitEndOfField(chunk.Slice(0, idx));
                         _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                        visitor.VisitEndOfField(chunk.Slice(0, idx));
                     }
                     else if (c == CR || c == LF)
                     {
@@ -269,8 +273,8 @@ namespace Cursively
                     goto nextLoop;
                 }
 
-                visitor.VisitPartialFieldContents(chunk);
                 _parserFlags = ParserFlags.ReadAnythingInCurrentField | ParserFlags.ReadAnythingOnCurrentLine;
+                visitor.VisitPartialFieldContents(chunk);
                 break;
 
                 nextLoop:;
@@ -329,8 +333,8 @@ namespace Cursively
                     // in fact, it should pay off so well in so many cases that we can probably even
                     // get away with making the other case really suboptimal, which is what it will
                     // do when we pick up where we leave off after setting this flag.
-                    visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx));
                     _parserFlags |= ParserFlags.CutAtPotentiallyTerminalDoubleQuote;
+                    visitor.VisitPartialFieldContents(readBuffer.Slice(0, idx));
                     readBuffer = default;
                     return;
                 }
@@ -348,8 +352,8 @@ namespace Cursively
                     // the double quote was the end of a quoted field, so send the entire data from
                     // the beginning of this quoted field data chunk up to the double quote that
                     // terminated it (excluding, of course, the double quote itself).
-                    visitor.VisitEndOfField(readBuffer.Slice(0, idx));
                     _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                    visitor.VisitEndOfField(readBuffer.Slice(0, idx));
                 }
                 else if (b == CR || b == LF)
                 {
@@ -381,8 +385,8 @@ namespace Cursively
                     byte b = readBuffer[idx];
                     if (b == _delimiter)
                     {
-                        visitor.VisitEndOfField(readBuffer.Slice(0, idx));
                         _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                        visitor.VisitEndOfField(readBuffer.Slice(0, idx));
                     }
                     else if (b == CR || b == LF)
                     {
@@ -433,16 +437,17 @@ namespace Cursively
 
         private void ProcessEndOfLine(ReadOnlySpan<byte> lastFieldDataChunk, CsvReaderVisitorBase visitor)
         {
-            if (!lastFieldDataChunk.IsEmpty || (_parserFlags & ParserFlags.ReadAnythingOnCurrentLine) != 0)
+            // even if the last field data chunk is empty, we still need to send it: we might be
+            // looking at a newline that immediately follows a comma, which is defined to mean
+            // an empty field at the end of a line.
+            bool notify = !lastFieldDataChunk.IsEmpty || (_parserFlags & ParserFlags.ReadAnythingOnCurrentLine) != 0;
+
+            _parserFlags = ParserFlags.None;
+            if (notify)
             {
-                // even if the last field data chunk is empty, we still need to send it: we might be
-                // looking at a newline that immediately follows a comma, which is defined to mean
-                // an empty field at the end of a line.
                 visitor.VisitEndOfField(lastFieldDataChunk);
                 visitor.VisitEndOfRecord();
             }
-
-            _parserFlags = ParserFlags.None;
         }
     }
 }
