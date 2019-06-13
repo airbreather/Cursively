@@ -71,7 +71,8 @@ namespace Cursively
         /// This method may be called at any time.
         /// </para>
         /// <para>
-        /// Any method, including this one, may be called directly after a call to this method.
+        /// Any method except <see cref="VisitNonstandardQuotedField"/>, including this one, may be
+        /// called directly after a call to this method.
         /// </para>
         /// <para>
         /// This method may be called without a preceding <see cref="VisitPartialFieldContents"/>
@@ -109,8 +110,8 @@ namespace Cursively
         /// <remarks>
         /// <para>
         /// This method may only be called after a call to <see cref="VisitPartialFieldContents"/>,
-        /// at most once per field (i.e., once it is called, it may not be called again until the
-        /// next call to <see cref="VisitEndOfField"/>).
+        /// at most once per field (i.e., once it is called, it may not be called again until after
+        /// the next time that <see cref="VisitEndOfField"/> is called).
         /// </para>
         /// <para>
         /// Only <see cref="VisitPartialFieldContents"/> and <see cref="VisitEndOfField"/> may be
