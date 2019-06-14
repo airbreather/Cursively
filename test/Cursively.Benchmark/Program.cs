@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -79,9 +80,26 @@ namespace Cursively.Benchmark
             public override string ToString() => FileName;
         }
 
-        private static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null) =>
-            Array.ConvertAll(Directory.GetFiles(Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files"), "*.csv"),
-                             fullPath => new CsvFile(fullPath));
+        private static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null)
+        {
+            string csvFileDirectoryPath = Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files");
+            if (!Directory.Exists(csvFileDirectoryPath))
+            {
+                string tmpDirectoryPath = csvFileDirectoryPath + "-tmp";
+                if (Directory.Exists(tmpDirectoryPath))
+                {
+                    Directory.Delete(tmpDirectoryPath, true);
+                }
+
+                string zipFilePath = csvFileDirectoryPath + ".zip";
+                Directory.CreateDirectory(tmpDirectoryPath);
+                ZipFile.ExtractToDirectory(zipFilePath, tmpDirectoryPath);
+                Directory.Move(tmpDirectoryPath, csvFileDirectoryPath);
+            }
+
+            return Array.ConvertAll(Directory.GetFiles(csvFileDirectoryPath, "*.csv"),
+                                    fullPath => new CsvFile(fullPath));
+        }
 
         private sealed class RowCountingVisitor : CsvReaderVisitorBase
         {
