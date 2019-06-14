@@ -119,11 +119,15 @@ namespace Cursively
         /// called directly after a call to this method.
         /// </para>
         /// <para>
-        /// Once called, the entire field described by all preceding consecutive calls to
-        /// <see cref="VisitPartialFieldContents"/> calls, and all successive calls up to the next
-        /// <see cref="VisitEndOfField"/>, are considered to be "nonstandard".  That means that this
-        /// method may be considered to affect the correctness of previous method calls, depending
-        /// on the semantics of the override.
+        /// The last byte in the preceding <see cref="VisitPartialFieldContents"/> call's chunk will
+        /// be the specific byte that was unexpected; all bytes before it were legal under RFC 4180.
+        /// So if this event is being raised because the tokenizer found a double-quote in a field
+        /// that did not start with a double-quote, then <see cref="VisitPartialFieldContents"/> was
+        /// previously called with a chunk that ended with that double-quote.  If it's being raised
+        /// because a double-quote was found in a quoted field that was not immediately followed by
+        /// a double-quote, delimiter, or line ending, then <see cref="VisitPartialFieldContents"/>
+        /// was previously called with a chunk that ended with whichever byte immediately followed
+        /// the double-quote that ended the quoted part of the quoted field data.
         /// </para>
         /// </remarks>
         public virtual void VisitNonstandardQuotedField() { }

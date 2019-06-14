@@ -89,11 +89,34 @@ namespace Cursively.Tests
 
             // act
             Csv.ProcessEntireFile(filePath, visitor);
-            var actual = visitor.Lines;
+            var actual = visitor.Records;
 
             // assert
             var expected = TokenizeCsvFileUsingCsvHelper(File.ReadAllBytes(filePath), ",");
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void NonstandardQuotedFieldsShouldNotify()
+        {
+            // arrange
+            string csvFilePath = Path.Combine(TestCsvFilesFolderPath, "nonstandard.csv");
+            var visitor = new NonstandardFieldVisitor(checked((int)new FileInfo(csvFilePath).Length));
+
+            // act
+            Csv.ProcessEntireFile(csvFilePath, visitor);
+
+            // assert
+            string[] expectedContentsBeforeNonstandardFields =
+            {
+                "hello ",
+                "hello ",
+                "good\"",
+                @"100% coverage, with the version of Roslyn shipped with the .NET Core 3.0 Preview 4 SDK version, is impossible...
+...unless I do something like making the byte immediately after this quoted field something with an ASCII value less than 13 that's not 10.
+Tab ('\t') has an ASCII value of 9, which is perfect for this.  so here's your tab:	",
+            };
+            Assert.Equal(expectedContentsBeforeNonstandardFields, visitor.ContentsBeforeNonstandardFields);
         }
 
         private static List<string[]> TokenizeCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
@@ -108,7 +131,7 @@ namespace Cursively.Tests
 
             tokenizer.ProcessNextChunk(fileData, visitor);
             tokenizer.ProcessEndOfStream(visitor);
-            return visitor.Lines;
+            return visitor.Records;
         }
 
         private static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData, string delimiter)
@@ -186,11 +209,11 @@ namespace Cursively.Tests
 
             public StringBufferingVisitor(int fileLength) => _cutBuffer = new byte[fileLength];
 
-            public List<string[]> Lines { get; } = new List<string[]>();
+            public List<string[]> Records { get; } = new List<string[]>();
 
             public override void VisitEndOfRecord()
             {
-                Lines.Add(_fields.ToArray());
+                Records.Add(_fields.ToArray());
                 _fields.Clear();
             }
 
@@ -212,6 +235,47 @@ namespace Cursively.Tests
             {
                 chunk.CopyTo(new Span<byte>(_cutBuffer, _cutBufferConsumed, chunk.Length));
                 _cutBufferConsumed += chunk.Length;
+            }
+        }
+
+        private sealed class NonstandardFieldVisitor : CsvReaderVisitorBase
+        {
+            private readonly Decoder _decoder = new UTF8Encoding(false, true).GetDecoder();
+
+            private readonly char[] _fieldBuffer;
+
+            private int _fieldBufferConsumed;
+
+            public NonstandardFieldVisitor(int byteCount) =>
+                _fieldBuffer = new char[Encoding.UTF8.GetMaxCharCount(byteCount)];
+
+            public override void VisitEndOfField(ReadOnlySpan<byte> chunk)
+            {
+                VisitFieldContents(chunk, true);
+                _fieldBufferConsumed = 0;
+            }
+
+            public List<string> ContentsBeforeNonstandardFields { get; } = new List<string>();
+
+            public override void VisitEndOfRecord() { }
+
+            public override void VisitPartialFieldContents(ReadOnlySpan<byte> chunk) =>
+                VisitFieldContents(chunk, false);
+
+            public override void VisitNonstandardQuotedField()
+            {
+                VisitFieldContents(default, true);
+                ContentsBeforeNonstandardFields.Add(new string(_fieldBuffer, 0, _fieldBufferConsumed));
+            }
+
+            private void VisitFieldContents(ReadOnlySpan<byte> chunk, bool flush)
+            {
+                int cnt = _decoder.GetCharCount(chunk, flush);
+                if (cnt > 0)
+                {
+                    _decoder.GetChars(chunk, new Span<char>(_fieldBuffer, _fieldBufferConsumed, cnt), flush);
+                    _fieldBufferConsumed += cnt;
+                }
             }
         }
     }
