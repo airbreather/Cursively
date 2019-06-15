@@ -107,15 +107,15 @@ public static void ProcessCsvFile(string csvFilePath)
 
 public static void ProcessCsvStream(Stream csvStream)
 {
-    Console.WriteLine($"Started reading '{csvFilePath}'.");
+    Console.WriteLine($"Started reading CSV file.");
     Csv.ProcessStream(csvStream, new MyVisitor(maxFieldLength: 1000));
-    Console.WriteLine($"Finished reading '{csvFilePath}'.");
+    Console.WriteLine($"Finished reading CSV file.");
 }
 
 public static async ValueTask ProcessCsvStreamAsync(Stream csvStream, IProgress<int> progress = null, CancellationToken cancellationToken = default)
 {
-    Console.WriteLine($"Started reading '{csvFilePath}'.");
+    Console.WriteLine($"Started reading CSV file.");
     await Csv.ProcessStreamAsync(csvStream, new MyVisitor(maxFieldLength: 1000), progress, cancellationToken);
-    Console.WriteLine($"Finished reading '{csvFilePath}'.");
+    Console.WriteLine($"Finished reading CSV file.");
 }
 ```
