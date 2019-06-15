@@ -247,7 +247,7 @@ namespace Cursively
                     }
                     else if (c == CR || c == LF)
                     {
-                        ProcessEndOfLine(chunk.Slice(0, idx), visitor);
+                        ProcessEndOfRecord(chunk.Slice(0, idx), visitor);
                     }
                     else if (c == QUOTE)
                     {
@@ -306,7 +306,7 @@ namespace Cursively
                 visitor = CsvReaderVisitorBase.Null;
             }
 
-            ProcessEndOfLine(default, visitor);
+            ProcessEndOfRecord(default, visitor);
         }
 
         private void PickUpFromLastTime(ref ReadOnlySpan<byte> readBuffer, CsvReaderVisitorBase visitor)
@@ -356,7 +356,7 @@ namespace Cursively
                 {
                     // same thing as the delimiter case, just the field ended at the end of a line
                     // instead of the end of a field on the current line.
-                    ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
+                    ProcessEndOfRecord(readBuffer.Slice(0, idx), visitor);
                 }
                 else
                 {
@@ -398,7 +398,7 @@ namespace Cursively
                     }
                     else if (b == CR || b == LF)
                     {
-                        ProcessEndOfLine(readBuffer.Slice(0, idx), visitor);
+                        ProcessEndOfRecord(readBuffer.Slice(0, idx), visitor);
                     }
                     else
                     {
@@ -453,7 +453,7 @@ namespace Cursively
             }
         }
 
-        private void ProcessEndOfLine(ReadOnlySpan<byte> lastFieldDataChunk, CsvReaderVisitorBase visitor)
+        private void ProcessEndOfRecord(ReadOnlySpan<byte> lastFieldDataChunk, CsvReaderVisitorBase visitor)
         {
             // even if the last field data chunk is empty, we still need to send it: we might be
             // looking at a newline that immediately follows a comma, which is defined to mean
