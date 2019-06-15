@@ -85,7 +85,7 @@ namespace Cursively.Tests
             var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
 
             // act
-            Csv.ProcessEntireFile(filePath, visitor);
+            Csv.ProcessFile(filePath, visitor);
             var actual = visitor.Records;
 
             // assert
@@ -101,7 +101,7 @@ namespace Cursively.Tests
             var visitor = new NonstandardFieldVisitor(checked((int)new FileInfo(csvFilePath).Length));
 
             // act
-            Csv.ProcessEntireFile(csvFilePath, visitor);
+            Csv.ProcessFile(csvFilePath, visitor);
 
             // assert
             string[] expectedContentsBeforeNonstandardFields =

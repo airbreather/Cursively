@@ -275,7 +275,7 @@ namespace Cursively
         /// <exception cref="PathTooLongException">
         /// See <see cref="FileStream(string, FileMode, FileAccess, FileShare, int, FileOptions)"/>.
         /// </exception>
-        public static unsafe void ProcessEntireFile(string csvFilePath, CsvReaderVisitorBase visitor)
+        public static unsafe void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)
         {
             using (var fl = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
             {
