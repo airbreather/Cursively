@@ -22,7 +22,7 @@ namespace Cursively.Benchmark
 
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(CsvFiles))]
-        public long CountRowsUsingCursivelyByteArray(CsvFile csvFile)
+        public long CountRowsUsingCursively(CsvFile csvFile)
         {
             var visitor = new RowCountingVisitor();
             var tokenizer = new CsvTokenizer();
@@ -54,7 +54,7 @@ namespace Cursively.Benchmark
             var prog = new Program();
             foreach (var csvFile in CsvFiles)
             {
-                long rowCount = prog.CountRowsUsingCursivelyByteArray(csvFile);
+                long rowCount = prog.CountRowsUsingCursively(csvFile);
                 if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount)
                 {
                     Console.Error.WriteLine($"Failed on {csvFile}.");
