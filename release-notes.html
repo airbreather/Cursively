@@ -72,6 +72,18 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="cursively-release-notes">Cursively Release Notes</h1>
 
+<h2 id="110"><a href="https://github.com/airbreather/Cursively/milestone/1">1.1.0</a></h2>
+<ul>
+<li>Several further performance optimizations.  Most significantly, inlining and tuning a critical <code>ReadOnlySpan&lt;T&gt;</code> extension method.
+<ul>
+<li>In some cases, this increased throughput by a factor of 3.</li>
+</ul>
+</li>
+<li>Added hooks for visitor implementations to detect situations where the stream does not conform to the RFC 4180 rules for quoted fields (<a href="https://github.com/airbreather/Cursively/issues/4">#4</a>)</li>
+<li>Added support to customize the field delimiter byte (<a href="https://github.com/airbreather/Cursively/issues/11">#11</a>)</li>
+<li>Added helpers to avoid having to use <code>CsvTokenizer</code> directly in most cases (<a href="https://github.com/airbreather/Cursively/issues/9">#9</a>, <a href="https://github.com/airbreather/Cursively/issues/10">#10</a>)</li>
+<li>Added an intermediate abstract visitor class that handles UTF-8 encoded headers (<a href="https://github.com/airbreather/Cursively/issues/5">#5</a>)</li>
+</ul>
 <h2 id="100">1.0.0</h2>
 <ul>
 <li>Initial release.</li>

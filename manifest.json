@@ -26,6 +26,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "benchmark-1.1.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "benchmark-1.1.0.html",
+          "hash": "23WKckKph7/kmrPUaKj2Uw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
         ".html": {
@@ -38,11 +50,35 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Csv.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Csv.html",
+          "hash": "1ReWd8zHI8HnsLdZ2coAIQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Cursively.CsvReaderVisitorBase.yml",
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CsvReaderVisitorBase.html",
-          "hash": "mqU5bpsuuZ2rVBr+6euv1A=="
+          "hash": "ERC5nXIXs1pLCRmWwYPDgA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html",
+          "hash": "gau1E3SpeIintFr7xxi0Zg=="
         }
       },
       "is_incremental": false,
@@ -54,7 +90,79 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CsvTokenizer.html",
-          "hash": "+PRq931f4hUxCc6H4EhXJw=="
+          "hash": "8GIsr0kI8yasjKieL5/bTw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyDataStreamException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyDataStreamException.html",
+          "hash": "U7r92DPwoPzIUgfmxvUYrQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyExtraDataFieldsException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyExtraDataFieldsException.html",
+          "hash": "3bWjfiKCpxP7BJr61xJuTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyHeaderIsTooLongException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyHeaderIsTooLongException.html",
+          "hash": "RqfbfVPWiMJJ0G5blY3h0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyHeadersAreNotUTF8Exception.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyHeadersAreNotUTF8Exception.html",
+          "hash": "+0CkIz7lNsHGeDLEen7P0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyMissingDataFieldsException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyMissingDataFieldsException.html",
+          "hash": "dBJNOUTIs81wcAivFopA+w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CursivelyTooManyHeadersException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CursivelyTooManyHeadersException.html",
+          "hash": "qYA4vj4bk3FiGN2DOzkYsA=="
         }
       },
       "is_incremental": false,
@@ -66,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.html",
-          "hash": "4LUGUdrblEFHmyaSOlUSiA=="
+          "hash": "LTMhQVMQqEMKuR7yB8OXCw=="
         }
       },
       "is_incremental": false,
@@ -78,7 +186,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "bYQWlsmoxMSTtchQyaSlnQ=="
+          "hash": "p0PYvcSZz8Sy20pZpppa/g=="
         }
       },
       "is_incremental": false,
@@ -90,7 +198,7 @@
       "output": {
         ".html": {
           "relative_path": "release-notes.html",
-          "hash": "6eBkrWJNq1Lk5nAN0GVVyA=="
+          "hash": "uJCylHxNQgQSsFJ4t+Q3OQ=="
         }
       },
       "is_incremental": false,
@@ -102,7 +210,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "ehQVHO///by+4It0O1H40w=="
+          "hash": "bKT57/4FXwsfcq3CTs7WYQ=="
         }
       },
       "is_incremental": false,
@@ -123,13 +231,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 3,
+          "total_file_count": 4,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 3,
+          "total_file_count": 11,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {

@@ -87,9 +87,27 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
+      <h4><a class="xref" href="Cursively.Csv.html">Csv</a></h4>
+      <section><p>Contains helper methods for CSV processing.</p>
+</section>
       <h4><a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a></h4>
       <section><p>Base class for listeners that process a stream of RFC 4180 (CSV) tokens from an instance of
 <a class="xref" href="Cursively.CsvTokenizer.html">CsvTokenizer</a>.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a></h4>
+      <section><p>
+Intermediate base class for CSV reader visitors that don&apos;t want to have to implement header
+handling by themselves.
+</p>
+<p>
+Instances of this class are tied to a single CSV stream and cannot be reused or reset for
+use with other CSV streams.
+</p>
+<p>
+Each instance of this visitor has an upper-bound on the maximum number of headers and on the
+maximum length of each header.  CSV streams that exceed these limits will cause this class
+to throw exceptions, and behavior of a particular instance is undefined once this happens.
+</p>
 </section>
       <h4><a class="xref" href="Cursively.CsvTokenizer.html">CsvTokenizer</a></h4>
       <section><p>Tokenizes a byte stream into CSV fields.  The processing follows the guidelines set out in
@@ -108,6 +126,30 @@ treated as data and passed through as-is.  It is the consumer&apos;s responsibil
 not handle) NUL bytes, invalid UTF-8, leading UTF-8 BOM, or any other quirks that come with
 the territory of text processing.
 </p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyDataStreamException.html">CursivelyDataStreamException</a></h4>
+      <section><p>Serves as the base class for exceptions thrown by this library to indicate problems with the
+actual contents of a CSV stream.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyExtraDataFieldsException.html">CursivelyExtraDataFieldsException</a></h4>
+      <section><p>Raised by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a>, by default, when a data record
+contains more fields than the header record.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyHeaderIsTooLongException.html">CursivelyHeaderIsTooLongException</a></h4>
+      <section><p>Raised by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a> when the length of a header
+exceeds the configured maximum.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyHeadersAreNotUTF8Exception.html">CursivelyHeadersAreNotUTF8Exception</a></h4>
+      <section><p>Raised by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a>, by default, when the header
+record contains invalid UTF-8 bytes.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyMissingDataFieldsException.html">CursivelyMissingDataFieldsException</a></h4>
+      <section><p>Raised by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a>, by default, when a data record
+contains fewer fields than the header record.</p>
+</section>
+      <h4><a class="xref" href="Cursively.CursivelyTooManyHeadersException.html">CursivelyTooManyHeadersException</a></h4>
+      <section><p>Raised by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html">CsvReaderVisitorWithUTF8HeadersBase</a> when the number of headers
+exceeds the configured maximum.</p>
 </section>
 </article>
           </div>

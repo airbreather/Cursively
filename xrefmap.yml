@@ -7,6 +7,69 @@ references:
   commentId: N:Cursively
   fullName: Cursively
   nameWithType: Cursively
+- uid: Cursively.Csv
+  name: Csv
+  href: api/Cursively.Csv.html
+  commentId: T:Cursively.Csv
+  fullName: Cursively.Csv
+  nameWithType: Csv
+- uid: Cursively.Csv.ProcessFile(System.String,Cursively.CsvReaderVisitorBase)
+  name: ProcessFile(String, CsvReaderVisitorBase)
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessFile_System_String_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Csv.ProcessFile(System.String,Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Csv.ProcessFile(System.String, Cursively.CsvReaderVisitorBase)
+  nameWithType: Csv.ProcessFile(String, CsvReaderVisitorBase)
+- uid: Cursively.Csv.ProcessFile*
+  name: ProcessFile
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessFile_
+  commentId: Overload:Cursively.Csv.ProcessFile
+  isSpec: "True"
+  fullName: Cursively.Csv.ProcessFile
+  nameWithType: Csv.ProcessFile
+- uid: Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase)
+  name: ProcessStream(Stream, CsvReaderVisitorBase)
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Csv.ProcessStream(System.IO.Stream, Cursively.CsvReaderVisitorBase)
+  nameWithType: Csv.ProcessStream(Stream, CsvReaderVisitorBase)
+- uid: Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32)
+  name: ProcessStream(Stream, CsvReaderVisitorBase, Int32)
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_
+  commentId: M:Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32)
+  fullName: Cursively.Csv.ProcessStream(System.IO.Stream, Cursively.CsvReaderVisitorBase, System.Int32)
+  nameWithType: Csv.ProcessStream(Stream, CsvReaderVisitorBase, Int32)
+- uid: Cursively.Csv.ProcessStream*
+  name: ProcessStream
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStream_
+  commentId: Overload:Cursively.Csv.ProcessStream
+  isSpec: "True"
+  fullName: Cursively.Csv.ProcessStream
+  nameWithType: Csv.ProcessStream
+- uid: Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessStreamAsync(Stream, CsvReaderVisitorBase, Int32, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessStreamAsync(Stream, CsvReaderVisitorBase, Int32, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Csv.ProcessStreamAsync(System.IO.Stream, Cursively.CsvReaderVisitorBase, System.Int32, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Csv.ProcessStreamAsync(System.IO.Stream, Cursively.CsvReaderVisitorBase, System.Int32, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: Csv.ProcessStreamAsync(Stream, CsvReaderVisitorBase, Int32, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: Csv.ProcessStreamAsync(Stream, CsvReaderVisitorBase, Int32, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessStreamAsync(Stream, CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessStreamAsync(Stream, CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Csv.ProcessStreamAsync(System.IO.Stream, Cursively.CsvReaderVisitorBase, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Csv.ProcessStreamAsync(System.IO.Stream, Cursively.CsvReaderVisitorBase, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: Csv.ProcessStreamAsync(Stream, CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: Csv.ProcessStreamAsync(Stream, CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Csv.ProcessStreamAsync*
+  name: ProcessStreamAsync
+  href: api/Cursively.Csv.html#Cursively_Csv_ProcessStreamAsync_
+  commentId: Overload:Cursively.Csv.ProcessStreamAsync
+  isSpec: "True"
+  fullName: Cursively.Csv.ProcessStreamAsync
+  nameWithType: Csv.ProcessStreamAsync
 - uid: Cursively.CsvReaderVisitorBase
   name: CsvReaderVisitorBase
   href: api/Cursively.CsvReaderVisitorBase.html
@@ -48,6 +111,19 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvReaderVisitorBase.VisitEndOfRecord
   nameWithType: CsvReaderVisitorBase.VisitEndOfRecord
+- uid: Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField
+  name: VisitNonstandardQuotedField()
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitNonstandardQuotedField
+  commentId: M:Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField
+  fullName: Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField()
+  nameWithType: CsvReaderVisitorBase.VisitNonstandardQuotedField()
+- uid: Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField*
+  name: VisitNonstandardQuotedField
+  href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitNonstandardQuotedField_
+  commentId: Overload:Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorBase.VisitNonstandardQuotedField
+  nameWithType: CsvReaderVisitorBase.VisitNonstandardQuotedField
 - uid: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})
   name: VisitPartialFieldContents(ReadOnlySpan<Byte>)
   href: api/Cursively.CsvReaderVisitorBase.html#Cursively_CsvReaderVisitorBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__
@@ -64,12 +140,235 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvReaderVisitorBase.VisitPartialFieldContents
   nameWithType: CsvReaderVisitorBase.VisitPartialFieldContents
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase
+  name: CsvReaderVisitorWithUTF8HeadersBase
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html
+  commentId: T:Cursively.CsvReaderVisitorWithUTF8HeadersBase
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor
+  name: CsvReaderVisitorWithUTF8HeadersBase()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor(System.Int32,System.Int32,System.Boolean,System.Text.DecoderFallback)
+  name: CsvReaderVisitorWithUTF8HeadersBase(Int32, Int32, Boolean, DecoderFallback)
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_System_Int32_System_Int32_System_Boolean_System_Text_DecoderFallback_
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor(System.Int32,System.Int32,System.Boolean,System.Text.DecoderFallback)
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase(System.Int32, System.Int32, System.Boolean, System.Text.DecoderFallback)
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase(Int32, Int32, Boolean, DecoderFallback)
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor*
+  name: CsvReaderVisitorWithUTF8HeadersBase
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.CsvReaderVisitorWithUTF8HeadersBase
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+  name: CurrentFieldIndex
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_CurrentFieldIndex
+  commentId: P:Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex*
+  name: CurrentFieldIndex
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_CurrentFieldIndex_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback
+  name: DefaultDecoderFallback
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultDecoderFallback
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+  name: DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount
+  name: DefaultMaxHeaderCount
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderCount
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength
+  name: DefaultMaxHeaderLength
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderLength
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
+  name: Headers
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_Headers
+  commentId: P:Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.Headers
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers*
+  name: Headers
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_Headers_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.Headers
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan{System.Byte})
+  name: VisitEndOfDataField(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitEndOfDataField(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField*
+  name: VisitEndOfDataField
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord
+  name: VisitEndOfDataRecord()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataRecord
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord*
+  name: VisitEndOfDataRecord
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataRecord_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})
+  name: VisitEndOfField(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitEndOfField(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField*
+  name: VisitEndOfField
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfField_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord
+  name: VisitEndOfHeaderRecord()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfHeaderRecord
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord*
+  name: VisitEndOfHeaderRecord
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfHeaderRecord_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord
+  name: VisitEndOfRecord()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfRecord
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord*
+  name: VisitEndOfRecord
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfRecord_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields
+  name: VisitMissingDataFields()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitMissingDataFields
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields*
+  name: VisitMissingDataFields
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitMissingDataFields_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan{System.Byte})
+  name: VisitPartialDataFieldContents(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialDataFieldContents_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitPartialDataFieldContents(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents*
+  name: VisitPartialDataFieldContents
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialDataFieldContents_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})
+  name: VisitPartialFieldContents(ReadOnlySpan<Byte>)
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})
+  name.vb: VisitPartialFieldContents(ReadOnlySpan(Of Byte))
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan<System.Byte>)
+  fullName.vb: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan(Of System.Byte))
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(ReadOnlySpan<Byte>)
+  nameWithType.vb: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(ReadOnlySpan(Of Byte))
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents*
+  name: VisitPartialFieldContents
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialFieldContents_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
+  name: VisitUnexpectedDataField()
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitUnexpectedDataField
+  commentId: M:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField()
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField()
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField*
+  name: VisitUnexpectedDataField
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitUnexpectedDataField_
+  commentId: Overload:Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
+  isSpec: "True"
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
 - uid: Cursively.CsvTokenizer
   name: CsvTokenizer
   href: api/Cursively.CsvTokenizer.html
   commentId: T:Cursively.CsvTokenizer
   fullName: Cursively.CsvTokenizer
   nameWithType: CsvTokenizer
+- uid: Cursively.CsvTokenizer.#ctor
+  name: CsvTokenizer()
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer__ctor
+  commentId: M:Cursively.CsvTokenizer.#ctor
+  fullName: Cursively.CsvTokenizer.CsvTokenizer()
+  nameWithType: CsvTokenizer.CsvTokenizer()
+- uid: Cursively.CsvTokenizer.#ctor(System.Byte)
+  name: CsvTokenizer(Byte)
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer__ctor_System_Byte_
+  commentId: M:Cursively.CsvTokenizer.#ctor(System.Byte)
+  fullName: Cursively.CsvTokenizer.CsvTokenizer(System.Byte)
+  nameWithType: CsvTokenizer.CsvTokenizer(Byte)
+- uid: Cursively.CsvTokenizer.#ctor*
+  name: CsvTokenizer
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer__ctor_
+  commentId: Overload:Cursively.CsvTokenizer.#ctor
+  isSpec: "True"
+  fullName: Cursively.CsvTokenizer.CsvTokenizer
+  nameWithType: CsvTokenizer.CsvTokenizer
 - uid: Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)
   name: ProcessEndOfStream(CsvReaderVisitorBase)
   href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_
@@ -99,3 +398,52 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvTokenizer.ProcessNextChunk
   nameWithType: CsvTokenizer.ProcessNextChunk
+- uid: Cursively.CursivelyDataStreamException
+  name: CursivelyDataStreamException
+  href: api/Cursively.CursivelyDataStreamException.html
+  commentId: T:Cursively.CursivelyDataStreamException
+  fullName: Cursively.CursivelyDataStreamException
+  nameWithType: CursivelyDataStreamException
+- uid: Cursively.CursivelyExtraDataFieldsException
+  name: CursivelyExtraDataFieldsException
+  href: api/Cursively.CursivelyExtraDataFieldsException.html
+  commentId: T:Cursively.CursivelyExtraDataFieldsException
+  fullName: Cursively.CursivelyExtraDataFieldsException
+  nameWithType: CursivelyExtraDataFieldsException
+- uid: Cursively.CursivelyHeaderIsTooLongException
+  name: CursivelyHeaderIsTooLongException
+  href: api/Cursively.CursivelyHeaderIsTooLongException.html
+  commentId: T:Cursively.CursivelyHeaderIsTooLongException
+  fullName: Cursively.CursivelyHeaderIsTooLongException
+  nameWithType: CursivelyHeaderIsTooLongException
+- uid: Cursively.CursivelyHeadersAreNotUTF8Exception
+  name: CursivelyHeadersAreNotUTF8Exception
+  href: api/Cursively.CursivelyHeadersAreNotUTF8Exception.html
+  commentId: T:Cursively.CursivelyHeadersAreNotUTF8Exception
+  fullName: Cursively.CursivelyHeadersAreNotUTF8Exception
+  nameWithType: CursivelyHeadersAreNotUTF8Exception
+- uid: Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+  name: InnerDecoderFallbackException
+  href: api/Cursively.CursivelyHeadersAreNotUTF8Exception.html#Cursively_CursivelyHeadersAreNotUTF8Exception_InnerDecoderFallbackException
+  commentId: P:Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+  fullName: Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+  nameWithType: CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+- uid: Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException*
+  name: InnerDecoderFallbackException
+  href: api/Cursively.CursivelyHeadersAreNotUTF8Exception.html#Cursively_CursivelyHeadersAreNotUTF8Exception_InnerDecoderFallbackException_
+  commentId: Overload:Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+  isSpec: "True"
+  fullName: Cursively.CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+  nameWithType: CursivelyHeadersAreNotUTF8Exception.InnerDecoderFallbackException
+- uid: Cursively.CursivelyMissingDataFieldsException
+  name: CursivelyMissingDataFieldsException
+  href: api/Cursively.CursivelyMissingDataFieldsException.html
+  commentId: T:Cursively.CursivelyMissingDataFieldsException
+  fullName: Cursively.CursivelyMissingDataFieldsException
+  nameWithType: CursivelyMissingDataFieldsException
+- uid: Cursively.CursivelyTooManyHeadersException
+  name: CursivelyTooManyHeadersException
+  href: api/Cursively.CursivelyTooManyHeadersException.html
+  commentId: T:Cursively.CursivelyTooManyHeadersException
+  fullName: Cursively.CursivelyTooManyHeadersException
+  nameWithType: CursivelyTooManyHeadersException
