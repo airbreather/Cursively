@@ -240,7 +240,16 @@ namespace Cursively
                 for (int idx = 0; idx < chunk.Length; idx++)
                 {
                     byte c = chunk[idx];
-                    if (c == QUOTE)
+                    if (c == delimiter)
+                    {
+                        _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
+                        visitor.VisitEndOfField(chunk.Slice(0, idx));
+                    }
+                    else if (c == CR || c == LF)
+                    {
+                        ProcessEndOfLine(chunk.Slice(0, idx), visitor);
+                    }
+                    else if (c == QUOTE)
                     {
                         if (idx == 0)
                         {
@@ -257,15 +266,6 @@ namespace Cursively
                             // let the visitor know that this was nonstandard.
                             visitor.VisitNonstandardQuotedField();
                         }
-                    }
-                    else if (c == delimiter)
-                    {
-                        _parserFlags = ParserFlags.ReadAnythingOnCurrentLine;
-                        visitor.VisitEndOfField(chunk.Slice(0, idx));
-                    }
-                    else if (c == CR || c == LF)
-                    {
-                        ProcessEndOfLine(chunk.Slice(0, idx), visitor);
                     }
                     else
                     {
@@ -311,12 +311,6 @@ namespace Cursively
 
         private void PickUpFromLastTime(ref ReadOnlySpan<byte> readBuffer, CsvReaderVisitorBase visitor)
         {
-            if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
-            {
-                HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
-                return;
-            }
-
             if ((_parserFlags & (ParserFlags.CurrentFieldStartedWithQuote | ParserFlags.QuotedFieldDataEnded)) == ParserFlags.CurrentFieldStartedWithQuote)
             {
                 int idx = readBuffer.IndexOf(QUOTE);
@@ -388,6 +382,12 @@ namespace Cursively
                 // the field; by this point, we don't save enough state to remember which case we're
                 // in, so VisitNonstandardQuotedField **MUST** have been correctly called (or not)
                 // before entering this section.
+                if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
+                {
+                    HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
+                    return;
+                }
+
                 for (int idx = 0; idx < readBuffer.Length; idx++)
                 {
                     byte b = readBuffer[idx];
