@@ -17,28 +17,34 @@ namespace Cursively.Tests
 
         private static readonly int[] TestChunkLengths = { 1, 2, 3, 5, 8, 13, 21, 34 };
 
+        private static readonly byte[] TestDelimiters = { (byte)',', (byte)'\t' };
+
         public static IEnumerable<object[]> TestCsvFiles =>
-            from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv")
-            let fileName = Path.GetFileNameWithoutExtension(filePath)
-            from chunkLength in TestChunkLengths
-            select new object[] { fileName, chunkLength };
+            from filePath in Directory.EnumerateFiles(TestCsvFilesFolderPath, "*.csv", SearchOption.AllDirectories)
+            select new object[] { filePath };
+
+        public static IEnumerable<object[]> TestCsvFilesWithChunkLengthsAndDelimiters => GetTestCsvFilesWithChunkLengthsAndDelimiters();
+
+        public static IEnumerable<object[]> TestValidHeaderedCsvFilesWithChunkLengthsAndDelimiters => GetTestCsvFilesWithChunkLengthsAndDelimiters("with-headers", "valid");
+
+        [Theory]
+        [InlineData((byte)0x0A)]
+        [InlineData((byte)0x0D)]
+        [InlineData((byte)0x22)]
+        public void ConstructorShouldRejectInvalidDelimiters(byte delimiter)
+        {
+            Assert.Throws<ArgumentException>("delimiter", () => new CsvTokenizer(delimiter));
+        }
 
         [Theory]
         [MemberData(nameof(TestCsvFiles))]
-        public void NullVisitorShouldBeFine(string fileName, int chunkLength)
+        public void NullVisitorShouldBeFine(string filePath)
         {
             // arrange
-            string fullCsvFilePath = Path.Combine(TestCsvFilesFolderPath, fileName + ".csv");
-            ReadOnlySpan<byte> fileData = File.ReadAllBytes(fullCsvFilePath);
+            ReadOnlySpan<byte> fileData = File.ReadAllBytes(filePath);
             var tokenizer = new CsvTokenizer();
 
             // act
-            while (fileData.Length >= chunkLength)
-            {
-                tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), null);
-                fileData = fileData.Slice(chunkLength);
-            }
-
             tokenizer.ProcessNextChunk(fileData, null);
             tokenizer.ProcessEndOfStream(null);
 
@@ -46,27 +52,129 @@ namespace Cursively.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TestCsvFiles))]
-        public void CsvTokenizationShouldMatchCsvHelper(string fileName, int chunkLength)
+        [MemberData(nameof(TestCsvFilesWithChunkLengthsAndDelimiters))]
+        public void CsvTokenizationShouldMatchCsvHelper(string filePath, int chunkLength, byte delimiter)
         {
             // arrange
-            byte[] fileDataTemplate = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, fileName + ".csv"));
+            byte[] fileDataTemplate = File.ReadAllBytes(filePath);
+            for (int i = 0; i < fileDataTemplate.Length; i++)
+            {
+                if (fileDataTemplate[i] == (byte)',')
+                {
+                    fileDataTemplate[i] = delimiter;
+                }
+            }
 
-            int randomSeed = HashCode.Combine(fileName, chunkLength);
+            int randomSeed = HashCode.Combine(filePath, chunkLength, delimiter);
             foreach (byte[] fileData in VaryLineEndings(fileDataTemplate, randomSeed))
             {
                 // act
-                var actual = TokenizeCsvFileUsingMine(fileData, chunkLength);
+                var actual = TokenizeCsvFileUsingCursively(fileData, chunkLength, delimiter);
 
                 // assert
-                var expected = TokenizeCsvFileUsingCsvHelper(fileData);
+                var expected = TokenizeCsvFileUsingCsvHelper(fileData, $"{(char)delimiter}");
                 Assert.Equal(expected, actual);
             }
         }
 
-        private static List<string[]> TokenizeCsvFileUsingMine(ReadOnlySpan<byte> fileData, int chunkLength)
+        [Theory]
+        [MemberData(nameof(TestCsvFiles))]
+        public void MemoryMappedCsvShouldMatchCsvHelper(string filePath)
         {
-            var tokenizer = new CsvTokenizer();
+            // arrange
+            var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
+
+            // act
+            Csv.ProcessFile(filePath, visitor);
+            var actual = visitor.Records;
+
+            // assert
+            var expected = TokenizeCsvFileUsingCsvHelper(File.ReadAllBytes(filePath), ",");
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void NonstandardQuotedFieldsShouldNotify()
+        {
+            // arrange
+            string csvFilePath = Path.Combine(TestCsvFilesFolderPath, "nonstandard.csv");
+            var visitor = new NonstandardFieldVisitor(checked((int)new FileInfo(csvFilePath).Length));
+
+            // act
+            Csv.ProcessFile(csvFilePath, visitor);
+
+            // assert
+            string[] expectedContentsBeforeNonstandardFields =
+            {
+                "hello ",
+                "hello ",
+                "good\"",
+                @"100% coverage, with the version of Roslyn shipped with the .NET Core 3.0 Preview 4 SDK version, is impossible...
+...unless I do something like making the byte immediately after this quoted field something with an ASCII value less than 13 that's not 10.
+Tab ('\t') has an ASCII value of 9, which is perfect for this.  so here's your tab:	",
+            };
+            Assert.Equal(expectedContentsBeforeNonstandardFields, visitor.ContentsBeforeNonstandardFields);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestValidHeaderedCsvFilesWithChunkLengthsAndDelimiters))]
+        public void HeaderedCsvTokenizationShouldMatchCsvHelper(string filePath, int chunkLength, byte delimiter)
+        {
+            // arrange
+            byte[] fileDataTemplate = File.ReadAllBytes(filePath);
+            for (int i = 0; i < fileDataTemplate.Length; i++)
+            {
+                if (fileDataTemplate[i] == (byte)',')
+                {
+                    fileDataTemplate[i] = delimiter;
+                }
+            }
+
+            int randomSeed = HashCode.Combine(filePath, chunkLength, delimiter);
+            foreach (byte[] fileData in VaryLineEndings(fileDataTemplate, randomSeed))
+            {
+                // act
+                var actual = TokenizeHeaderedCsvFileUsingCursively(fileData, chunkLength, delimiter);
+
+                // assert
+                var expected = TokenizeCsvFileUsingCsvHelper(fileData, $"{(char)delimiter}");
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectTooManyDataFieldsByDefault()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "invalid", "too-many-data-fields.csv"));
+
+            // act, assert
+            Assert.Throws<CursivelyExtraDataFieldsException>(() => TokenizeHeaderedCsvFileUsingCursively(fileData, fileData.Length, (byte)','));
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectMissingDataFieldsByDefault()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "invalid", "missing-data-fields.csv"));
+
+            // act, assert
+            Assert.Throws<CursivelyMissingDataFieldsException>(() => TokenizeHeaderedCsvFileUsingCursively(fileData, fileData.Length, (byte)','));
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectInvalidUTF8ByDefault()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "invalid", "invalid-utf8-in-header.csv"));
+
+            // act, assert
+            Assert.Throws<CursivelyHeadersAreNotUTF8Exception>(() => TokenizeHeaderedCsvFileUsingCursively(fileData, fileData.Length, (byte)','));
+        }
+
+        private static List<string[]> TokenizeCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
+        {
+            var tokenizer = new CsvTokenizer(delimiter);
             var visitor = new StringBufferingVisitor(fileData.Length);
             while (fileData.Length >= chunkLength)
             {
@@ -76,14 +184,29 @@ namespace Cursively.Tests
 
             tokenizer.ProcessNextChunk(fileData, visitor);
             tokenizer.ProcessEndOfStream(visitor);
-            return visitor.Lines;
+            return visitor.Records;
         }
 
-        private static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData)
+        private static List<string[]> TokenizeHeaderedCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
+        {
+            var tokenizer = new CsvTokenizer(delimiter);
+            var visitor = new HeaderedStringBufferingVisitor(fileData.Length);
+            while (fileData.Length >= chunkLength)
+            {
+                tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), visitor);
+                fileData = fileData.Slice(chunkLength);
+            }
+
+            tokenizer.ProcessNextChunk(fileData, visitor);
+            tokenizer.ProcessEndOfStream(visitor);
+            return visitor.Records;
+        }
+
+        private static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData, string delimiter)
         {
             using (var stream = new MemoryStream(csvData, false))
             using (var streamReader = new StreamReader(stream, new UTF8Encoding(false, false), false))
-            using (var csvReader = new CsvReader(streamReader, new Configuration { BadDataFound = null }))
+            using (var csvReader = new CsvReader(streamReader, new Configuration { BadDataFound = null, Delimiter = delimiter }))
             {
                 while (csvReader.Read())
                 {
@@ -142,6 +265,12 @@ namespace Cursively.Tests
             return Array.ConvertAll(resultLists, lst => lst.ToArray());
         }
 
+        private static IEnumerable<object[]> GetTestCsvFilesWithChunkLengthsAndDelimiters(params string[] pathParts) =>
+            from filePath in Directory.EnumerateFiles(Path.Combine(TestCsvFilesFolderPath, Path.Combine(pathParts)), "*.csv", SearchOption.AllDirectories)
+            from chunkLength in TestChunkLengths
+            from delimiter in TestDelimiters
+            select new object[] { filePath, chunkLength, delimiter };
+
         private sealed class StringBufferingVisitor : CsvReaderVisitorBase
         {
             private static readonly UTF8Encoding TheEncoding = new UTF8Encoding(false, false);
@@ -154,17 +283,104 @@ namespace Cursively.Tests
 
             public StringBufferingVisitor(int fileLength) => _cutBuffer = new byte[fileLength];
 
-            public List<string[]> Lines { get; } = new List<string[]>();
+            public List<string[]> Records { get; } = new List<string[]>();
 
             public override void VisitEndOfRecord()
             {
-                Lines.Add(_fields.ToArray());
+                Records.Add(_fields.ToArray());
                 _fields.Clear();
             }
 
             public override void VisitPartialFieldContents(ReadOnlySpan<byte> chunk) => CopyToCutBuffer(chunk);
 
             public override void VisitEndOfField(ReadOnlySpan<byte> chunk)
+            {
+                if (_cutBufferConsumed != 0)
+                {
+                    CopyToCutBuffer(chunk);
+                    chunk = new ReadOnlySpan<byte>(_cutBuffer, 0, _cutBufferConsumed);
+                }
+
+                _fields.Add(TheEncoding.GetString(chunk));
+                _cutBufferConsumed = 0;
+            }
+
+            private void CopyToCutBuffer(ReadOnlySpan<byte> chunk)
+            {
+                chunk.CopyTo(new Span<byte>(_cutBuffer, _cutBufferConsumed, chunk.Length));
+                _cutBufferConsumed += chunk.Length;
+            }
+        }
+
+        private sealed class NonstandardFieldVisitor : CsvReaderVisitorBase
+        {
+            private readonly Decoder _decoder = new UTF8Encoding(false, true).GetDecoder();
+
+            private readonly char[] _fieldBuffer;
+
+            private int _fieldBufferConsumed;
+
+            public NonstandardFieldVisitor(int byteCount) =>
+                _fieldBuffer = new char[Encoding.UTF8.GetMaxCharCount(byteCount)];
+
+            public override void VisitEndOfField(ReadOnlySpan<byte> chunk)
+            {
+                VisitFieldContents(chunk, true);
+                _fieldBufferConsumed = 0;
+            }
+
+            public List<string> ContentsBeforeNonstandardFields { get; } = new List<string>();
+
+            public override void VisitEndOfRecord() { }
+
+            public override void VisitPartialFieldContents(ReadOnlySpan<byte> chunk) =>
+                VisitFieldContents(chunk, false);
+
+            public override void VisitNonstandardQuotedField()
+            {
+                VisitFieldContents(default, true);
+                ContentsBeforeNonstandardFields.Add(new string(_fieldBuffer, 0, _fieldBufferConsumed));
+            }
+
+            private void VisitFieldContents(ReadOnlySpan<byte> chunk, bool flush)
+            {
+                int cnt = _decoder.GetCharCount(chunk, flush);
+                if (cnt > 0)
+                {
+                    _decoder.GetChars(chunk, new Span<char>(_fieldBuffer, _fieldBufferConsumed, cnt), flush);
+                    _fieldBufferConsumed += cnt;
+                }
+            }
+        }
+
+        private sealed class HeaderedStringBufferingVisitor : CsvReaderVisitorWithUTF8HeadersBase
+        {
+            private static readonly UTF8Encoding TheEncoding = new UTF8Encoding(false, false);
+
+            private readonly List<string> _fields = new List<string>();
+
+            private readonly byte[] _cutBuffer;
+
+            private int _cutBufferConsumed;
+
+            public HeaderedStringBufferingVisitor(int fileLength) => _cutBuffer = new byte[fileLength];
+
+            public List<string[]> Records { get; } = new List<string[]>();
+
+            protected override void VisitEndOfHeaderRecord()
+            {
+                Records.Insert(0, Headers.ToArray());
+            }
+
+            protected override void VisitEndOfDataRecord()
+            {
+                Records.Add(_fields.ToArray());
+                _fields.Clear();
+            }
+
+            protected override void VisitPartialDataFieldContents(ReadOnlySpan<byte> chunk) => CopyToCutBuffer(chunk);
+
+            protected override void VisitEndOfDataField(ReadOnlySpan<byte> chunk)
             {
                 if (_cutBufferConsumed != 0)
                 {

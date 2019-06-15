@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -13,7 +14,6 @@ namespace Cursively.Benchmark
 {
     [ClrJob]
     [CoreJob]
-    [CoreRtJob]
     [GcServer(true)]
     [MemoryDiagnoser]
     public class Program
@@ -21,15 +21,6 @@ namespace Cursively.Benchmark
         public static CsvFile[] CsvFiles => GetCsvFiles();
 
         [Benchmark(Baseline = true)]
-        [ArgumentsSource(nameof(CsvFiles))]
-        public void NopUsingCursively(CsvFile csvFile)
-        {
-            var tokenizer = new CsvTokenizer();
-            tokenizer.ProcessNextChunk(csvFile.FileData, null);
-            tokenizer.ProcessEndOfStream(null);
-        }
-
-        [Benchmark]
         [ArgumentsSource(nameof(CsvFiles))]
         public long CountRowsUsingCursively(CsvFile csvFile)
         {
@@ -63,7 +54,8 @@ namespace Cursively.Benchmark
             var prog = new Program();
             foreach (var csvFile in CsvFiles)
             {
-                if (prog.CountRowsUsingCursively(csvFile) != prog.CountRowsUsingCsvHelper(csvFile))
+                long rowCount = prog.CountRowsUsingCursively(csvFile);
+                if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount)
                 {
                     Console.Error.WriteLine($"Failed on {csvFile}.");
                     return 1;
@@ -88,14 +80,29 @@ namespace Cursively.Benchmark
             public override string ToString() => FileName;
         }
 
-        private static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null) =>
-            Array.ConvertAll(Directory.GetFiles(Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files"), "*.csv"),
-                             fullPath => new CsvFile(fullPath));
+        private static CsvFile[] GetCsvFiles([CallerFilePath]string myLocation = null)
+        {
+            string csvFileDirectoryPath = Path.Combine(Path.GetDirectoryName(myLocation), "large-csv-files");
+            if (!Directory.Exists(csvFileDirectoryPath))
+            {
+                string tmpDirectoryPath = csvFileDirectoryPath + "-tmp";
+                if (Directory.Exists(tmpDirectoryPath))
+                {
+                    Directory.Delete(tmpDirectoryPath, true);
+                }
+
+                string zipFilePath = csvFileDirectoryPath + ".zip";
+                Directory.CreateDirectory(tmpDirectoryPath);
+                ZipFile.ExtractToDirectory(zipFilePath, tmpDirectoryPath);
+                Directory.Move(tmpDirectoryPath, csvFileDirectoryPath);
+            }
+
+            return Array.ConvertAll(Directory.GetFiles(csvFileDirectoryPath, "*.csv"),
+                                    fullPath => new CsvFile(fullPath));
+        }
 
         private sealed class RowCountingVisitor : CsvReaderVisitorBase
         {
-            public long CharCount { get; private set; }
-
             public long RowCount { get; private set; }
 
             public override void VisitEndOfRecord() => ++RowCount;

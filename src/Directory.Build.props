@@ -21,8 +21,11 @@
     <GenerateGitVersionInformation>false</GenerateGitVersionInformation>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(LGTM)' != 'true' ">
     <PackageReference Include="GitVersionTask" Version="5.0.0-beta3-4" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" PrivateAssets="All" />
   </ItemGroup>
 

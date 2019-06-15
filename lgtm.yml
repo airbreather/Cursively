@@ -1,0 +1,6 @@
+extraction:
+  csharp:
+    after_prepare:
+      - export LGTM=true
+    index:
+      solution: src/Cursively/Cursively.csproj
