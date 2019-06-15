@@ -311,7 +311,7 @@ namespace Cursively
 
         private void PickUpFromLastTime(ref ReadOnlySpan<byte> readBuffer, CsvReaderVisitorBase visitor)
         {
-            if ((_parserFlags & (ParserFlags.CurrentFieldStartedWithQuote | ParserFlags.QuotedFieldDataEnded)) == ParserFlags.CurrentFieldStartedWithQuote)
+            if ((_parserFlags & (ParserFlags.CurrentFieldStartedWithQuote | ParserFlags.QuotedFieldDataEnded | ParserFlags.CutAtPotentiallyTerminalDoubleQuote)) == ParserFlags.CurrentFieldStartedWithQuote)
             {
                 int idx = readBuffer.IndexOf(QUOTE);
                 if (idx < 0)
