@@ -29,6 +29,22 @@ namespace Cursively.Processing
         public CsvCharsInput WithDelimiter(byte delimiter) =>
             new CsvCharsInput(delimiter, _chars, _chunkCharCount);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chunkCharCount"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        public CsvCharsInput WithChunkCharCount(int chunkCharCount)
+        {
+            if (chunkCharCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+            }
+
+            return new CsvCharsInput(Delimiter, _chars, chunkCharCount);
+        }
+
         /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
