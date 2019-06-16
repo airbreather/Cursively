@@ -4,8 +4,6 @@ using System.IO.MemoryMappedFiles;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Cursively.Processing;
-
 namespace Cursively
 {
     /// <summary>

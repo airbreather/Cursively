@@ -1,4 +1,6 @@
-﻿namespace Cursively.Processing
+﻿using Cursively.Processing;
+
+namespace Cursively
 {
     /// <summary>
     /// 

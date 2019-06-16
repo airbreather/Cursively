@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Text;
 
-using Cursively.Processing;
-
 using Xunit;
 
 namespace Cursively.Tests
