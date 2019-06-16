@@ -67,7 +67,7 @@ namespace Cursively.Processing
                 var charSpan = segment.Span;
                 if (charSpan.IsEmpty)
                 {
-                    return;
+                    continue;
                 }
 
                 int rem = charSpan.Length;
