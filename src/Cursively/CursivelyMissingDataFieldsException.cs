@@ -5,8 +5,7 @@ using System.Runtime.Serialization;
 namespace Cursively
 {
     /// <summary>
-    /// Raised by <see cref="CsvReaderVisitorWithUTF8HeadersBase"/>, by default, when a data record
-    /// contains fewer fields than the header record.
+    /// Raised, by default, when a data record contains fewer fields than the header record.
     /// </summary>
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]

@@ -1,0 +1,58 @@
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Cursively.Internal
+{
+    internal sealed class CsvStreamInput : CsvAsyncInput
+    {
+        private readonly Stream _stream;
+
+        private readonly int _bufferSize;
+
+        public CsvStreamInput(byte delimiter, Stream stream, int bufferSize)
+            : base(delimiter)
+        {
+            _stream = stream;
+            _bufferSize = bufferSize;
+        }
+
+        public override CsvInput WithDelimiter(byte delimiter) =>
+            new CsvStreamInput(delimiter, _stream, _bufferSize);
+
+        protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        {
+            var stream = _stream;
+
+            byte[] buffer = new byte[_bufferSize];
+            int cnt;
+            while ((cnt = stream.Read(buffer, 0, buffer.Length)) != 0)
+            {
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
+            }
+
+            tokenizer.ProcessEndOfStream(visitor);
+        }
+
+        protected override async ValueTask ProcessAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, IProgress<int> progress, CancellationToken cancellationToken)
+        {
+            var stream = _stream;
+
+            byte[] buffer = new byte[_bufferSize];
+            int cnt;
+            while ((cnt = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)) != 0)
+            {
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
+                progress?.Report(cnt);
+
+                // not all streams support cancellation, so we might as well do this ourselves.  it
+                // does involve a volatile read, so don't go overboard.
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            tokenizer.ProcessEndOfStream(visitor);
+            progress?.Report(0);
+        }
+    }
+}

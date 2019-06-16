@@ -65,25 +65,25 @@ namespace Cursively
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// maximum number of headers (1,000).
         /// </summary>
-        protected static readonly int DefaultMaxHeaderCount = 1_000;
+        protected internal static readonly int DefaultMaxHeaderCount = 1_000;
 
         /// <summary>
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// maximum length, in UTF-16 code units, of a single header (100).
         /// </summary>
-        protected static readonly int DefaultMaxHeaderLength = 100;
+        protected internal static readonly int DefaultMaxHeaderLength = 100;
 
         /// <summary>
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// value indicating whether or not to ignore a leading UTF-8 BOM (true).
         /// </summary>
-        protected static readonly bool DefaultIgnoreUTF8IdentifierOnFirstHeaderField = true;
+        protected internal static readonly bool DefaultIgnoreUTF8IdentifierOnFirstHeaderField = true;
 
         /// <summary>
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// fallback logic when the decoder encounters invalid UTF-8 bytes (throw an exception).
         /// </summary>
-        protected static readonly DecoderFallback DefaultDecoderFallback = new CursivelyDecoderExceptionFallback();
+        protected internal static readonly DecoderFallback DefaultDecoderFallback = new CursivelyDecoderExceptionFallback();
 
         private static readonly UTF8Encoding EncodingToUse = new UTF8Encoding(false, false);
 

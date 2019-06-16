@@ -5,8 +5,7 @@ using System.Runtime.Serialization;
 namespace Cursively
 {
     /// <summary>
-    /// Raised by <see cref="CsvReaderVisitorWithUTF8HeadersBase"/> when the number of headers
-    /// exceeds the configured maximum.
+    /// Raised when the number of headers exceeds the configured maximum.
     /// </summary>
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]

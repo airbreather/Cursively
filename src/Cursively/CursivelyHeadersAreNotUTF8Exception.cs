@@ -6,8 +6,7 @@ using System.Text;
 namespace Cursively
 {
     /// <summary>
-    /// Raised by <see cref="CsvReaderVisitorWithUTF8HeadersBase"/>, by default, when the header
-    /// record contains invalid UTF-8 bytes.
+    /// Raised, by default, when the header record contains invalid UTF-8 bytes.
     /// </summary>
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
