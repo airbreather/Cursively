@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 using Xunit;
@@ -8,6 +7,12 @@ namespace Cursively.Tests
 {
     public sealed class CsvOperationTests
     {
+        // I think AppVeyor is cloning with Unix-style line endings despite running the tests on
+        // Windows... it doesn't matter for the main source code, but it makes these tests really
+        // annoying unless I do something like this to make it all consistent.
+        private const string NewLineInSourceCode = @"
+";
+
         [Fact]
         public void WriteFlattenedTest()
         {
@@ -20,15 +25,26 @@ B,B,C
             var stringBuilder = new StringBuilder();
             using (var writer = new StringWriter(stringBuilder))
             {
+                writer.NewLine = NewLineInSourceCode;
                 var input = CsvInput.ForString(InputText);
                 CsvOperation.WriteFlattened()
                             .WithOutputSink(writer)
                             .Run(input);
             }
 
-            string expectedFormat = "[A] = 1{0}[B] = 2{0}[C] = 3{0}[A] = B{0}[B] = B{0}[C] = C{0}[A] = 3{0}[B] = 2{0}[C] = 1{0}";
-            string expected = string.Format(expectedFormat, Environment.NewLine);
-            Assert.Equal(expected, stringBuilder.ToString());
+            const string Expected =
+@"[A] = 1
+[B] = 2
+[C] = 3
+[A] = B
+[B] = B
+[C] = C
+[A] = 3
+[B] = 2
+[C] = 1
+";
+
+            Assert.Equal(Expected, stringBuilder.ToString());
         }
     }
 }
