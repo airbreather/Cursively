@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 
 using Xunit;
@@ -25,18 +26,9 @@ B,B,C
                             .Run(input);
             }
 
-            const string Expected =
-@"[A] = 1
-[B] = 2
-[C] = 3
-[A] = B
-[B] = B
-[C] = C
-[A] = 3
-[B] = 2
-[C] = 1
-";
-            Assert.Equal(Expected, stringBuilder.ToString());
+            string expectedFormat = "[A] = 1{0}[B] = 2{0}[C] = 3{0}[A] = B{0}[B] = B{0}[C] = C{0}[A] = 3{0}[B] = 2{0}[C] = 1{0}";
+            string expected = string.Format(expectedFormat, Environment.NewLine);
+            Assert.Equal(expected, stringBuilder.ToString());
         }
     }
 }
