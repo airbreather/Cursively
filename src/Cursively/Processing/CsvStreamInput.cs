@@ -15,7 +15,7 @@ namespace Cursively.Processing
         private readonly int _bufferSize;
 
         internal CsvStreamInput(byte delimiter, Stream stream, int bufferSize)
-            : base(delimiter)
+            : base(delimiter, true)
         {
             _stream = stream;
             _bufferSize = bufferSize;
@@ -63,6 +63,21 @@ namespace Cursively.Processing
 
             tokenizer.ProcessEndOfStream(visitor);
             progress?.Report(0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override bool TryResetCore()
+        {
+            if (!_stream.CanSeek)
+            {
+                return false;
+            }
+
+            _stream.Seek(0, SeekOrigin.Begin);
+            return true;
         }
     }
 }

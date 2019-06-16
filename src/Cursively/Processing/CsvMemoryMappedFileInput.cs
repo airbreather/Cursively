@@ -13,7 +13,7 @@ namespace Cursively.Processing
         private readonly string _csvFilePath;
 
         internal CsvMemoryMappedFileInput(byte delimiter, string csvFilePath)
-            : base(delimiter)
+            : base(delimiter, false)
         {
             _csvFilePath = csvFilePath;
         }

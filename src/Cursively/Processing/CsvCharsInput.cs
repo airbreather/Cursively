@@ -13,7 +13,7 @@ namespace Cursively.Processing
         private readonly int _chunkCharCount;
 
         internal CsvCharsInput(byte delimiter, ReadOnlyMemory<char> chars, int chunkCharCount)
-            : base(delimiter)
+            : base(delimiter, false)
         {
             _chars = chars;
             _chunkCharCount = chunkCharCount < chars.Length

@@ -10,7 +10,7 @@ namespace Cursively.Processing
         private readonly ReadOnlyMemory<byte> _bytes;
 
         internal CsvBytesInput(byte delimiter, ReadOnlyMemory<byte> bytes)
-            : base(delimiter)
+            : base(delimiter, false)
         {
             _bytes = bytes;
         }

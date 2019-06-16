@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.IO;
 
 using Cursively.Processing;
@@ -10,12 +11,26 @@ namespace Cursively
     /// </summary>
     public abstract class CsvInput
     {
+        private readonly bool _mustResetAfterProcessing;
+
+        private bool _alreadyProcessed;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected CsvInput()
+            : this((byte)',', true)
+        {
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="delimiter"></param>
-        protected CsvInput(byte delimiter)
+        /// <param name="mustResetAfterProcessing"></param>
+        protected CsvInput(byte delimiter, bool mustResetAfterProcessing)
         {
+            _mustResetAfterProcessing = mustResetAfterProcessing;
             Delimiter = delimiter;
         }
 
@@ -123,10 +138,58 @@ namespace Cursively
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="chars"></param>
+        /// <returns></returns>
+        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars) =>
+            ForChars(chars, 341);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chars"></param>
+        /// <param name="chunkCharCount"></param>
+        /// <returns></returns>
+        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars, int chunkCharCount)
+        {
+            if (chunkCharCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+            }
+
+            return new CsvCharSequenceInput((byte)',', chars, chunkCharCount);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="visitor"></param>
         public void Process(CsvReaderVisitorBase visitor)
         {
+            if (_alreadyProcessed && _mustResetAfterProcessing)
+            {
+                throw new InvalidOperationException("Input was already processed.  Call TryReset() first to try to reset this input.  If that method returns false, then this input will not work.");
+            }
+
             Process(new CsvTokenizer(Delimiter), visitor);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool TryReset()
+        {
+            if (_alreadyProcessed)
+            {
+                if (!TryResetCore())
+                {
+                    return false;
+                }
+
+                _alreadyProcessed = false;
+            }
+
+            return !_alreadyProcessed;
         }
 
         /// <summary>
@@ -135,5 +198,11 @@ namespace Cursively
         /// <param name="tokenizer"></param>
         /// <param name="visitor"></param>
         protected abstract void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool TryResetCore() => false;
     }
 }
