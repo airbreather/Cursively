@@ -45,13 +45,15 @@ namespace Cursively.Processing
         }
 
         /// <inheritdoc />
-        protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            int chunkCharCount = _chunkCharCount;
+            if (_chars.IsSingleSegment)
+            {
+                CsvCharsInput.ProcessFullSegment(_chars.First.Span, _chunkCharCount, tokenizer, visitor);
+                return;
+            }
 
-            var encoding = Encoding.UTF8;
-
-            int maxByteCount = encoding.GetMaxByteCount(chunkCharCount);
+            int maxByteCount = Encoding.UTF8.GetMaxByteCount(_chunkCharCount);
             Span<byte> bytes = stackalloc byte[0];
             if (maxByteCount < 1024)
             {
@@ -62,39 +64,9 @@ namespace Cursively.Processing
                 bytes = new byte[maxByteCount];
             }
 
-            fixed (byte* b = &bytes[0])
+            foreach (var segment in _chars)
             {
-                foreach (var segment in _chars)
-                {
-                    var charSpan = segment.Span;
-                    if (charSpan.IsEmpty)
-                    {
-                        continue;
-                    }
-
-                    int rem = charSpan.Length;
-                    fixed (char* cHead = &charSpan[0])
-                    {
-                        char* c = cHead;
-
-                        while (rem > chunkCharCount)
-                        {
-                            int byteCount = encoding.GetByteCount(c, chunkCharCount);
-                            encoding.GetBytes(c, chunkCharCount, b, byteCount);
-                            tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
-
-                            rem -= chunkCharCount;
-                            c += chunkCharCount;
-                        }
-
-                        if (rem > 0)
-                        {
-                            int byteCount = encoding.GetByteCount(c, rem);
-                            encoding.GetBytes(c, rem, b, byteCount);
-                            tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
-                        }
-                    }
-                }
+                CsvCharsInput.ProcessSegment(segment.Span, bytes, _chunkCharCount, tokenizer, visitor);
             }
 
             tokenizer.ProcessEndOfStream(visitor);

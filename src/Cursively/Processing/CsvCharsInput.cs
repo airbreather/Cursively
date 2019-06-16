@@ -16,9 +16,7 @@ namespace Cursively.Processing
             : base(delimiter, false)
         {
             _chars = chars;
-            _chunkCharCount = chunkCharCount < chars.Length
-                ? chunkCharCount
-                : chars.Length;
+            _chunkCharCount = chunkCharCount;
         }
 
         /// <summary>
@@ -48,17 +46,22 @@ namespace Cursively.Processing
         /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            var charSpan = _chars.Span;
-            if (charSpan.IsEmpty)
+            ProcessFullSegment(_chars.Span, _chunkCharCount, tokenizer, visitor);
+        }
+
+        internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int chunkCharCount, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        {
+            if (chars.IsEmpty)
             {
                 return;
             }
 
-            int chunkCharCount = _chunkCharCount;
+            if (chunkCharCount > chars.Length)
+            {
+                chunkCharCount = chars.Length;
+            }
 
-            var encoding = Encoding.UTF8;
-
-            int maxByteCount = encoding.GetMaxByteCount(chunkCharCount);
+            int maxByteCount = Encoding.UTF8.GetMaxByteCount(chunkCharCount);
             Span<byte> bytes = stackalloc byte[0];
             if (maxByteCount < 1024)
             {
@@ -69,9 +72,18 @@ namespace Cursively.Processing
                 bytes = new byte[maxByteCount];
             }
 
-            int rem = charSpan.Length;
+            ProcessSegment(chars, bytes, chunkCharCount, tokenizer, visitor);
+
+            tokenizer.ProcessEndOfStream(visitor);
+        }
+
+        internal static unsafe void ProcessSegment(ReadOnlySpan<char> chars, Span<byte> bytes, int chunkCharCount, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        {
+            var encoding = Encoding.UTF8;
+
+            int rem = chars.Length;
             fixed (byte* b = &bytes[0])
-            fixed (char* cHead = &charSpan[0])
+            fixed (char* cHead = &chars[0])
             {
                 char* c = cHead;
 
@@ -91,8 +103,6 @@ namespace Cursively.Processing
                     encoding.GetBytes(c, rem, b, byteCount);
                     tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
                 }
-
-                tokenizer.ProcessEndOfStream(visitor);
             }
         }
     }
