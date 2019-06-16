@@ -92,10 +92,10 @@ namespace Cursively.Processing
                         encoding.GetBytes(c, rem, b, byteCount);
                         tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
                     }
-
-                    tokenizer.ProcessEndOfStream(visitor);
                 }
             }
+
+            tokenizer.ProcessEndOfStream(visitor);
         }
     }
 }
