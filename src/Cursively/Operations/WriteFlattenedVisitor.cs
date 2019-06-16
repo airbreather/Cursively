@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Cursively.Processing
+namespace Cursively.Operations
 {
     internal sealed class WriteFlattenedVisitor : CsvReaderVisitorWithUTF8HeadersBase
     {

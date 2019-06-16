@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
 
-namespace Cursively.Processing
+namespace Cursively.Inputs
 {
     /// <summary>
     /// 

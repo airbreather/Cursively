@@ -2,7 +2,7 @@
 using System.Buffers;
 using System.IO;
 
-using Cursively.Processing;
+using Cursively.Inputs;
 
 namespace Cursively
 {
@@ -203,6 +203,6 @@ namespace Cursively
         /// 
         /// </summary>
         /// <returns></returns>
-        protected virtual bool TryResetCore() => false;
+        protected virtual bool TryResetCore() => true;
     }
 }

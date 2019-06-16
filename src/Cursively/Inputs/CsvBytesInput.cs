@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cursively.Processing
+namespace Cursively.Inputs
 {
     /// <summary>
     /// 

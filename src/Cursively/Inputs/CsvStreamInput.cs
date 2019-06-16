@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cursively.Processing
+namespace Cursively.Inputs
 {
     /// <summary>
     /// 

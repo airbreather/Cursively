@@ -2,7 +2,7 @@
 using System.Buffers;
 using System.Text;
 
-namespace Cursively.Processing
+namespace Cursively.Inputs
 {
     /// <summary>
     /// 

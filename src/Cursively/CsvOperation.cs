@@ -1,4 +1,4 @@
-﻿using Cursively.Processing;
+﻿using Cursively.Operations;
 
 namespace Cursively
 {

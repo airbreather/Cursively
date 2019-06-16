@@ -1,4 +1,4 @@
-﻿namespace Cursively.Processing
+﻿namespace Cursively.Operations
 {
     /// <summary>
     /// 
