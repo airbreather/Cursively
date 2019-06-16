@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 
-using Cursively.Internal;
-
-namespace Cursively
+namespace Cursively.Processing
 {
     /// <summary>
     /// 
@@ -29,7 +27,7 @@ namespace Cursively
         /// </summary>
         /// <param name="csvStream"></param>
         /// <returns></returns>
-        public static CsvAsyncInput ForStream(Stream csvStream) =>
+        public static CsvStreamInput ForStream(Stream csvStream) =>
             ForStream(csvStream, 81920);
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace Cursively
         /// <param name="csvStream"></param>
         /// <param name="bufferSize"></param>
         /// <returns></returns>
-        public static CsvAsyncInput ForStream(Stream csvStream, int bufferSize)
+        public static CsvStreamInput ForStream(Stream csvStream, int bufferSize)
         {
             if (csvStream is null)
             {
@@ -63,7 +61,7 @@ namespace Cursively
         /// </summary>
         /// <param name="csvFilePath"></param>
         /// <returns></returns>
-        public static CsvInput ForFile(string csvFilePath)
+        public static CsvMemoryMappedFileInput ForFile(string csvFilePath)
         {
             return new CsvMemoryMappedFileInput((byte)',', csvFilePath);
         }
@@ -73,7 +71,7 @@ namespace Cursively
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static CsvInput ForBytes(ReadOnlyMemory<byte> bytes)
+        public static CsvBytesInput ForBytes(ReadOnlyMemory<byte> bytes)
         {
             return new CsvBytesInput((byte)',', bytes);
         }
@@ -81,29 +79,44 @@ namespace Cursively
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="chars"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
-        public static CsvInput ForChars(ReadOnlyMemory<char> chars)
-        {
-            return new CsvCharsInput((byte)',', chars);
-        }
+        public static CsvCharsInput ForString(string str) =>
+            ForChars(str.AsMemory());
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="str"></param>
+        /// <param name="chunkCharCount"></param>
         /// <returns></returns>
-        public static CsvInput ForString(string str)
-        {
-            return new CsvCharsInput((byte)',', str.AsMemory());
-        }
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        public static CsvCharsInput ForString(string str, int chunkCharCount) =>
+            ForChars(str.AsMemory(), chunkCharCount);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="delimiter"></param>
+        /// <param name="chars"></param>
         /// <returns></returns>
-        public abstract CsvInput WithDelimiter(byte delimiter);
+        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars) =>
+            ForChars(chars, 341);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chars"></param>
+        /// <param name="chunkCharCount"></param>
+        /// <returns></returns>
+        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars, int chunkCharCount)
+        {
+            if (chunkCharCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+            }
+
+            return new CsvCharsInput((byte)',', chars, chunkCharCount);
+        }
 
         /// <summary>
         /// 

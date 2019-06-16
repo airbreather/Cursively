@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Cursively.Internal
+namespace Cursively.Processing
 {
     internal sealed class WriteFlattenedVisitor : CsvReaderVisitorWithUTF8HeadersBase
     {
@@ -16,6 +17,8 @@ namespace Cursively.Internal
 
         private int _fieldBufferConsumed;
 
+        private string[] _leadingSpaces;
+
         public WriteFlattenedVisitor(int maxHeaderCount, int maxFieldLength, bool ignoreUTF8IdentifierOnFirstHeaderField, DecoderFallback decoderFallback, TextWriter outputSink)
             : base(maxHeaderCount, maxFieldLength, ignoreUTF8IdentifierOnFirstHeaderField, decoderFallback)
         {
@@ -25,6 +28,35 @@ namespace Cursively.Internal
 
             _fieldDataDecoder = EncodingToUse.GetDecoder();
             _fieldDataDecoder.Fallback = decoderFallback;
+        }
+
+        protected override void VisitEndOfHeaderRecord()
+        {
+            var headers = Headers;
+
+            int longestHeaderLength = -1;
+            foreach (string header in headers)
+            {
+                if (header.Length > longestHeaderLength)
+                {
+                    longestHeaderLength = header.Length;
+                }
+            }
+
+            var leadingSpacesByLength = new Dictionary<int, string> { [0] = string.Empty };
+            string[] leadingSpacesByHeader = new string[headers.Length];
+            for (int i = 0; i < leadingSpacesByHeader.Length; i++)
+            {
+                int leadingSpaceCount = longestHeaderLength - headers[i].Length;
+                if (!leadingSpacesByLength.TryGetValue(leadingSpaceCount, out string leadingSpaces))
+                {
+                    leadingSpaces = leadingSpacesByLength[leadingSpaceCount] = new string(' ', leadingSpaceCount);
+                }
+
+                leadingSpacesByHeader[i] = leadingSpaces;
+            }
+
+            _leadingSpaces = leadingSpacesByHeader;
         }
 
         protected override unsafe void VisitPartialDataFieldContents(ReadOnlySpan<byte> chunk)
@@ -53,6 +85,12 @@ namespace Cursively.Internal
                 {
                     VisitFieldData(b, chunk.Length, true);
                 }
+            }
+
+            string leadingSpaces = _leadingSpaces[CurrentFieldIndex];
+            if (leadingSpaces.Length != 0)
+            {
+                _outputSink.Write(leadingSpaces);
             }
 
             _outputSink.Write("[" + Headers[CurrentFieldIndex] + "] = ");

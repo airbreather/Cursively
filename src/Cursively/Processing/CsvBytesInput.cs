@@ -1,20 +1,29 @@
 ﻿using System;
 
-namespace Cursively.Internal
+namespace Cursively.Processing
 {
-    internal sealed class CsvBytesInput : CsvInput
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class CsvBytesInput : CsvInput
     {
         private readonly ReadOnlyMemory<byte> _bytes;
 
-        public CsvBytesInput(byte delimiter, ReadOnlyMemory<byte> bytes)
+        internal CsvBytesInput(byte delimiter, ReadOnlyMemory<byte> bytes)
             : base(delimiter)
         {
             _bytes = bytes;
         }
 
-        public override CsvInput WithDelimiter(byte delimiter) =>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="delimiter"></param>
+        /// <returns></returns>
+        public CsvBytesInput WithDelimiter(byte delimiter) =>
             new CsvBytesInput(delimiter, _bytes);
 
+        /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
             tokenizer.ProcessNextChunk(_bytes.Span, visitor);

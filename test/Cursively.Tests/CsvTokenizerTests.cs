@@ -7,6 +7,8 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 
+using Cursively.Processing;
+
 using Xunit;
 
 namespace Cursively.Tests

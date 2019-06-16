@@ -3,21 +3,30 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
 
-namespace Cursively.Internal
+namespace Cursively.Processing
 {
-    internal sealed class CsvMemoryMappedFileInput : CsvInput
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class CsvMemoryMappedFileInput : CsvInput
     {
         private readonly string _csvFilePath;
 
-        public CsvMemoryMappedFileInput(byte delimiter, string csvFilePath)
+        internal CsvMemoryMappedFileInput(byte delimiter, string csvFilePath)
             : base(delimiter)
         {
             _csvFilePath = csvFilePath;
         }
 
-        public override CsvInput WithDelimiter(byte delimiter) =>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="delimiter"></param>
+        /// <returns></returns>
+        public CsvMemoryMappedFileInput WithDelimiter(byte delimiter) =>
             new CsvMemoryMappedFileInput(delimiter, _csvFilePath);
 
+        /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
             using (var fl = new FileStream(_csvFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))

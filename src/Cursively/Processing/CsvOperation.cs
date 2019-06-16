@@ -1,10 +1,16 @@
-﻿namespace Cursively
+﻿namespace Cursively.Processing
 {
     /// <summary>
     /// 
     /// </summary>
     public static class CsvOperation
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static CsvCountRecordsOperation CountRecords() => new CsvCountRecordsOperation();
+
         /// <summary>
         /// 
         /// </summary>

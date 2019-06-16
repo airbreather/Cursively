@@ -3,24 +3,33 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cursively.Internal
+namespace Cursively.Processing
 {
-    internal sealed class CsvStreamInput : CsvAsyncInput
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class CsvStreamInput : CsvAsyncInput
     {
         private readonly Stream _stream;
 
         private readonly int _bufferSize;
 
-        public CsvStreamInput(byte delimiter, Stream stream, int bufferSize)
+        internal CsvStreamInput(byte delimiter, Stream stream, int bufferSize)
             : base(delimiter)
         {
             _stream = stream;
             _bufferSize = bufferSize;
         }
 
-        public override CsvInput WithDelimiter(byte delimiter) =>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="delimiter"></param>
+        /// <returns></returns>
+        public CsvStreamInput WithDelimiter(byte delimiter) =>
             new CsvStreamInput(delimiter, _stream, _bufferSize);
 
+        /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
             var stream = _stream;
@@ -35,6 +44,7 @@ namespace Cursively.Internal
             tokenizer.ProcessEndOfStream(visitor);
         }
 
+        /// <inheritdoc />
         protected override async ValueTask ProcessAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, IProgress<int> progress, CancellationToken cancellationToken)
         {
             var stream = _stream;

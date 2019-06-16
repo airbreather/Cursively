@@ -1,5 +1,8 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
+
+using Cursively.Processing;
 
 using Xunit;
 
@@ -13,11 +16,33 @@ namespace Cursively.Tests
         private const string NewLineInSourceCode = @"
 ";
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(200)]
+        [InlineData(2_000)]
+        public void CountRecordsTest(int expected)
+        {
+            // arrange
+            string record = $"A,\"B{NewLineInSourceCode}\",\"C\",";
+
+            string input = string.Join(NewLineInSourceCode, Enumerable.Repeat(record, expected));
+
+            // act
+            long actual = CsvOperation.CountRecords()
+                                      .Run(CsvInput.ForString(input));
+
+            // assert
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public void WriteFlattenedTest()
         {
-            const string InputText = @"
-A,B,C
+            // arrange
+            const string Input = @"
+A,BB,CCC
 1,2,3
 B,B,C
 3,2,1
@@ -26,22 +51,24 @@ B,B,C
             using (var writer = new StringWriter(stringBuilder))
             {
                 writer.NewLine = NewLineInSourceCode;
-                var input = CsvInput.ForString(InputText);
+
+                // act
                 CsvOperation.WriteFlattened()
                             .WithOutputSink(writer)
-                            .Run(input);
+                            .Run(CsvInput.ForString(Input));
             }
 
+            // assert
             const string Expected =
-@"[A] = 1
-[B] = 2
-[C] = 3
-[A] = B
-[B] = B
-[C] = C
-[A] = 3
-[B] = 2
-[C] = 1
+@"  [A] = 1
+ [BB] = 2
+[CCC] = 3
+  [A] = B
+ [BB] = B
+[CCC] = C
+  [A] = 3
+ [BB] = 2
+[CCC] = 1
 ";
 
             Assert.Equal(Expected, stringBuilder.ToString());

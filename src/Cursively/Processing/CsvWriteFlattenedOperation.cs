@@ -2,9 +2,7 @@
 using System.IO;
 using System.Text;
 
-using Cursively.Internal;
-
-namespace Cursively
+namespace Cursively.Processing
 {
     /// <summary>
     /// 
