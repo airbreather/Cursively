@@ -14,11 +14,14 @@ namespace Cursively.Inputs
 
         private readonly int _bufferSize;
 
+        private readonly long _pos;
+
         internal CsvStreamInput(byte delimiter, Stream stream, int bufferSize)
             : base(delimiter, true)
         {
             _stream = stream;
             _bufferSize = bufferSize;
+            _pos = stream.CanSeek ? stream.Position : -1;
         }
 
         /// <summary>
@@ -71,12 +74,12 @@ namespace Cursively.Inputs
         /// <returns></returns>
         protected override bool TryResetCore()
         {
-            if (!_stream.CanSeek)
+            if (_pos < 0)
             {
                 return false;
             }
 
-            _stream.Seek(0, SeekOrigin.Begin);
+            _stream.Seek(_pos, SeekOrigin.Begin);
             return true;
         }
     }

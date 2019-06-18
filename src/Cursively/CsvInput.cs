@@ -44,8 +44,10 @@ namespace Cursively
         /// </summary>
         /// <param name="csvStream"></param>
         /// <returns></returns>
-        public static CsvStreamInput ForStream(Stream csvStream) =>
-            ForStream(csvStream, 81920);
+        public static CsvStreamInput ForStream(Stream csvStream)
+        {
+            return ForStream(csvStream, 81920);
+        }
 
         /// <summary>
         /// 
@@ -98,8 +100,10 @@ namespace Cursively
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static CsvCharsInput ForString(string str) =>
-            ForChars(str.AsMemory());
+        public static CsvCharsInput ForString(string str)
+        {
+            return ForChars(str.AsMemory());
+        }
 
         /// <summary>
         /// 
@@ -108,16 +112,20 @@ namespace Cursively
         /// <param name="chunkCharCount"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"/>
-        public static CsvCharsInput ForString(string str, int chunkCharCount) =>
-            ForChars(str.AsMemory(), chunkCharCount);
+        public static CsvCharsInput ForString(string str, int chunkCharCount)
+        {
+            return ForChars(str.AsMemory(), chunkCharCount);
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="chars"></param>
         /// <returns></returns>
-        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars) =>
-            ForChars(chars, 341);
+        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars)
+        {
+            return ForChars(chars, 341);
+        }
 
         /// <summary>
         /// 
@@ -140,8 +148,10 @@ namespace Cursively
         /// </summary>
         /// <param name="chars"></param>
         /// <returns></returns>
-        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars) =>
-            ForChars(chars, 341);
+        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars)
+        {
+            return ForChars(chars, 341);
+        }
 
         /// <summary>
         /// 
