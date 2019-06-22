@@ -26,9 +26,15 @@ namespace Cursively
         /// <param name="progress"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public ValueTask ProcessAsync(CsvReaderVisitorBase visitor, IProgress<int> progress = null, CancellationToken cancellationToken = default)
+        public async ValueTask ProcessAsync(CsvReaderVisitorBase visitor, IProgress<int> progress = null, CancellationToken cancellationToken = default)
         {
-            return ProcessAsync(new CsvTokenizer(Delimiter), visitor, progress, cancellationToken);
+            if (!TryReset())
+            {
+                throw new InvalidOperationException("Input has already been consumed and cannot be reset.");
+            }
+
+            await ProcessAsync(new CsvTokenizer(Delimiter), visitor, progress, cancellationToken).ConfigureAwait(false);
+            _alreadyProcessed = true;
         }
 
         /// <summary>

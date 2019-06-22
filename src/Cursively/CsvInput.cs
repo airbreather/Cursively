@@ -13,15 +13,7 @@ namespace Cursively
     {
         private readonly bool _mustResetAfterProcessing;
 
-        private bool _alreadyProcessed;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected CsvInput()
-            : this((byte)',', true)
-        {
-        }
+        private protected bool _alreadyProcessed;
 
         /// <summary>
         /// 
@@ -131,12 +123,13 @@ namespace Cursively
         /// <param name="visitor"></param>
         public void Process(CsvReaderVisitorBase visitor)
         {
-            if (_alreadyProcessed && _mustResetAfterProcessing)
+            if (!TryReset())
             {
-                throw new InvalidOperationException("Input was already processed.  Call TryReset() first to try to reset this input.  If that method returns false, then this input will not work.");
+                throw new InvalidOperationException("Input has already been consumed and cannot be reset.");
             }
 
             Process(new CsvTokenizer(Delimiter), visitor);
+            _alreadyProcessed = true;
         }
 
         /// <summary>
@@ -147,7 +140,7 @@ namespace Cursively
         {
             if (_alreadyProcessed)
             {
-                if (!TryResetCore())
+                if (_mustResetAfterProcessing && !TryResetCore())
                 {
                     return false;
                 }
@@ -169,6 +162,6 @@ namespace Cursively
         /// 
         /// </summary>
         /// <returns></returns>
-        protected virtual bool TryResetCore() => true;
+        protected virtual bool TryResetCore() => false;
     }
 }

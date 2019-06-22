@@ -11,7 +11,7 @@ namespace Cursively.Inputs
     /// </summary>
     public sealed class CsvStreamInput : CsvAsyncInput
     {
-        private readonly Stream _stream;
+        private readonly Stream _csvStream;
 
         private readonly int _minReadBufferByteCount;
 
@@ -21,15 +21,15 @@ namespace Cursively.Inputs
 
         private readonly bool _ignoreUTF8ByteOrderMark;
 
-        internal CsvStreamInput(byte delimiter, Stream stream, int minReadBufferByteCount, ArrayPool<byte> readBufferPool, bool ignoreUTF8ByteOrderMark)
+        internal CsvStreamInput(byte delimiter, Stream csvStream, int minReadBufferByteCount, ArrayPool<byte> readBufferPool, bool ignoreUTF8ByteOrderMark)
             : base(delimiter, true)
         {
-            _stream = stream;
+            _csvStream = csvStream;
             _minReadBufferByteCount = minReadBufferByteCount;
             _readBufferPool = readBufferPool;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
 
-            _pos = stream.CanSeek ? stream.Position : -1;
+            _pos = csvStream.CanSeek ? csvStream.Position : -1;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvStreamInput WithDelimiter(byte delimiter) =>
-            new CsvStreamInput(delimiter, _stream, _minReadBufferByteCount, _readBufferPool, _ignoreUTF8ByteOrderMark);
+            new CsvStreamInput(delimiter, _csvStream, _minReadBufferByteCount, _readBufferPool, _ignoreUTF8ByteOrderMark);
 
         /// <summary>
         /// 
@@ -52,7 +52,7 @@ namespace Cursively.Inputs
                 throw new ArgumentOutOfRangeException(nameof(minReadBufferByteCount), minReadBufferByteCount, "Must be greater than zero.");
             }
 
-            return new CsvStreamInput(Delimiter, _stream, minReadBufferByteCount, _readBufferPool, _ignoreUTF8ByteOrderMark);
+            return new CsvStreamInput(Delimiter, _csvStream, minReadBufferByteCount, _readBufferPool, _ignoreUTF8ByteOrderMark);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Cursively.Inputs
         /// <param name="readBufferPool"></param>
         /// <returns></returns>
         public CsvStreamInput WithReadBufferPool(ArrayPool<byte> readBufferPool) =>
-            new CsvStreamInput(Delimiter, _stream, _minReadBufferByteCount, readBufferPool, _ignoreUTF8ByteOrderMark);
+            new CsvStreamInput(Delimiter, _csvStream, _minReadBufferByteCount, readBufferPool, _ignoreUTF8ByteOrderMark);
 
         /// <summary>
         /// 
@@ -69,12 +69,12 @@ namespace Cursively.Inputs
         /// <param name="ignoreUTF8ByteOrderMark"></param>
         /// <returns></returns>
         public CsvStreamInput WithIgnoreUTF8ByteOrderMark(bool ignoreUTF8ByteOrderMark) =>
-            new CsvStreamInput(Delimiter, _stream, _minReadBufferByteCount, _readBufferPool, ignoreUTF8ByteOrderMark);
+            new CsvStreamInput(Delimiter, _csvStream, _minReadBufferByteCount, _readBufferPool, ignoreUTF8ByteOrderMark);
 
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            var stream = _stream;
+            var stream = _csvStream;
             int minReadBufferByteCount = _minReadBufferByteCount;
             var readBufferPool = _readBufferPool;
 
@@ -116,7 +116,7 @@ namespace Cursively.Inputs
             // does involve a volatile read, so don't go overboard.
             cancellationToken.ThrowIfCancellationRequested();
 
-            var stream = _stream;
+            var stream = _csvStream;
             int minReadBufferByteCount = _minReadBufferByteCount;
             var readBufferPool = _readBufferPool;
 
@@ -168,7 +168,7 @@ namespace Cursively.Inputs
                 return false;
             }
 
-            _stream.Seek(_pos, SeekOrigin.Begin);
+            _csvStream.Seek(_pos, SeekOrigin.Begin);
             return true;
         }
 
