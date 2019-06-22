@@ -13,9 +13,9 @@ namespace Cursively
         /// 
         /// </summary>
         /// <param name="delimiter"></param>
-        /// <param name="mustResetAfterProcessing"></param>
-        protected CsvAsyncInput(byte delimiter, bool mustResetAfterProcessing)
-            : base(delimiter, mustResetAfterProcessing)
+        /// <param name="requiresExplicitReset"></param>
+        protected CsvAsyncInput(byte delimiter, bool requiresExplicitReset)
+            : base(delimiter, requiresExplicitReset)
         {
         }
 

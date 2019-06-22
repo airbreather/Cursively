@@ -18,7 +18,7 @@ namespace Cursively.Inputs
         private readonly bool _ignoreByteOrderMark;
 
         internal CsvCharSequenceInput(byte delimiter, ReadOnlySequence<char> chars, int encodeBatchCharCount, MemoryPool<byte> encodeBufferPool, bool ignoreByteOrderMark)
-            : base(delimiter, false)
+            : base(delimiter, requiresExplicitReset: false)
         {
             _chars = chars;
             _encodeBatchCharCount = encodeBatchCharCount;

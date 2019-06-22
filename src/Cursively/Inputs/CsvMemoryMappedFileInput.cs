@@ -15,7 +15,7 @@ namespace Cursively.Inputs
         private readonly bool _ignoreUTF8ByteOrderMark;
 
         internal CsvMemoryMappedFileInput(byte delimiter, string csvFilePath, bool ignoreUTF8ByteOrderMark)
-            : base(delimiter, false)
+            : base(delimiter, requiresExplicitReset: false)
         {
             _csvFilePath = csvFilePath;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;

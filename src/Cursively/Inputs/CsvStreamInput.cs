@@ -22,7 +22,7 @@ namespace Cursively.Inputs
         private readonly long _originalStreamPosition;
 
         internal CsvStreamInput(byte delimiter, Stream csvStream, int minReadBufferByteCount, ArrayPool<byte> readBufferPool, bool ignoreUTF8ByteOrderMark)
-            : base(delimiter, true)
+            : base(delimiter, requiresExplicitReset: true)
         {
             _csvStream = csvStream;
             _minReadBufferByteCount = minReadBufferByteCount;

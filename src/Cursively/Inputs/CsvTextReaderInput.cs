@@ -25,7 +25,7 @@ namespace Cursively.Inputs
         private readonly MemoryPool<byte> _encodeBufferPool;
 
         internal CsvTextReaderInput(byte delimiter, TextReader textReader, int minReadBufferCharCount, ArrayPool<char> readBufferPool, int encodeBatchCharCount, MemoryPool<byte> encodeBufferPool, bool ignoreByteOrderMark)
-            : base(delimiter, true)
+            : base(delimiter, requiresExplicitReset: true)
         {
             _textReader = textReader;
             _minReadBufferCharCount = minReadBufferCharCount;

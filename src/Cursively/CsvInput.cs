@@ -19,10 +19,10 @@ namespace Cursively
         /// 
         /// </summary>
         /// <param name="delimiter"></param>
-        /// <param name="mustResetAfterProcessing"></param>
-        protected CsvInput(byte delimiter, bool mustResetAfterProcessing)
+        /// <param name="requiresExplicitReset"></param>
+        protected CsvInput(byte delimiter, bool requiresExplicitReset)
         {
-            _mustResetAfterProcessing = mustResetAfterProcessing;
+            _mustResetAfterProcessing = requiresExplicitReset;
             Delimiter = delimiter;
         }
 

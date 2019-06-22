@@ -12,7 +12,7 @@ namespace Cursively.Inputs
         private readonly bool _ignoreUTF8ByteOrderMark;
 
         internal CsvBytesInput(byte delimiter, ReadOnlyMemory<byte> bytes, bool ignoreUTF8ByteOrderMark)
-            : base(delimiter, false)
+            : base(delimiter, requiresExplicitReset: false)
         {
             _bytes = bytes;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
