@@ -45,6 +45,7 @@ namespace Cursively.Inputs
                 long length = fl.Length;
                 if (length == 0)
                 {
+                    tokenizer.ProcessEndOfStream(visitor);
                     return;
                 }
 

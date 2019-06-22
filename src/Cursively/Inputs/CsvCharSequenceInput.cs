@@ -113,6 +113,8 @@ namespace Cursively.Inputs
                         CsvCharsInput.ProcessSegment(tokenizer, visitor, segment.Span, encodeBuffer, encodeBatchCharCount);
                     }
                 }
+
+                tokenizer.ProcessEndOfStream(visitor);
             }
         }
 
@@ -140,6 +142,7 @@ namespace Cursively.Inputs
                 return false;
             }
 
+            tokenizer.ProcessEndOfStream(visitor);
             return true;
         }
     }

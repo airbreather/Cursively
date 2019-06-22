@@ -47,7 +47,11 @@ namespace Cursively.Inputs
                 span = span.Slice(3);
             }
 
-            tokenizer.ProcessNextChunk(span, visitor);
+            if (!span.IsEmpty)
+            {
+                tokenizer.ProcessNextChunk(span, visitor);
+            }
+
             tokenizer.ProcessEndOfStream(visitor);
         }
     }

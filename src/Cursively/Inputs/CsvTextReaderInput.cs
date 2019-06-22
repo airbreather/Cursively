@@ -247,7 +247,7 @@ namespace Cursively.Inputs
             }
 
             int charOffset = 0;
-            if (charCount > 0 && readBuffer[0] == '\uFEFF')
+            if (readBuffer[0] == '\uFEFF')
             {
                 charOffset = 1;
             }
@@ -275,7 +275,7 @@ namespace Cursively.Inputs
             cancellationToken.ThrowIfCancellationRequested();
 
             int charOffset = 0;
-            if (charCount > 0 && readBuffer[0] == '\uFEFF')
+            if (readBuffer[0] == '\uFEFF')
             {
                 charOffset = 1;
             }

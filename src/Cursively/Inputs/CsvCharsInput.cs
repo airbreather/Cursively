@@ -81,6 +81,7 @@ namespace Cursively.Inputs
 
             if (chars.IsEmpty)
             {
+                tokenizer.ProcessEndOfStream(visitor);
                 return;
             }
 
