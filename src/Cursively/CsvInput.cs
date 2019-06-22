@@ -46,11 +46,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvStreamInput ForStream(Stream csvStream)
         {
-            if (csvStream is null)
-            {
-                throw new ArgumentNullException(nameof(csvStream));
-            }
-
+            csvStream = csvStream ?? Stream.Null;
             if (!csvStream.CanRead)
             {
                 throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
@@ -66,6 +62,16 @@ namespace Cursively
         /// <returns></returns>
         public static CsvMemoryMappedFileInput ForFile(string csvFilePath)
         {
+            if (csvFilePath is null)
+            {
+                throw new ArgumentNullException(nameof(csvFilePath));
+            }
+
+            if (string.IsNullOrWhiteSpace(csvFilePath))
+            {
+                throw new ArgumentException("Cannot be blank", nameof(csvFilePath));
+            }
+
             return new CsvMemoryMappedFileInput((byte)',', csvFilePath, true);
         }
 
