@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -19,13 +20,19 @@ namespace Cursively.Inputs
 
         private readonly bool _ignoreByteOrderMark;
 
-        internal CsvTextReaderInput(byte delimiter, TextReader textReader, int readBufferCharCount, int encodeBatchCharCount, bool ignoreByteOrderMark)
+        private readonly ArrayPool<char> _readBufferPool;
+
+        private readonly MemoryPool<byte> _encodeBufferPool;
+
+        internal CsvTextReaderInput(byte delimiter, TextReader textReader, int readBufferCharCount, ArrayPool<char> readBufferPool, int encodeBatchCharCount, MemoryPool<byte> encodeBufferPool, bool ignoreByteOrderMark)
             : base(delimiter, true)
         {
             _textReader = textReader;
             _readBufferCharCount = readBufferCharCount;
             _encodeBatchCharCount = encodeBatchCharCount;
             _ignoreByteOrderMark = ignoreByteOrderMark;
+            _readBufferPool = readBufferPool;
+            _encodeBufferPool = encodeBufferPool;
         }
 
         /// <summary>
@@ -34,7 +41,7 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvTextReaderInput WithDelimiter(byte delimiter) =>
-            new CsvTextReaderInput(delimiter, _textReader, _readBufferCharCount, _encodeBatchCharCount, _ignoreByteOrderMark);
+            new CsvTextReaderInput(delimiter, _textReader, _readBufferCharCount, _readBufferPool, _encodeBatchCharCount, _encodeBufferPool, _ignoreByteOrderMark);
 
         /// <summary>
         /// 
@@ -49,8 +56,16 @@ namespace Cursively.Inputs
                 throw new ArgumentOutOfRangeException(nameof(readBufferCharCount), readBufferCharCount, "Must be greater than zero.");
             }
 
-            return new CsvTextReaderInput(Delimiter, _textReader, readBufferCharCount, _encodeBatchCharCount, _ignoreByteOrderMark);
+            return new CsvTextReaderInput(Delimiter, _textReader, readBufferCharCount, _readBufferPool, _encodeBatchCharCount, _encodeBufferPool, _ignoreByteOrderMark);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="readBufferPool"></param>
+        /// <returns></returns>
+        public CsvTextReaderInput WithReadBufferPool(ArrayPool<char> readBufferPool) =>
+            new CsvTextReaderInput(Delimiter, _textReader, _readBufferCharCount, readBufferPool, _encodeBatchCharCount, _encodeBufferPool, _ignoreByteOrderMark);
 
         /// <summary>
         /// 
@@ -65,48 +80,82 @@ namespace Cursively.Inputs
                 throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
             }
 
-            return new CsvTextReaderInput(Delimiter, _textReader, _readBufferCharCount, encodeBatchCharCount, _ignoreByteOrderMark);
+            return new CsvTextReaderInput(Delimiter, _textReader, _readBufferCharCount, _readBufferPool, encodeBatchCharCount, _encodeBufferPool, _ignoreByteOrderMark);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encodeBufferPool"></param>
+        /// <returns></returns>
+        public CsvTextReaderInput WithEncodeBufferPool(MemoryPool<byte> encodeBufferPool) =>
+            new CsvTextReaderInput(Delimiter, _textReader, _readBufferCharCount, _readBufferPool, _encodeBatchCharCount, encodeBufferPool, _ignoreByteOrderMark);
 
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
             var textReader = _textReader;
+            int readBufferCharCount = _readBufferCharCount;
             int encodeBatchCharCount = _encodeBatchCharCount;
+            var readBufferPool = _readBufferPool;
+            var encodeBufferPool = _encodeBufferPool;
 
-            char[] readBuffer = new char[_readBufferCharCount];
+            IMemoryOwner<byte> encodeBufferOwner = null;
 
-            if (encodeBatchCharCount > readBuffer.Length)
+            char[] readBuffer;
+            if (readBufferPool is null)
             {
-                encodeBatchCharCount = readBuffer.Length;
-            }
-
-            int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
-            Span<byte> encodeBuffer = stackalloc byte[0];
-            if (encodeBufferLength < 1024)
-            {
-                encodeBuffer = stackalloc byte[encodeBufferLength];
+                readBuffer = new char[readBufferCharCount];
             }
             else
             {
-                encodeBuffer = new byte[encodeBufferLength];
+                readBuffer = readBufferPool.Rent(readBufferCharCount);
             }
 
-            if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount))
+            try
             {
-                return;
-            }
+                if (encodeBatchCharCount > readBuffer.Length)
+                {
+                    encodeBatchCharCount = readBuffer.Length;
+                }
 
-            int cnt;
-            while ((cnt = textReader.Read(readBuffer, 0, readBuffer.Length)) != 0)
+                int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+                Span<byte> encodeBuffer = stackalloc byte[0];
+                if (encodeBufferLength < 1024)
+                {
+                    encodeBuffer = stackalloc byte[encodeBufferLength];
+                }
+                else if (encodeBufferPool is null)
+                {
+                    encodeBuffer = new byte[encodeBufferLength];
+                }
+                else
+                {
+                    encodeBufferOwner = encodeBufferPool.Rent(encodeBufferLength);
+                    encodeBuffer = encodeBufferOwner.Memory.Span;
+                }
+
+                if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount))
+                {
+                    return;
+                }
+
+                int cnt;
+                while ((cnt = textReader.Read(readBuffer, 0, readBuffer.Length)) != 0)
+                {
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer, encodeBatchCharCount);
+                }
+            }
+            finally
             {
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer, encodeBatchCharCount);
+                encodeBufferOwner?.Dispose();
+                readBufferPool?.Return(readBuffer, clearArray: true);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
         }
 
-        /// <inheritdoc />s
+        /// <inheritdoc />
         protected override async ValueTask ProcessAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, IProgress<int> progress, CancellationToken cancellationToken)
         {
             // TextReader doesn't support cancellation, so it's really important that we do this
@@ -114,32 +163,71 @@ namespace Cursively.Inputs
             cancellationToken.ThrowIfCancellationRequested();
 
             var textReader = _textReader;
+            int readBufferCharCount = _readBufferCharCount;
             int encodeBatchCharCount = _encodeBatchCharCount;
+            var readBufferPool = _readBufferPool;
+            var encodeBufferPool = _encodeBufferPool;
 
-            char[] readBuffer = new char[_readBufferCharCount];
+            IMemoryOwner<byte> encodeBufferOwner = null;
 
-            int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
-            byte[] encodeBuffer = new byte[encodeBufferLength];
-
-            if (_ignoreByteOrderMark && await EatBOMAsync(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount, progress, cancellationToken).ConfigureAwait(false))
+            char[] readBuffer;
+            if (readBufferPool is null)
             {
-                return;
+                readBuffer = new char[readBufferCharCount];
+            }
+            else
+            {
+                readBuffer = readBufferPool.Rent(readBufferCharCount);
             }
 
-            int cnt;
-            while ((cnt = await textReader.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false)) != 0)
+            try
             {
-                // TextReader doesn't support cancellation, so it's really important that we do this
-                // ourselves.  it does involve a volatile read, so don't go overboard.
-                cancellationToken.ThrowIfCancellationRequested();
+                if (encodeBatchCharCount > readBuffer.Length)
+                {
+                    encodeBatchCharCount = readBuffer.Length;
+                }
 
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer, encodeBatchCharCount);
-                progress?.Report(cnt);
+                int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+
+                Memory<byte> encodeBuffer;
+                if (encodeBufferPool is null)
+                {
+                    encodeBuffer = new byte[encodeBufferLength];
+                }
+                else
+                {
+                    encodeBufferOwner = encodeBufferPool.Rent(encodeBufferLength);
+                    encodeBuffer = encodeBufferOwner.Memory;
+                }
+
+                if (_ignoreByteOrderMark && await EatBOMAsync(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount, progress, cancellationToken).ConfigureAwait(false))
+                {
+                    return;
+                }
+
+                int cnt;
+                while ((cnt = await textReader.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false)) != 0)
+                {
+                    // TextReader doesn't support cancellation, so it's really important that we do this
+                    // ourselves.  it does involve a volatile read, so don't go overboard.
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer.Span, encodeBatchCharCount);
+                    progress?.Report(cnt);
+                }
+            }
+            finally
+            {
+                encodeBufferOwner?.Dispose();
+                readBufferPool?.Return(readBuffer, clearArray: true);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
             progress?.Report(0);
         }
+
+        /// <inheritdoc />
+        protected override bool TryResetCore() => false;
 
         private bool EatBOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Span<byte> encodeBuffer, int encodeBatchCharCount)
         {
@@ -165,7 +253,7 @@ namespace Cursively.Inputs
             return false;
         }
 
-        private async ValueTask<bool> EatBOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, byte[] encodeBuffer, int encodeBatchCharCount, IProgress<int> progress, CancellationToken cancellationToken)
+        private async ValueTask<bool> EatBOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Memory<byte> encodeBuffer, int encodeBatchCharCount, IProgress<int> progress, CancellationToken cancellationToken)
         {
             int cnt = await _textReader.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false);
             if (cnt == 0)
@@ -189,7 +277,7 @@ namespace Cursively.Inputs
 
             if (cnt != 0)
             {
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, off, cnt), encodeBuffer, encodeBatchCharCount);
+                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, off, cnt), encodeBuffer.Span, encodeBatchCharCount);
                 progress?.Report(rptCnt);
             }
 

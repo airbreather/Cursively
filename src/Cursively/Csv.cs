@@ -25,10 +25,13 @@ namespace Cursively
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="csvStream"/> is <see langword="null"/>.
         /// </exception>
-        [Obsolete("Use CsvInput.ForStream(csvStream).Process(visitor)")]
+        [Obsolete("Use CsvInput.ForStream(csvStream).Process(visitor), and consider whether or not to also chain .WithIgnoreUTF8ByteOrderMark(false).")]
         public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor)
         {
             CsvInput.ForStream(csvStream)
+                    .WithMinReadBufferByteCount(81920)
+                    .WithReadBufferPool(null)
+                    .WithIgnoreUTF8ByteOrderMark(false)
                     .Process(visitor);
         }
 
@@ -55,10 +58,13 @@ namespace Cursively
         /// Thrown when <paramref name="csvStream"/> does not support reading (i.e.,
         /// <see cref="Stream.CanRead"/> is <see langword="false"/>).
         /// </exception>
-        [Obsolete("Use CsvInput.ForStream(csvStream, bufferSize).Process(visitor)")]
+        [Obsolete("Use CsvInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).Process(visitor), and consider whether or not to also chain .WithIgnoreUTF8ByteOrderMark(false).")]
         public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize)
         {
-            CsvInput.ForStream(csvStream, bufferSize)
+            CsvInput.ForStream(csvStream)
+                    .WithMinReadBufferByteCount(bufferSize)
+                    .WithReadBufferPool(null)
+                    .WithIgnoreUTF8ByteOrderMark(false)
                     .Process(visitor);
         }
 
@@ -115,10 +121,13 @@ namespace Cursively
         /// object backing <paramref name="cancellationToken"/> is disposed before the asynchronous
         /// operation terminates.
         /// </exception>
-        [Obsolete("Use CsvInput.ForStream(csvStream).ProcessAsync(visitor, progress, cancellationToken)")]
+        [Obsolete("Use CsvInput.ForStream(csvStream).ProcessAsync(visitor, progress, cancellationToken), and consider whether or not to also chain .WithIgnoreUTF8ByteOrderMark(false).")]
         public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, IProgress<int> progress = null, CancellationToken cancellationToken = default)
         {
             return CsvInput.ForStream(csvStream)
+                           .WithMinReadBufferByteCount(81920)
+                           .WithReadBufferPool(null)
+                           .WithIgnoreUTF8ByteOrderMark(false)
                            .ProcessAsync(visitor, progress, cancellationToken);
         }
 
@@ -181,10 +190,13 @@ namespace Cursively
         /// object backing <paramref name="cancellationToken"/> is disposed before the asynchronous
         /// operation terminates.
         /// </exception>
-        [Obsolete("Use CsvInput.ForStream(csvStream, bufferSize).ProcessAsync(visitor, progress, cancellationToken)")]
+        [Obsolete("Use CsvInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).ProcessAsync(visitor, progress, cancellationToken), and consider whether or not to also chain .WithIgnoreUTF8ByteOrderMark(false).")]
         public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize, IProgress<int> progress = null, CancellationToken cancellationToken = default)
         {
-            return CsvInput.ForStream(csvStream, bufferSize)
+            return CsvInput.ForStream(csvStream)
+                           .WithMinReadBufferByteCount(bufferSize)
+                           .WithReadBufferPool(null)
+                           .WithIgnoreUTF8ByteOrderMark(false)
                            .ProcessAsync(visitor, progress, cancellationToken);
         }
 
@@ -235,10 +247,11 @@ namespace Cursively
         /// <exception cref="PathTooLongException">
         /// See <see cref="FileStream(string, FileMode, FileAccess, FileShare, int, FileOptions)"/>.
         /// </exception>
-        [Obsolete("Use CsvInput.ForFile(csvFilePath).Process(visitor)")]
+        [Obsolete("Use CsvInput.ForFile(csvFilePath).Process(visitor), and consider whether or not to also chain .WithIgnoreUTF8ByteOrderMark(false).")]
         public static unsafe void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)
         {
             CsvInput.ForFile(csvFilePath)
+                    .WithIgnoreUTF8ByteOrderMark(false)
                     .Process(visitor);
         }
     }

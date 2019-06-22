@@ -85,7 +85,7 @@ namespace Cursively.Tests
             var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
 
             // act
-            CsvInput.ForFile(filePath).Process(visitor);
+            CsvInput.ForFile(filePath).WithIgnoreUTF8ByteOrderMark(false).Process(visitor);
             var actual = visitor.Records;
 
             // assert
@@ -101,7 +101,7 @@ namespace Cursively.Tests
             var visitor = new NonstandardFieldVisitor(checked((int)new FileInfo(csvFilePath).Length));
 
             // act
-            CsvInput.ForFile(csvFilePath).Process(visitor);
+            CsvInput.ForFile(csvFilePath).WithIgnoreUTF8ByteOrderMark(false).Process(visitor);
 
             // assert
             string[] expectedContentsBeforeNonstandardFields =
