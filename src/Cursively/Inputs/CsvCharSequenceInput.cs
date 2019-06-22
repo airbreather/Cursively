@@ -53,18 +53,18 @@ namespace Cursively.Inputs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ignoreByteOrderMark"></param>
-        /// <returns></returns>
-        public CsvCharSequenceInput WithIgnoreByteOrderMark(bool ignoreByteOrderMark) =>
-            new CsvCharSequenceInput(Delimiter, _chars, _encodeBatchCharCount, _encodeBufferPool, ignoreByteOrderMark);
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="encodeBufferPool"></param>
         /// <returns></returns>
         public CsvCharSequenceInput WithEncodeBufferPool(MemoryPool<byte> encodeBufferPool) =>
             new CsvCharSequenceInput(Delimiter, _chars, _encodeBatchCharCount, encodeBufferPool, _ignoreByteOrderMark);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ignoreByteOrderMark"></param>
+        /// <returns></returns>
+        public CsvCharSequenceInput WithIgnoreByteOrderMark(bool ignoreByteOrderMark) =>
+            new CsvCharSequenceInput(Delimiter, _chars, _encodeBatchCharCount, _encodeBufferPool, ignoreByteOrderMark);
 
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)

@@ -17,9 +17,9 @@ namespace Cursively.Inputs
 
         private readonly ArrayPool<byte> _readBufferPool;
 
-        private readonly long _pos;
-
         private readonly bool _ignoreUTF8ByteOrderMark;
+
+        private readonly long _originalStreamPosition;
 
         internal CsvStreamInput(byte delimiter, Stream csvStream, int minReadBufferByteCount, ArrayPool<byte> readBufferPool, bool ignoreUTF8ByteOrderMark)
             : base(delimiter, true)
@@ -29,7 +29,7 @@ namespace Cursively.Inputs
             _readBufferPool = readBufferPool;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
 
-            _pos = csvStream.CanSeek ? csvStream.Position : -1;
+            _originalStreamPosition = csvStream.CanSeek ? csvStream.Position : -1;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Cursively.Inputs
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            var stream = _csvStream;
+            var csvStream = _csvStream;
             int minReadBufferByteCount = _minReadBufferByteCount;
             var readBufferPool = _readBufferPool;
 
@@ -90,13 +90,13 @@ namespace Cursively.Inputs
 
             try
             {
-                if (_ignoreUTF8ByteOrderMark && EatUTF8BOM(tokenizer, visitor, stream, readBuffer))
+                if (_ignoreUTF8ByteOrderMark && EatUTF8BOM(tokenizer, visitor, csvStream, readBuffer))
                 {
                     return;
                 }
 
                 int cnt;
-                while ((cnt = stream.Read(readBuffer, 0, readBuffer.Length)) != 0)
+                while ((cnt = csvStream.Read(readBuffer, 0, readBuffer.Length)) != 0)
                 {
                     tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, cnt), visitor);
                 }
@@ -116,7 +116,7 @@ namespace Cursively.Inputs
             // does involve a volatile read, so don't go overboard.
             cancellationToken.ThrowIfCancellationRequested();
 
-            var stream = _csvStream;
+            var csvStream = _csvStream;
             int minReadBufferByteCount = _minReadBufferByteCount;
             var readBufferPool = _readBufferPool;
 
@@ -132,13 +132,13 @@ namespace Cursively.Inputs
 
             try
             {
-                if (_ignoreUTF8ByteOrderMark && await EatUTF8BOMAsync(tokenizer, visitor, stream, readBuffer, progress, cancellationToken).ConfigureAwait(false))
+                if (_ignoreUTF8ByteOrderMark && await EatUTF8BOMAsync(tokenizer, visitor, csvStream, readBuffer, progress, cancellationToken).ConfigureAwait(false))
                 {
                     return;
                 }
 
                 int cnt;
-                while ((cnt = await stream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken).ConfigureAwait(false)) != 0)
+                while ((cnt = await csvStream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken).ConfigureAwait(false)) != 0)
                 {
                     // not all streams support cancellation, so we might as well do this ourselves.  it
                     // does involve a volatile read, so don't go overboard.
@@ -163,80 +163,80 @@ namespace Cursively.Inputs
         /// <returns></returns>
         protected override bool TryResetCore()
         {
-            if (_pos < 0)
+            if (_originalStreamPosition < 0)
             {
                 return false;
             }
 
-            _csvStream.Seek(_pos, SeekOrigin.Begin);
+            _csvStream.Position = _originalStreamPosition;
             return true;
         }
 
-        private static bool EatUTF8BOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, Stream stream, byte[] buffer)
+        private static bool EatUTF8BOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, Stream csvStream, byte[] readBuffer)
         {
-            if (buffer.Length < 3)
+            if (readBuffer.Length < 3)
             {
-                buffer = new byte[3];
+                // don't bother pooling; nobody should really ever care.
+                readBuffer = new byte[3];
             }
 
-            int off = 0;
-            while (off < 3)
+            int byteCount = 0;
+            while (byteCount < 3)
             {
-                int cnt = stream.Read(buffer, off, buffer.Length - off);
-                if (cnt == 0)
+                int readLength = csvStream.Read(readBuffer, byteCount, readBuffer.Length - byteCount);
+                if (readLength == 0)
                 {
-                    if (off != 0)
+                    if (byteCount != 0)
                     {
-                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, off), visitor);
+                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
                     }
 
                     tokenizer.ProcessEndOfStream(visitor);
                     return true;
                 }
 
-                off += cnt;
+                byteCount += readLength;
             }
 
-            int len = off;
-            off = 0;
-            if (buffer[0] == 0xEF &&
-                buffer[1] == 0xBB &&
-                buffer[2] == 0xBF)
+            int byteOffset = 0;
+            if (readBuffer[0] == 0xEF &&
+                readBuffer[1] == 0xBB &&
+                readBuffer[2] == 0xBF)
             {
-                off = 3;
-                len -= 3;
+                byteOffset = 3;
             }
 
-            if (len != 0)
+            if (byteOffset < byteCount)
             {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, off, len), visitor);
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, byteOffset, byteCount - byteOffset), visitor);
             }
 
             return false;
         }
 
-        private static async ValueTask<bool> EatUTF8BOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, Stream stream, byte[] buffer, IProgress<int> progress, CancellationToken cancellationToken)
+        private static async ValueTask<bool> EatUTF8BOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, Stream csvStream, byte[] readBuffer, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            if (buffer.Length < 3)
+            if (readBuffer.Length < 3)
             {
-                buffer = new byte[3];
+                // don't bother pooling; nobody should really ever care.
+                readBuffer = new byte[3];
             }
 
-            int off = 0;
-            while (off < 3)
+            int byteCount = 0;
+            while (byteCount < 3)
             {
-                int cnt = await stream.ReadAsync(buffer, off, buffer.Length - off, cancellationToken).ConfigureAwait(false);
+                int readLength = await csvStream.ReadAsync(readBuffer, byteCount, readBuffer.Length - byteCount, cancellationToken).ConfigureAwait(false);
 
                 // not all streams support cancellation, so we might as well do this ourselves.  it
                 // does involve a volatile read, so don't go overboard.
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (cnt == 0)
+                if (readLength == 0)
                 {
-                    if (off != 0)
+                    if (byteCount != 0)
                     {
-                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, off), visitor);
-                        progress?.Report(off);
+                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
+                        progress?.Report(byteCount);
                     }
 
                     tokenizer.ProcessEndOfStream(visitor);
@@ -244,26 +244,23 @@ namespace Cursively.Inputs
                     return true;
                 }
 
-                off += cnt;
+                byteCount += readLength;
             }
 
-            int len = off;
-            int rptLen = len;
-            off = 0;
-            if (buffer[0] == 0xEF &&
-                buffer[1] == 0xBB &&
-                buffer[2] == 0xBF)
+            int byteOffset = 0;
+            if (readBuffer[0] == 0xEF &&
+                readBuffer[1] == 0xBB &&
+                readBuffer[2] == 0xBF)
             {
-                off = 3;
-                len -= 3;
+                byteOffset = 3;
             }
 
-            if (len != 0)
+            if (byteOffset < byteCount)
             {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, off, len), visitor);
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, byteOffset, byteCount - byteOffset), visitor);
             }
 
-            progress?.Report(rptLen);
+            progress?.Report(byteCount);
             return false;
         }
     }
