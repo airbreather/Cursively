@@ -12,11 +12,14 @@ namespace Cursively.Inputs
 
         private readonly int _chunkCharCount;
 
-        internal CsvCharsInput(byte delimiter, ReadOnlyMemory<char> chars, int chunkCharCount)
+        private readonly bool _ignoreByteOrderMark;
+
+        internal CsvCharsInput(byte delimiter, ReadOnlyMemory<char> chars, int chunkCharCount, bool ignoreByteOrderMark)
             : base(delimiter, false)
         {
             _chars = chars;
             _chunkCharCount = chunkCharCount;
+            _ignoreByteOrderMark = ignoreByteOrderMark;
         }
 
         /// <summary>
@@ -25,7 +28,7 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvCharsInput WithDelimiter(byte delimiter) =>
-            new CsvCharsInput(delimiter, _chars, _chunkCharCount);
+            new CsvCharsInput(delimiter, _chars, _chunkCharCount, _ignoreByteOrderMark);
 
         /// <summary>
         /// 
@@ -40,17 +43,30 @@ namespace Cursively.Inputs
                 throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharsInput(Delimiter, _chars, chunkCharCount);
+            return new CsvCharsInput(Delimiter, _chars, chunkCharCount, _ignoreByteOrderMark);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ignoreByteOrderMark"></param>
+        /// <returns></returns>
+        public CsvCharsInput WithIgnoreByteOrderMark(bool ignoreByteOrderMark) =>
+            new CsvCharsInput(Delimiter, _chars, _chunkCharCount, ignoreByteOrderMark);
 
         /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            ProcessFullSegment(_chars.Span, _chunkCharCount, tokenizer, visitor);
+            ProcessFullSegment(_chars.Span, _chunkCharCount, _ignoreByteOrderMark, tokenizer, visitor);
         }
 
-        internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int chunkCharCount, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int chunkCharCount, bool ignoreByteOrderMark, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
+            if (ignoreByteOrderMark && !chars.IsEmpty && chars[0] == '\uFEFF')
+            {
+                chars = chars.Slice(1);
+            }
+
             if (chars.IsEmpty)
             {
                 return;
@@ -72,12 +88,12 @@ namespace Cursively.Inputs
                 bytes = new byte[maxByteCount];
             }
 
-            ProcessSegment(chars, bytes, chunkCharCount, tokenizer, visitor);
+            ProcessSegment(tokenizer, visitor, chars, bytes, chunkCharCount);
 
             tokenizer.ProcessEndOfStream(visitor);
         }
 
-        internal static unsafe void ProcessSegment(ReadOnlySpan<char> chars, Span<byte> bytes, int chunkCharCount, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        internal static unsafe void ProcessSegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ReadOnlySpan<char> chars, Span<byte> bytes, int chunkCharCount)
         {
             var encoding = Encoding.UTF8;
 

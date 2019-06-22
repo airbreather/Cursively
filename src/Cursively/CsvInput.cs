@@ -72,7 +72,7 @@ namespace Cursively
                 throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
             }
 
-            return new CsvStreamInput((byte)',', csvStream, bufferSize);
+            return new CsvStreamInput((byte)',', csvStream, bufferSize, false);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvMemoryMappedFileInput ForFile(string csvFilePath)
         {
-            return new CsvMemoryMappedFileInput((byte)',', csvFilePath);
+            return new CsvMemoryMappedFileInput((byte)',', csvFilePath, false);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvBytesInput ForBytes(ReadOnlyMemory<byte> bytes)
         {
-            return new CsvBytesInput((byte)',', bytes);
+            return new CsvBytesInput((byte)',', bytes, false);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Cursively
                 throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharsInput((byte)',', chars, chunkCharCount);
+            return new CsvCharsInput((byte)',', chars, chunkCharCount, false);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Cursively
                 throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharSequenceInput((byte)',', chars, chunkCharCount);
+            return new CsvCharSequenceInput((byte)',', chars, chunkCharCount, false);
         }
 
         /// <summary>

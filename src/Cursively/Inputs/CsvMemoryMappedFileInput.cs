@@ -12,10 +12,13 @@ namespace Cursively.Inputs
     {
         private readonly string _csvFilePath;
 
-        internal CsvMemoryMappedFileInput(byte delimiter, string csvFilePath)
+        private readonly bool _ignoreUTF8ByteOrderMark;
+
+        internal CsvMemoryMappedFileInput(byte delimiter, string csvFilePath, bool ignoreUTF8ByteOrderMark)
             : base(delimiter, false)
         {
             _csvFilePath = csvFilePath;
+            _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
         }
 
         /// <summary>
@@ -24,7 +27,15 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvMemoryMappedFileInput WithDelimiter(byte delimiter) =>
-            new CsvMemoryMappedFileInput(delimiter, _csvFilePath);
+            new CsvMemoryMappedFileInput(delimiter, _csvFilePath, _ignoreUTF8ByteOrderMark);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ignoreUTF8ByteOrderMark"></param>
+        /// <returns></returns>
+        public CsvMemoryMappedFileInput WithIgnoreUTF8ByteOrderMark(bool ignoreUTF8ByteOrderMark) =>
+            new CsvMemoryMappedFileInput(Delimiter, _csvFilePath, ignoreUTF8ByteOrderMark);
 
         /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
@@ -46,6 +57,17 @@ namespace Cursively.Inputs
                     try
                     {
                         handle.AcquirePointer(ref ptr);
+
+                        if (_ignoreUTF8ByteOrderMark &&
+                            length >= 3 &&
+                            ptr[0] == 0xEF &&
+                            ptr[1] == 0xBB &&
+                            ptr[2] == 0xBF)
+                        {
+                            length -= 3;
+                            ptr += 3;
+                        }
+
                         while (length > int.MaxValue)
                         {
                             tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(ptr, int.MaxValue), visitor);
