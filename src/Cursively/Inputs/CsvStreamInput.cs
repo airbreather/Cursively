@@ -23,8 +23,9 @@ namespace Cursively.Inputs
         {
             _stream = stream;
             _bufferSize = bufferSize;
-            _pos = stream.CanSeek ? stream.Position : -1;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
+
+            _pos = stream.CanSeek ? stream.Position : -1;
         }
 
         /// <summary>
