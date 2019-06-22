@@ -112,7 +112,7 @@ namespace Cursively.Inputs
             }
 
             int off = 0;
-            while (true)
+            while (off < 3)
             {
                 int cnt = stream.Read(buffer, off, buffer.Length - off);
                 if (cnt == 0)
@@ -127,10 +127,6 @@ namespace Cursively.Inputs
                 }
 
                 off += cnt;
-                if (off >= 3)
-                {
-                    break;
-                }
             }
 
             int len = off;
@@ -159,7 +155,7 @@ namespace Cursively.Inputs
             }
 
             int off = 0;
-            while (true)
+            while (off < 3)
             {
                 int cnt = await stream.ReadAsync(buffer, off, buffer.Length - off, cancellationToken).ConfigureAwait(false);
                 if (cnt == 0)
@@ -176,10 +172,6 @@ namespace Cursively.Inputs
                 }
 
                 off += cnt;
-                if (off >= 3)
-                {
-                    break;
-                }
             }
 
             int len = off;
