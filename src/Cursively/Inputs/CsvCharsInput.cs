@@ -10,15 +10,15 @@ namespace Cursively.Inputs
     {
         private readonly ReadOnlyMemory<char> _chars;
 
-        private readonly int _chunkCharCount;
+        private readonly int _encodeBatchCharCount;
 
         private readonly bool _ignoreByteOrderMark;
 
-        internal CsvCharsInput(byte delimiter, ReadOnlyMemory<char> chars, int chunkCharCount, bool ignoreByteOrderMark)
+        internal CsvCharsInput(byte delimiter, ReadOnlyMemory<char> chars, int encodeBatchCharCount, bool ignoreByteOrderMark)
             : base(delimiter, false)
         {
             _chars = chars;
-            _chunkCharCount = chunkCharCount;
+            _encodeBatchCharCount = encodeBatchCharCount;
             _ignoreByteOrderMark = ignoreByteOrderMark;
         }
 
@@ -28,22 +28,22 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvCharsInput WithDelimiter(byte delimiter) =>
-            new CsvCharsInput(delimiter, _chars, _chunkCharCount, _ignoreByteOrderMark);
+            new CsvCharsInput(delimiter, _chars, _encodeBatchCharCount, _ignoreByteOrderMark);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="chunkCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"/>
-        public CsvCharsInput WithChunkCharCount(int chunkCharCount)
+        public CsvCharsInput WithEncodeBatchCharCount(int encodeBatchCharCount)
         {
-            if (chunkCharCount < 1)
+            if (encodeBatchCharCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharsInput(Delimiter, _chars, chunkCharCount, _ignoreByteOrderMark);
+            return new CsvCharsInput(Delimiter, _chars, encodeBatchCharCount, _ignoreByteOrderMark);
         }
 
         /// <summary>
@@ -52,15 +52,15 @@ namespace Cursively.Inputs
         /// <param name="ignoreByteOrderMark"></param>
         /// <returns></returns>
         public CsvCharsInput WithIgnoreByteOrderMark(bool ignoreByteOrderMark) =>
-            new CsvCharsInput(Delimiter, _chars, _chunkCharCount, ignoreByteOrderMark);
+            new CsvCharsInput(Delimiter, _chars, _encodeBatchCharCount, ignoreByteOrderMark);
 
         /// <inheritdoc />
         protected override unsafe void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            ProcessFullSegment(_chars.Span, _chunkCharCount, _ignoreByteOrderMark, tokenizer, visitor);
+            ProcessFullSegment(_chars.Span, _encodeBatchCharCount, _ignoreByteOrderMark, tokenizer, visitor);
         }
 
-        internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int chunkCharCount, bool ignoreByteOrderMark, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int encodeBatchCharCount, bool ignoreByteOrderMark, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
             if (ignoreByteOrderMark && !chars.IsEmpty && chars[0] == '\uFEFF')
             {
@@ -72,52 +72,51 @@ namespace Cursively.Inputs
                 return;
             }
 
-            if (chunkCharCount > chars.Length)
+            if (encodeBatchCharCount > chars.Length)
             {
-                chunkCharCount = chars.Length;
+                encodeBatchCharCount = chars.Length;
             }
 
-            int maxByteCount = Encoding.UTF8.GetMaxByteCount(chunkCharCount);
-            Span<byte> bytes = stackalloc byte[0];
-            if (maxByteCount < 1024)
+            int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+            Span<byte> encodeBuffer = stackalloc byte[0];
+            if (encodeBufferLength < 1024)
             {
-                bytes = stackalloc byte[maxByteCount];
+                encodeBuffer = stackalloc byte[encodeBufferLength];
             }
             else
             {
-                bytes = new byte[maxByteCount];
+                encodeBuffer = new byte[encodeBufferLength];
             }
 
-            ProcessSegment(tokenizer, visitor, chars, bytes, chunkCharCount);
-
+            ProcessSegment(tokenizer, visitor, chars, encodeBuffer, encodeBatchCharCount);
             tokenizer.ProcessEndOfStream(visitor);
         }
 
-        internal static unsafe void ProcessSegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ReadOnlySpan<char> chars, Span<byte> bytes, int chunkCharCount)
+        internal static unsafe void ProcessSegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ReadOnlySpan<char> chars, Span<byte> encodeBuffer, int encodeBatchCharCount)
         {
             var encoding = Encoding.UTF8;
 
-            int rem = chars.Length;
-            fixed (byte* b = &bytes[0])
-            fixed (char* cHead = &chars[0])
+            int remainingCharCount = chars.Length;
+            fixed (byte* encodePtr = &encodeBuffer[0])
+            fixed (char* decodePtrFixed = &chars[0])
             {
-                char* c = cHead;
+                char* decodePtr = decodePtrFixed;
 
-                while (rem > chunkCharCount)
+                while (remainingCharCount > encodeBatchCharCount)
                 {
-                    int byteCount = encoding.GetByteCount(c, chunkCharCount);
-                    encoding.GetBytes(c, chunkCharCount, b, byteCount);
-                    tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
+                    int encodeByteCount = encoding.GetByteCount(decodePtr, encodeBatchCharCount);
+                    encoding.GetBytes(decodePtr, encodeBatchCharCount, encodePtr, encodeByteCount);
+                    tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(encodePtr, encodeByteCount), visitor);
 
-                    rem -= chunkCharCount;
-                    c += chunkCharCount;
+                    remainingCharCount -= encodeBatchCharCount;
+                    decodePtr += encodeBatchCharCount;
                 }
 
-                if (rem > 0)
+                if (remainingCharCount > 0)
                 {
-                    int byteCount = encoding.GetByteCount(c, rem);
-                    encoding.GetBytes(c, rem, b, byteCount);
-                    tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(b, byteCount), visitor);
+                    int encodeByteCount = encoding.GetByteCount(decodePtr, remainingCharCount);
+                    encoding.GetBytes(decodePtr, remainingCharCount, encodePtr, encodeByteCount);
+                    tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(encodePtr, encodeByteCount), visitor);
                 }
             }
         }

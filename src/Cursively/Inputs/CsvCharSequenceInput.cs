@@ -11,15 +11,15 @@ namespace Cursively.Inputs
     {
         private readonly ReadOnlySequence<char> _chars;
 
-        private readonly int _chunkCharCount;
+        private readonly int _encodeBatchCharCount;
 
         private readonly bool _ignoreByteOrderMark;
 
-        internal CsvCharSequenceInput(byte delimiter, ReadOnlySequence<char> chars, int chunkCharCount, bool ignoreByteOrderMark)
+        internal CsvCharSequenceInput(byte delimiter, ReadOnlySequence<char> chars, int encodeBatchCharCount, bool ignoreByteOrderMark)
             : base(delimiter, false)
         {
             _chars = chars;
-            _chunkCharCount = chunkCharCount;
+            _encodeBatchCharCount = encodeBatchCharCount;
             _ignoreByteOrderMark = ignoreByteOrderMark;
         }
 
@@ -29,22 +29,22 @@ namespace Cursively.Inputs
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public CsvCharSequenceInput WithDelimiter(byte delimiter) =>
-            new CsvCharSequenceInput(delimiter, _chars, _chunkCharCount, _ignoreByteOrderMark);
+            new CsvCharSequenceInput(delimiter, _chars, _encodeBatchCharCount, _ignoreByteOrderMark);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="chunkCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"/>
-        public CsvCharSequenceInput WithChunkCharCount(int chunkCharCount)
+        public CsvCharSequenceInput WithEncodeBatchCharCount(int encodeBatchCharCount)
         {
-            if (chunkCharCount < 1)
+            if (encodeBatchCharCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharSequenceInput(Delimiter, _chars, chunkCharCount, _ignoreByteOrderMark);
+            return new CsvCharSequenceInput(Delimiter, _chars, encodeBatchCharCount, _ignoreByteOrderMark);
         }
 
         /// <summary>
@@ -53,41 +53,46 @@ namespace Cursively.Inputs
         /// <param name="ignoreByteOrderMark"></param>
         /// <returns></returns>
         public CsvCharSequenceInput WithIgnoreByteOrderMark(bool ignoreByteOrderMark) =>
-            new CsvCharSequenceInput(Delimiter, _chars, _chunkCharCount, ignoreByteOrderMark);
+            new CsvCharSequenceInput(Delimiter, _chars, _encodeBatchCharCount, ignoreByteOrderMark);
 
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
+            int encodeBatchCharCount = _encodeBatchCharCount;
             if (_chars.IsSingleSegment)
             {
-                CsvCharsInput.ProcessFullSegment(_chars.First.Span, _chunkCharCount, _ignoreByteOrderMark, tokenizer, visitor);
+                CsvCharsInput.ProcessFullSegment(_chars.First.Span, encodeBatchCharCount, _ignoreByteOrderMark, tokenizer, visitor);
                 return;
             }
 
-            int maxByteCount = Encoding.UTF8.GetMaxByteCount(_chunkCharCount);
-            Span<byte> bytes = stackalloc byte[0];
-            if (maxByteCount < 1024)
+            int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+            Span<byte> encodeBuffer = stackalloc byte[0];
+            if (encodeBufferLength < 1024)
             {
-                bytes = stackalloc byte[maxByteCount];
+                encodeBuffer = stackalloc byte[encodeBufferLength];
             }
             else
             {
-                bytes = new byte[maxByteCount];
+                encodeBuffer = new byte[encodeBufferLength];
             }
 
             var enumerator = _chars.GetEnumerator();
-            if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, _chunkCharCount, bytes, ref enumerator))
+            if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, encodeBatchCharCount, encodeBuffer, ref enumerator))
             {
                 return;
             }
 
             while (enumerator.MoveNext())
             {
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, enumerator.Current.Span, bytes, _chunkCharCount);
+                var segment = enumerator.Current;
+                if (!segment.IsEmpty)
+                {
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, segment.Span, encodeBuffer, encodeBatchCharCount);
+                }
             }
         }
 
-        private static bool EatBOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, int chunkCharCount, Span<byte> bytes, ref ReadOnlySequence<char>.Enumerator enumerator)
+        private static bool EatBOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, int encodeBatchCharCount, Span<byte> encodeBuffer, ref ReadOnlySequence<char>.Enumerator enumerator)
         {
             while (enumerator.MoveNext())
             {
@@ -105,7 +110,7 @@ namespace Cursively.Inputs
 
                 if (!span.IsEmpty)
                 {
-                    CsvCharsInput.ProcessSegment(tokenizer, visitor, span, bytes, chunkCharCount);
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, span, encodeBuffer, encodeBatchCharCount);
                 }
 
                 return false;

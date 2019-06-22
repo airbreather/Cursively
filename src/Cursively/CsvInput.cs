@@ -109,12 +109,12 @@ namespace Cursively
         /// 
         /// </summary>
         /// <param name="str"></param>
-        /// <param name="chunkCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"/>
-        public static CsvCharsInput ForString(string str, int chunkCharCount)
+        public static CsvCharsInput ForString(string str, int encodeBatchCharCount)
         {
-            return ForChars(str.AsMemory(), chunkCharCount);
+            return ForChars(str.AsMemory(), encodeBatchCharCount);
         }
 
         /// <summary>
@@ -124,23 +124,23 @@ namespace Cursively
         /// <returns></returns>
         public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars)
         {
-            return ForChars(chars, 341);
+            return ForChars(chars, 340);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="chars"></param>
-        /// <param name="chunkCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
         /// <returns></returns>
-        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars, int chunkCharCount)
+        public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars, int encodeBatchCharCount)
         {
-            if (chunkCharCount < 1)
+            if (encodeBatchCharCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharsInput((byte)',', chars, chunkCharCount, false);
+            return new CsvCharsInput((byte)',', chars, encodeBatchCharCount, false);
         }
 
         /// <summary>
@@ -150,23 +150,66 @@ namespace Cursively
         /// <returns></returns>
         public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars)
         {
-            return ForChars(chars, 341);
+            return ForChars(chars, 340);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="chars"></param>
-        /// <param name="chunkCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
         /// <returns></returns>
-        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars, int chunkCharCount)
+        public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars, int encodeBatchCharCount)
         {
-            if (chunkCharCount < 1)
+            if (encodeBatchCharCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(chunkCharCount), chunkCharCount, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
             }
 
-            return new CsvCharSequenceInput((byte)',', chars, chunkCharCount, false);
+            return new CsvCharSequenceInput((byte)',', chars, encodeBatchCharCount, false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textReader"></param>
+        /// <returns></returns>
+        public static CsvTextReaderInput ForTextReader(TextReader textReader)
+        {
+            return ForTextReader(textReader, 1024);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textReader"></param>
+        /// <param name="readBufferCharCount"></param>
+        /// <returns></returns>
+        public static CsvTextReaderInput ForTextReader(TextReader textReader, int readBufferCharCount)
+        {
+            return ForTextReader(textReader, readBufferCharCount, 340);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textReader"></param>
+        /// <param name="readBufferCharCount"></param>
+        /// <param name="encodeBatchCharCount"></param>
+        /// <returns></returns>
+        public static CsvTextReaderInput ForTextReader(TextReader textReader, int readBufferCharCount, int encodeBatchCharCount)
+        {
+            if (readBufferCharCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(readBufferCharCount), readBufferCharCount, "Must be greater than zero.");
+            }
+
+            if (encodeBatchCharCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(encodeBatchCharCount), encodeBatchCharCount, "Must be greater than zero.");
+            }
+
+            return new CsvTextReaderInput((byte)',', textReader ?? TextReader.Null, readBufferCharCount, encodeBatchCharCount, false);
         }
 
         /// <summary>

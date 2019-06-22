@@ -39,6 +39,14 @@ namespace Cursively.Inputs
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="bufferSize"></param>
+        /// <returns></returns>
+        public CsvStreamInput WithBufferSize(int bufferSize) =>
+            new CsvStreamInput(Delimiter, _stream, bufferSize, _ignoreUTF8ByteOrderMark);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="ignoreUTF8ByteOrderMark"></param>
         /// <returns></returns>
         public CsvStreamInput WithIgnoreUTF8ByteOrderMark(bool ignoreUTF8ByteOrderMark) =>
@@ -67,6 +75,10 @@ namespace Cursively.Inputs
         /// <inheritdoc />
         protected override async ValueTask ProcessAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, IProgress<int> progress, CancellationToken cancellationToken)
         {
+            // not all streams support cancellation, so we might as well do this ourselves.  it
+            // does involve a volatile read, so don't go overboard.
+            cancellationToken.ThrowIfCancellationRequested();
+
             var stream = _stream;
 
             byte[] buffer = new byte[_bufferSize];
@@ -78,12 +90,12 @@ namespace Cursively.Inputs
             int cnt;
             while ((cnt = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)) != 0)
             {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
-                progress?.Report(cnt);
-
                 // not all streams support cancellation, so we might as well do this ourselves.  it
                 // does involve a volatile read, so don't go overboard.
                 cancellationToken.ThrowIfCancellationRequested();
+
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
+                progress?.Report(cnt);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
@@ -159,6 +171,11 @@ namespace Cursively.Inputs
             while (off < 3)
             {
                 int cnt = await stream.ReadAsync(buffer, off, buffer.Length - off, cancellationToken).ConfigureAwait(false);
+
+                // not all streams support cancellation, so we might as well do this ourselves.  it
+                // does involve a volatile read, so don't go overboard.
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (cnt == 0)
                 {
                     if (off != 0)
