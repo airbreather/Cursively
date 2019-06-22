@@ -171,6 +171,7 @@ namespace Cursively.Inputs
                     }
 
                     tokenizer.ProcessEndOfStream(visitor);
+                    progress?.Report(0);
                     return true;
                 }
 
