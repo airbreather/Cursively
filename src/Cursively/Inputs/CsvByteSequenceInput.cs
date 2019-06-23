@@ -67,8 +67,7 @@ namespace Cursively.Inputs
 
         private static bool EatUTF8BOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ref ReadOnlySequence<byte>.Enumerator enumerator)
         {
-            // greedily optimize for the case where the first non-empty segment has 3 or more bytes.
-            ReadOnlyMemory<byte> firstNonEmptySegment;
+            ReadOnlyMemory<byte> segment;
             while (true)
             {
                 if (!enumerator.MoveNext())
@@ -77,14 +76,16 @@ namespace Cursively.Inputs
                     return true;
                 }
 
-                firstNonEmptySegment = enumerator.Current;
-                if (!firstNonEmptySegment.IsEmpty)
+                segment = enumerator.Current;
+                if (!segment.IsEmpty)
                 {
                     break;
                 }
             }
 
-            var span = firstNonEmptySegment.Span;
+            var span = segment.Span;
+
+            // this greed should **probably** pay off most of the time.
             if (span.Length >= 3)
             {
                 if (span[0] == 0xEF &&
@@ -92,71 +93,72 @@ namespace Cursively.Inputs
                     span[2] == 0xBF)
                 {
                     span = span.Slice(3);
+
+                    if (span.IsEmpty)
+                    {
+                        return false;
+                    }
                 }
 
                 tokenizer.ProcessNextChunk(span, visitor);
                 return false;
             }
 
-            byte nextByteOfUTF8BOM = 0xEF;
+            ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB, 0xBF };
+            int alreadyEaten = 0;
             while (true)
             {
-                if (span[0] == nextByteOfUTF8BOM)
+                switch (span[0])
                 {
-                    span = span.Slice(1);
-                    switch (nextByteOfUTF8BOM)
-                    {
-                        case 0xEF:
-                            nextByteOfUTF8BOM = 0xBB;
-                            break;
-
-                        case 0xBB:
-                            nextByteOfUTF8BOM = 0xBF;
-                            break;
-
-                        default:
+                    case 0xEF when alreadyEaten == 0:
+                    case 0xBB when alreadyEaten == 1:
+                    case 0xBF when alreadyEaten == 2:
+                        span = span.Slice(1);
+                        if (++alreadyEaten == 3)
+                        {
                             if (!span.IsEmpty)
                             {
                                 tokenizer.ProcessNextChunk(span, visitor);
                             }
 
                             return false;
-                    }
-                }
-                else if (nextByteOfUTF8BOM == 0xEF)
-                {
-                    tokenizer.ProcessNextChunk(span, visitor);
-                    return false;
-                }
-                else
-                {
-                    ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB };
-                    if (nextByteOfUTF8BOM == 0xBB)
-                    {
-                        head = head.Slice(0, 1);
-                    }
-
-                    tokenizer.ProcessNextChunk(head, visitor);
-                    tokenizer.ProcessNextChunk(span, visitor);
-                    return false;
-                }
-
-                while (span.IsEmpty)
-                {
-                    if (!enumerator.MoveNext())
-                    {
-                        ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB };
-                        if (nextByteOfUTF8BOM == 0xBB)
-                        {
-                            head = head.Slice(0, 1);
                         }
 
-                        tokenizer.ProcessNextChunk(head, visitor);
-                        tokenizer.ProcessEndOfStream(visitor);
-                        return true;
+                        break;
+
+                    default:
+                        if (alreadyEaten != 0)
+                        {
+                            tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
+                        }
+
+                        tokenizer.ProcessNextChunk(span, visitor);
+                        return false;
+                }
+
+                if (span.IsEmpty)
+                {
+                    while (true)
+                    {
+                        if (!enumerator.MoveNext())
+                        {
+                            if (alreadyEaten != 0)
+                            {
+                                tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
+                            }
+
+                            tokenizer.ProcessEndOfStream(visitor);
+                            return true;
+                        }
+
+                        segment = enumerator.Current;
+                        if (!segment.IsEmpty)
+                        {
+                            break;
+                        }
                     }
 
-                    span = enumerator.Current.Span;
+                    span = segment.Span;
                 }
             }
         }
