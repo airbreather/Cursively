@@ -37,19 +37,23 @@ namespace Cursively.Inputs
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            var span = _bytes.Span;
-            if (_ignoreUTF8ByteOrderMark &&
-                span.Length >= 3 &&
-                span[0] == 0xEF &&
-                span[1] == 0xBB &&
-                span[2] == 0xBF)
+            ProcessFullSegment(_bytes.Span, _ignoreUTF8ByteOrderMark, tokenizer, visitor);
+        }
+
+        internal static unsafe void ProcessFullSegment(ReadOnlySpan<byte> bytes, bool ignoreUTF8ByteOrderMark, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
+        {
+            if (ignoreUTF8ByteOrderMark &&
+                bytes.Length >= 3 &&
+                bytes[0] == 0xEF &&
+                bytes[1] == 0xBB &&
+                bytes[2] == 0xBF)
             {
-                span = span.Slice(3);
+                bytes = bytes.Slice(3);
             }
 
-            if (!span.IsEmpty)
+            if (!bytes.IsEmpty)
             {
-                tokenizer.ProcessNextChunk(span, visitor);
+                tokenizer.ProcessNextChunk(bytes, visitor);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
