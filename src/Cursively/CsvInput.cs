@@ -80,6 +80,16 @@ namespace Cursively
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static CsvByteSequenceInput ForBytes(ReadOnlySequence<byte> bytes)
+        {
+            return new CsvByteSequenceInput((byte)',', bytes, true);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
         public static CsvCharsInput ForString(string str)
