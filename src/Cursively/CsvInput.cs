@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.IO;
-
+using System.IO.Pipelines;
 using Cursively.Inputs;
 
 namespace Cursively
@@ -85,6 +85,16 @@ namespace Cursively
         public static CsvByteSequenceInput ForBytes(ReadOnlySequence<byte> bytes)
         {
             return new CsvByteSequenceInput((byte)',', bytes, true);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static CsvPipeReaderInput ForPipeReader(PipeReader reader)
+        {
+            return new CsvPipeReaderInput((byte)',', reader, true);
         }
 
         /// <summary>
