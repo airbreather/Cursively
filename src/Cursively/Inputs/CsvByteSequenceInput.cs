@@ -85,33 +85,31 @@ namespace Cursively.Inputs
 
             var span = segment.Span;
 
-            // this greed should **probably** pay off most of the time.
-            if (span.Length >= 3)
-            {
-                if (span[0] == 0xEF &&
-                    span[1] == 0xBB &&
-                    span[2] == 0xBF)
-                {
-                    span = span.Slice(3);
+            ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB, 0xBF };
 
-                    if (span.IsEmpty)
-                    {
-                        return false;
-                    }
+            // this greed should **probably** pay off most of the time.
+            if (span.Length >= head.Length)
+            {
+                if (span.StartsWith(head))
+                {
+                    span = span.Slice(head.Length);
                 }
 
-                tokenizer.ProcessNextChunk(span, visitor);
+                if (!span.IsEmpty)
+                {
+                    tokenizer.ProcessNextChunk(span, visitor);
+                }
+
                 return false;
             }
 
-            ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB, 0xBF };
             int alreadyEaten = 0;
             while (true)
             {
                 if (span[0] == head[alreadyEaten])
                 {
                     span = span.Slice(1);
-                    if (++alreadyEaten == 3)
+                    if (++alreadyEaten == head.Length)
                     {
                         if (!span.IsEmpty)
                         {
