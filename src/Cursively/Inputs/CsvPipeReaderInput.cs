@@ -16,7 +16,7 @@ namespace Cursively.Inputs
         private readonly bool _ignoreUTF8ByteOrderMark;
 
         internal CsvPipeReaderInput(byte delimiter, PipeReader reader, bool ignoreUTF8ByteOrderMark)
-            : base(delimiter, requiresExplicitReset: false)
+            : base(delimiter, requiresExplicitReset: true)
         {
             _reader = reader;
             _ignoreUTF8ByteOrderMark = ignoreUTF8ByteOrderMark;
@@ -64,25 +64,34 @@ namespace Cursively.Inputs
                 }
 
                 var buffer = result.Buffer;
-                try
+                long totalLength = 0;
+                foreach (var segment in buffer)
                 {
-                    foreach (var segment in buffer)
+                    if (!segment.IsEmpty)
                     {
-                        if (!segment.IsEmpty)
-                        {
-                            tokenizer.ProcessNextChunk(segment.Span, visitor);
-                            progress?.Report(segment.Length);
-                        }
-                    }
-
-                    if (result.IsCompleted)
-                    {
-                        break;
+                        tokenizer.ProcessNextChunk(segment.Span, visitor);
+                        totalLength += segment.Length;
                     }
                 }
-                finally
+
+                reader.AdvanceTo(buffer.End);
+                if (progress != null)
                 {
-                    reader.AdvanceTo(buffer.End);
+                    while (totalLength > int.MaxValue)
+                    {
+                        progress.Report(int.MaxValue);
+                        totalLength -= int.MaxValue;
+                    }
+
+                    if (totalLength != 0)
+                    {
+                        progress.Report(unchecked((int)totalLength));
+                    }
+                }
+
+                if (result.IsCompleted)
+                {
+                    break;
                 }
             }
 
@@ -121,11 +130,12 @@ namespace Cursively.Inputs
                         if (!segment.IsEmpty)
                         {
                             tokenizer.ProcessNextChunk(segment.Span, visitor);
-                            progress?.Report(segment.Length);
                         }
                     }
 
+                    progress?.Report(unchecked((int)buffer.Length));
                     tokenizer.ProcessEndOfStream(visitor);
+                    reader.AdvanceTo(buffer.End);
                     progress?.Report(0);
                     return true;
                 }
@@ -134,7 +144,6 @@ namespace Cursively.Inputs
             }
 
             Finish();
-            progress?.Report(3);
             return false;
 
             void Finish()
@@ -170,6 +179,7 @@ namespace Cursively.Inputs
                 }
 
                 reader.AdvanceTo(buffer.GetPosition(3));
+                progress?.Report(3);
             }
         }
     }

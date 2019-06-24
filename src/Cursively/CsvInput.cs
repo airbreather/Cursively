@@ -114,7 +114,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvCharsInput ForChars(ReadOnlyMemory<char> chars)
         {
-            return new CsvCharsInput((byte)',', chars, 340, MemoryPool<byte>.Shared, true);
+            return new CsvCharsInput((byte)',', chars, 340, MemoryPool<byte>.Shared, false);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvCharSequenceInput ForChars(ReadOnlySequence<char> chars)
         {
-            return new CsvCharSequenceInput((byte)',', chars, 340, MemoryPool<byte>.Shared, true);
+            return new CsvCharSequenceInput((byte)',', chars, 340, MemoryPool<byte>.Shared, false);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cursively
         /// <returns></returns>
         public static CsvTextReaderInput ForTextReader(TextReader textReader)
         {
-            return new CsvTextReaderInput((byte)',', textReader ?? TextReader.Null, 1024, ArrayPool<char>.Shared, 340, MemoryPool<byte>.Shared, true);
+            return new CsvTextReaderInput((byte)',', textReader ?? TextReader.Null, 1024, ArrayPool<char>.Shared, 340, MemoryPool<byte>.Shared, false);
         }
 
         /// <summary>
