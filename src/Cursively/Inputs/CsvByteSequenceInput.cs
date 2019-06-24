@@ -108,32 +108,28 @@ namespace Cursively.Inputs
             int alreadyEaten = 0;
             while (true)
             {
-                switch (span[0])
+                if (span[0] == head[alreadyEaten])
                 {
-                    case 0xEF when alreadyEaten == 0:
-                    case 0xBB when alreadyEaten == 1:
-                    case 0xBF when alreadyEaten == 2:
-                        span = span.Slice(1);
-                        if (++alreadyEaten == 3)
+                    span = span.Slice(1);
+                    if (++alreadyEaten == 3)
+                    {
+                        if (!span.IsEmpty)
                         {
-                            if (!span.IsEmpty)
-                            {
-                                tokenizer.ProcessNextChunk(span, visitor);
-                            }
-
-                            return false;
+                            tokenizer.ProcessNextChunk(span, visitor);
                         }
 
-                        break;
-
-                    default:
-                        if (alreadyEaten != 0)
-                        {
-                            tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
-                        }
-
-                        tokenizer.ProcessNextChunk(span, visitor);
                         return false;
+                    }
+                }
+                else
+                {
+                    if (alreadyEaten != 0)
+                    {
+                        tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
+                    }
+
+                    tokenizer.ProcessNextChunk(span, visitor);
+                    return false;
                 }
 
                 if (span.IsEmpty)

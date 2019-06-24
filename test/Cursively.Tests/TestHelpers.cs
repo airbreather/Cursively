@@ -13,7 +13,9 @@ namespace Cursively.Tests
     {
         public static readonly string TestCsvFilesFolderPath = Path.Combine(Path.GetDirectoryName(typeof(CsvTokenizer).Assembly.Location), "TestCsvFiles");
 
-        public static readonly int[] TestChunkLengths = { 1, 2, 3, 5, 8, 13, 21, 34 };
+        public static readonly int[] TestChunkLengths = { 1, 2, 3, 5, 8, 13, 21, 34, 65536 };
+
+        public static readonly int[] TestFewerChunkLengths = { 1, 8, 65536 };
 
         public static readonly byte[] TestDelimiters = { (byte)',', (byte)'\t' };
 
@@ -124,8 +126,8 @@ namespace Cursively.Tests
         public static IEnumerable<object[]> GetTestCsvFilesWithTwoChunkLengths(params string[] pathParts) =>
             from filePath in Directory.EnumerateFiles(Path.Combine(TestCsvFilesFolderPath, Path.Combine(pathParts)), "*.csv", SearchOption.AllDirectories)
             let relativePath = Path.GetRelativePath(TestCsvFilesFolderPath, filePath)
-            from chunkLength1 in TestChunkLengths
-            from chunkLength2 in TestChunkLengths
+            from chunkLength1 in TestFewerChunkLengths
+            from chunkLength2 in TestFewerChunkLengths
             select new object[] { relativePath, chunkLength1, chunkLength2 };
 
         public static IEnumerable<object[]> GetTestCsvFilesWithDelimiters(params string[] pathParts) =>

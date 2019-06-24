@@ -32,14 +32,15 @@ namespace Cursively.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TestCsvFiles))]
-        public void WithoutIgnoringUTF8BOM(string filePath)
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
+        public void WithoutIgnoringUTF8BOM(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
             string fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
 
             var sut = CsvInput.ForString(fileData)
+                              .WithEncodeBatchCharCount(chunkLength)
                               .WithIgnoreByteOrderMark(false);
 
             // act, assert
@@ -47,14 +48,15 @@ namespace Cursively.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TestCsvFiles))]
-        public void IgnoreUTF8BOM(string filePath)
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
+        public void IgnoreUTF8BOM(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
             string fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
 
             var sut = CsvInput.ForString(fileData)
+                              .WithEncodeBatchCharCount(chunkLength)
                               .WithIgnoreByteOrderMark(true);
 
             // act, assert
@@ -63,7 +65,7 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public void DecodeSmallerChunksNoPool(string filePath, int chunkLength)
+        public void NoPool(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);

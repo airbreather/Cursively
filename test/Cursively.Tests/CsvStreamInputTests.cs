@@ -79,5 +79,41 @@ namespace Cursively.Tests
                 await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
             }
         }
+
+        [Theory]
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
+        public void NoPool(string filePath, int chunkLength)
+        {
+            // arrange
+            filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
+            using (var stream = File.OpenRead(filePath))
+            {
+                var sut = CsvInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithReadBufferPool(null)
+                                  .WithIgnoreUTF8ByteOrderMark(true);
+
+                // act, assert
+                RunTest(sut, filePath, (byte)',', true);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCsvFilesWithChunkLengths))]
+        public async ValueTask NoPoolAsync(string filePath, int chunkLength)
+        {
+            // arrange
+            filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
+            using (var stream = File.OpenRead(filePath))
+            {
+                var sut = CsvInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithReadBufferPool(null)
+                                  .WithIgnoreUTF8ByteOrderMark(true);
+
+                // act, assert
+                await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
+            }
+        }
     }
 }
