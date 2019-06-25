@@ -291,9 +291,9 @@ namespace Cursively.Inputs
             if (charOffset < charCount)
             {
                 CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, charOffset, charCount - charOffset), encodeBuffer.Span, encodeBatchCharCount, encoder, false);
-                progress?.Report(charCount);
             }
 
+            progress?.Report(charCount);
             return false;
         }
     }

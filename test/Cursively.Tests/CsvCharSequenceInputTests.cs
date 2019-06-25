@@ -27,7 +27,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(false);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', false);
+            RunUTF16Test(sut, filePath, (byte)',', false);
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(true);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', fileData.IsEmpty || fileData.Span[0] == '\uFEFF');
+            RunUTF16Test(sut, filePath, (byte)',', true);
         }
 
         [Theory]
@@ -62,7 +62,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(false);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', false);
+            RunUTF16Test(sut, filePath, (byte)',', false);
         }
     }
 }

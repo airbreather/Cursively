@@ -35,7 +35,7 @@ namespace Cursively.Tests
                                   .WithIgnoreUTF8ByteOrderMark(false);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', false);
+                RunBinaryTest(sut, filePath, (byte)',', false);
             }
         }
 
@@ -59,13 +59,13 @@ namespace Cursively.Tests
                                   .WithIgnoreUTF8ByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', true);
+                RunBinaryTest(sut, filePath, (byte)',', true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public async ValueTask WithoutIgnoringUTF8BOMAsync(string filePath, int chunkLength)
+        public async Task WithoutIgnoringUTF8BOMAsync(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -83,13 +83,13 @@ namespace Cursively.Tests
                                   .WithIgnoreUTF8ByteOrderMark(false);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', false).ConfigureAwait(false);
+                await RunBinaryTestAsync(sut, filePath, (byte)',', false).ConfigureAwait(true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public async ValueTask IgnoreUTF8BOMAsync(string filePath, int chunkLength)
+        public async Task IgnoreUTF8BOMAsync(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -107,7 +107,7 @@ namespace Cursively.Tests
                                   .WithIgnoreUTF8ByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
+                await RunBinaryTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(true);
             }
         }
     }

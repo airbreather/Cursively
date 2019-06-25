@@ -28,7 +28,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(false);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', false);
+                RunUTF16Test(sut, filePath, (byte)',', false);
             }
         }
 
@@ -47,13 +47,13 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
+                RunUTF16Test(sut, filePath, (byte)',', true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask WithoutIgnoringBOMAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async Task WithoutIgnoringBOMAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -66,13 +66,13 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(false);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', false).ConfigureAwait(false);
+                await RunUTF16TestAsync(sut, filePath, (byte)',', false).ConfigureAwait(true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask IgnoreBOMAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async Task IgnoreBOMAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -85,7 +85,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
+                await RunUTF16TestAsync(sut, filePath, (byte)',', true).ConfigureAwait(true);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
+                RunUTF16Test(sut, filePath, (byte)',', true);
             }
         }
 
@@ -125,13 +125,13 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
+                RunUTF16Test(sut, filePath, (byte)',', true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask NoEncodeBufferPoolAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async Task NoEncodeBufferPoolAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -145,13 +145,13 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
+                await RunUTF16TestAsync(sut, filePath, (byte)',', true).ConfigureAwait(true);
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask NoReadBufferPoolAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async Task NoReadBufferPoolAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -165,7 +165,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
+                await RunUTF16TestAsync(sut, filePath, (byte)',', true).ConfigureAwait(true);
             }
         }
     }

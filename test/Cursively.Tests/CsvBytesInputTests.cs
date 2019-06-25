@@ -23,7 +23,7 @@ namespace Cursively.Tests
                               .WithIgnoreUTF8ByteOrderMark(false);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', false);
+            RunBinaryTest(sut, filePath, (byte)',', false);
         }
 
         [Theory]
@@ -38,7 +38,7 @@ namespace Cursively.Tests
                               .WithIgnoreUTF8ByteOrderMark(true);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            RunBinaryTest(sut, filePath, (byte)',', true);
         }
     }
 }

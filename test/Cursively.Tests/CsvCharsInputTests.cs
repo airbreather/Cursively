@@ -28,7 +28,9 @@ namespace Cursively.Tests
             var sut = CsvInput.ForString(fileData);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            // the system up to this point will have also ignored an incomplete BOM, which only our
+            // binary test method handles (not the UTF-16 test).
+            RunBinaryTest(sut, filePath, (byte)',', true);
         }
 
         [Theory]
@@ -44,7 +46,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(false);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', false);
+            RunUTF16Test(sut, filePath, (byte)',', false);
         }
 
         [Theory]
@@ -60,7 +62,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(true);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
+            RunUTF16Test(sut, filePath, (byte)',', true);
         }
 
         [Theory]
@@ -69,14 +71,14 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            string fileData = File.ReadAllText(filePath);
+            string fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
 
             var sut = CsvInput.ForString(fileData)
                               .WithEncodeBatchCharCount(chunkLength)
                               .WithEncodeBufferPool(null);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            RunUTF16Test(sut, filePath, (byte)',', false);
         }
     }
 }
