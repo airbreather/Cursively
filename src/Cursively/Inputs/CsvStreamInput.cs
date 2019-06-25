@@ -188,7 +188,10 @@ namespace Cursively.Inputs
                 {
                     if (byteCount != 0)
                     {
-                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
+                        if (!new ReadOnlySpan<byte>(readBuffer, 0, byteCount).SequenceEqual(new ReadOnlySpan<byte>(UTF8BOM, 0, byteCount)))
+                        {
+                            tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
+                        }
                     }
 
                     tokenizer.ProcessEndOfStream(visitor);
@@ -199,16 +202,15 @@ namespace Cursively.Inputs
             }
 
             int byteOffset = 0;
-            if (readBuffer[0] == 0xEF &&
-                readBuffer[1] == 0xBB &&
-                readBuffer[2] == 0xBF)
+            var buf = new ReadOnlySpan<byte>(readBuffer, 0, byteCount);
+            if (buf.StartsWith(UTF8BOM))
             {
-                byteOffset = 3;
+                buf = buf.Slice(UTF8BOM.Length);
             }
 
             if (byteOffset < byteCount)
             {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, byteOffset, byteCount - byteOffset), visitor);
+                tokenizer.ProcessNextChunk(buf, visitor);
             }
 
             return false;
@@ -235,7 +237,11 @@ namespace Cursively.Inputs
                 {
                     if (byteCount != 0)
                     {
-                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
+                        if (!new ReadOnlySpan<byte>(readBuffer, 0, byteCount).SequenceEqual(new ReadOnlySpan<byte>(UTF8BOM, 0, byteCount)))
+                        {
+                            tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(readBuffer, 0, byteCount), visitor);
+                        }
+
                         progress?.Report(byteCount);
                     }
 
@@ -248,9 +254,7 @@ namespace Cursively.Inputs
             }
 
             int byteOffset = 0;
-            if (readBuffer[0] == 0xEF &&
-                readBuffer[1] == 0xBB &&
-                readBuffer[2] == 0xBF)
+            if (new ReadOnlySpan<byte>(readBuffer, 0, 3).SequenceEqual(UTF8BOM))
             {
                 byteOffset = 3;
             }

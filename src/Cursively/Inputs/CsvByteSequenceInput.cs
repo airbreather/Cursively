@@ -55,11 +55,7 @@ namespace Cursively.Inputs
 
             while (enumerator.MoveNext())
             {
-                var segment = enumerator.Current;
-                if (!segment.IsEmpty)
-                {
-                    tokenizer.ProcessNextChunk(segment.Span, visitor);
-                }
+                tokenizer.ProcessNextChunk(enumerator.Current.Span, visitor);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
@@ -85,7 +81,7 @@ namespace Cursively.Inputs
 
             var span = segment.Span;
 
-            ReadOnlySpan<byte> head = stackalloc byte[] { 0xEF, 0xBB, 0xBF };
+            ReadOnlySpan<byte> head = UTF8BOM;
 
             // this greed should **probably** pay off most of the time.
             if (span.Length >= head.Length)
@@ -95,11 +91,7 @@ namespace Cursively.Inputs
                     span = span.Slice(head.Length);
                 }
 
-                if (!span.IsEmpty)
-                {
-                    tokenizer.ProcessNextChunk(span, visitor);
-                }
-
+                tokenizer.ProcessNextChunk(span, visitor);
                 return false;
             }
 
@@ -111,21 +103,13 @@ namespace Cursively.Inputs
                     span = span.Slice(1);
                     if (++alreadyEaten == head.Length)
                     {
-                        if (!span.IsEmpty)
-                        {
-                            tokenizer.ProcessNextChunk(span, visitor);
-                        }
-
+                        tokenizer.ProcessNextChunk(span, visitor);
                         return false;
                     }
                 }
                 else
                 {
-                    if (alreadyEaten != 0)
-                    {
-                        tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
-                    }
-
+                    tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
                     tokenizer.ProcessNextChunk(span, visitor);
                     return false;
                 }
@@ -136,11 +120,6 @@ namespace Cursively.Inputs
                     {
                         if (!enumerator.MoveNext())
                         {
-                            if (alreadyEaten != 0)
-                            {
-                                tokenizer.ProcessNextChunk(head.Slice(0, alreadyEaten), visitor);
-                            }
-
                             tokenizer.ProcessEndOfStream(visitor);
                             return true;
                         }

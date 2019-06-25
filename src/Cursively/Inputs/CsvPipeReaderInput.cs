@@ -125,15 +125,7 @@ namespace Cursively.Inputs
                 if (result.IsCompleted)
                 {
                     // we've seen the end of the data.
-                    foreach (var segment in buffer)
-                    {
-                        if (!segment.IsEmpty)
-                        {
-                            tokenizer.ProcessNextChunk(segment.Span, visitor);
-                        }
-                    }
-
-                    progress?.Report(unchecked((int)buffer.Length));
+                    Finish();
                     tokenizer.ProcessEndOfStream(visitor);
                     reader.AdvanceTo(buffer.End);
                     progress?.Report(0);
@@ -148,7 +140,7 @@ namespace Cursively.Inputs
 
             void Finish()
             {
-                Span<byte> firstThree = stackalloc byte[3];
+                Span<byte> upToFirstThreeBytes = stackalloc byte[3];
                 int alreadyEaten = 0;
                 foreach (var segment in buffer)
                 {
@@ -163,7 +155,7 @@ namespace Cursively.Inputs
                         lengthToCopy = segment.Length;
                     }
 
-                    segment.Slice(0, lengthToCopy).Span.CopyTo(firstThree.Slice(alreadyEaten, lengthToCopy));
+                    segment.Slice(0, lengthToCopy).Span.CopyTo(upToFirstThreeBytes.Slice(alreadyEaten, lengthToCopy));
                     alreadyEaten += lengthToCopy;
                     if (alreadyEaten == 3)
                     {
@@ -171,15 +163,15 @@ namespace Cursively.Inputs
                     }
                 }
 
-                if (!(firstThree[0] == 0xEF &&
-                      firstThree[1] == 0xBB &&
-                      firstThree[2] == 0xBF))
+                upToFirstThreeBytes = upToFirstThreeBytes.Slice(0, alreadyEaten);
+                var head = new ReadOnlySpan<byte>(UTF8BOM, 0, alreadyEaten);
+                if (!upToFirstThreeBytes.SequenceEqual(head))
                 {
-                    tokenizer.ProcessNextChunk(firstThree, visitor);
+                    tokenizer.ProcessNextChunk(upToFirstThreeBytes, visitor);
                 }
 
-                reader.AdvanceTo(buffer.GetPosition(3));
-                progress?.Report(3);
+                reader.AdvanceTo(buffer.GetPosition(alreadyEaten));
+                progress?.Report(alreadyEaten);
             }
         }
     }

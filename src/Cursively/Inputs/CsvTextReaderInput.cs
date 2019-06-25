@@ -102,6 +102,8 @@ namespace Cursively.Inputs
         /// <inheritdoc />
         protected override void Process(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
+            var encoding = CsvCharsInput.TheEncoding;
+            var encoder = encoding.GetEncoder();
             var textReader = _textReader;
             int minReadBufferCharCount = _minReadBufferCharCount;
             var readBufferPool = _readBufferPool;
@@ -127,7 +129,7 @@ namespace Cursively.Inputs
                     encodeBatchCharCount = readBuffer.Length;
                 }
 
-                int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+                int encodeBufferLength = encoding.GetMaxByteCount(encodeBatchCharCount);
                 Span<byte> encodeBuffer = stackalloc byte[0];
                 if (encodeBufferLength < 1024)
                 {
@@ -143,7 +145,7 @@ namespace Cursively.Inputs
                     encodeBuffer = encodeBufferOwner.Memory.Span;
                 }
 
-                if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount))
+                if (_ignoreByteOrderMark && EatBOM(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount, encoder))
                 {
                     return;
                 }
@@ -151,8 +153,10 @@ namespace Cursively.Inputs
                 int cnt;
                 while ((cnt = textReader.Read(readBuffer, 0, readBuffer.Length)) != 0)
                 {
-                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer, encodeBatchCharCount);
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, cnt), encodeBuffer, encodeBatchCharCount, encoder, false);
                 }
+
+                CsvCharsInput.ProcessSegment(tokenizer, visitor, Array.Empty<char>(), encodeBuffer, encodeBatchCharCount, encoder, true);
             }
             finally
             {
@@ -170,6 +174,8 @@ namespace Cursively.Inputs
             // ourselves.  it does involve a volatile read, so don't go overboard.
             cancellationToken.ThrowIfCancellationRequested();
 
+            var encoding = CsvCharsInput.TheEncoding;
+            var encoder = encoding.GetEncoder();
             var textReader = _textReader;
             int minReadBufferCharCount = _minReadBufferCharCount;
             var readBufferPool = _readBufferPool;
@@ -195,7 +201,7 @@ namespace Cursively.Inputs
                     encodeBatchCharCount = readBuffer.Length;
                 }
 
-                int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+                int encodeBufferLength = encoding.GetMaxByteCount(encodeBatchCharCount);
 
                 Memory<byte> encodeBuffer;
                 if (encodeBufferPool is null)
@@ -208,7 +214,7 @@ namespace Cursively.Inputs
                     encodeBuffer = encodeBufferOwner.Memory;
                 }
 
-                if (_ignoreByteOrderMark && await EatBOMAsync(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount, progress, cancellationToken).ConfigureAwait(false))
+                if (_ignoreByteOrderMark && await EatBOMAsync(tokenizer, visitor, readBuffer, encodeBuffer, encodeBatchCharCount, encoder, progress, cancellationToken).ConfigureAwait(false))
                 {
                     return;
                 }
@@ -220,9 +226,11 @@ namespace Cursively.Inputs
                     // ourselves.  it does involve a volatile read, so don't go overboard.
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, readLength), encodeBuffer.Span, encodeBatchCharCount);
+                    CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, 0, readLength), encodeBuffer.Span, encodeBatchCharCount, encoder, false);
                     progress?.Report(readLength);
                 }
+
+                CsvCharsInput.ProcessSegment(tokenizer, visitor, Array.Empty<char>(), encodeBuffer.Span, encodeBatchCharCount, encoder, true);
             }
             finally
             {
@@ -237,7 +245,7 @@ namespace Cursively.Inputs
         /// <inheritdoc />
         protected override bool TryResetCore() => false;
 
-        private bool EatBOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Span<byte> encodeBuffer, int encodeBatchCharCount)
+        private bool EatBOM(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Span<byte> encodeBuffer, int encodeBatchCharCount, Encoder encoder)
         {
             int charCount = _textReader.Read(readBuffer, 0, readBuffer.Length);
             if (charCount == 0)
@@ -254,13 +262,13 @@ namespace Cursively.Inputs
 
             if (charOffset < charCount)
             {
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, charOffset, charCount - charOffset), encodeBuffer, encodeBatchCharCount);
+                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, charOffset, charCount - charOffset), encodeBuffer, encodeBatchCharCount, encoder, false);
             }
 
             return false;
         }
 
-        private async ValueTask<bool> EatBOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Memory<byte> encodeBuffer, int encodeBatchCharCount, IProgress<int> progress, CancellationToken cancellationToken)
+        private async ValueTask<bool> EatBOMAsync(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, char[] readBuffer, Memory<byte> encodeBuffer, int encodeBatchCharCount, Encoder encoder, IProgress<int> progress, CancellationToken cancellationToken)
         {
             int charCount = await _textReader.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false);
             if (charCount == 0)
@@ -282,7 +290,7 @@ namespace Cursively.Inputs
 
             if (charOffset < charCount)
             {
-                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, charOffset, charCount - charOffset), encodeBuffer.Span, encodeBatchCharCount);
+                CsvCharsInput.ProcessSegment(tokenizer, visitor, new ReadOnlySpan<char>(readBuffer, charOffset, charCount - charOffset), encodeBuffer.Span, encodeBatchCharCount, encoder, false);
                 progress?.Report(charCount);
             }
 

@@ -15,7 +15,7 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public void WithoutIgnoringUTF8BOM(string filePath, int chunkLength1, int chunkLength2)
+        public void WithoutIgnoringBOM(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -32,7 +32,7 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public void IgnoreUTF8BOM(string filePath, int chunkLength1, int chunkLength2)
+        public void IgnoreBOM(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -44,7 +44,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(true);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            RunTest(sut, filePath, (byte)',', fileData.IsEmpty || fileData.Span[0] == '\uFEFF');
         }
 
         [Theory]
@@ -59,10 +59,10 @@ namespace Cursively.Tests
             var sut = CsvInput.ForChars(chars)
                               .WithEncodeBufferPool(null)
                               .WithEncodeBatchCharCount(chunkLength2)
-                              .WithIgnoreByteOrderMark(true);
+                              .WithIgnoreByteOrderMark(false);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            RunTest(sut, filePath, (byte)',', false);
         }
     }
 }

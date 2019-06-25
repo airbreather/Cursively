@@ -59,14 +59,14 @@ namespace Cursively.Inputs
                     {
                         handle.AcquirePointer(ref ptr);
 
-                        if (_ignoreUTF8ByteOrderMark &&
-                            length >= 3 &&
-                            ptr[0] == 0xEF &&
-                            ptr[1] == 0xBB &&
-                            ptr[2] == 0xBF)
+                        if (_ignoreUTF8ByteOrderMark)
                         {
-                            length -= 3;
-                            ptr += 3;
+                            var head = new ReadOnlySpan<byte>(UTF8BOM, 0, length < UTF8BOM.Length ? unchecked((int)length) : UTF8BOM.Length);
+                            if (head.SequenceEqual(new ReadOnlySpan<byte>(ptr, head.Length)))
+                            {
+                                length -= head.Length;
+                                ptr += head.Length;
+                            }
                         }
 
                         while (length > int.MaxValue)

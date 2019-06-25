@@ -54,26 +54,28 @@ namespace Cursively.Tests
                 return new ReadOnlySequence<T>(full);
             }
 
-            BufferSegment<T> last = null;
-            BufferSegment<T> first = null;
+            var first = new BufferSegment<T>(default);
+            var last = first;
+            for (int i = 0; i < 10; i++)
+            {
+                last = last.Append(Array.Empty<T>());
+                last = last.Append(default);
+            }
+
             int sizeOfFullChunks = full.Length - (full.Length % chunkLength);
             for (int pos = 0; pos < sizeOfFullChunks; pos += chunkLength)
             {
                 var chunk = full.Slice(pos, chunkLength);
-                if (first is null)
-                {
-                    first = new BufferSegment<T>(chunk);
-                    last = first;
-                }
-                else
-                {
-                    last = last.Append(chunk);
-                }
+                last = last.Append(chunk);
+                last = last.Append(default);
+                last = last.Append(Array.Empty<T>());
             }
 
             if (full.Length != sizeOfFullChunks)
             {
                 last = last.Append(full.Slice(sizeOfFullChunks));
+                last = last.Append(Array.Empty<T>());
+                last = last.Append(default);
             }
 
             return new ReadOnlySequence<T>(first, 0, last, last.Memory.Length);

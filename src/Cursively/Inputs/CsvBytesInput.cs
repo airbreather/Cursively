@@ -42,20 +42,16 @@ namespace Cursively.Inputs
 
         internal static unsafe void ProcessFullSegment(ReadOnlySpan<byte> bytes, bool ignoreUTF8ByteOrderMark, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
-            if (ignoreUTF8ByteOrderMark &&
-                bytes.Length >= 3 &&
-                bytes[0] == 0xEF &&
-                bytes[1] == 0xBB &&
-                bytes[2] == 0xBF)
+            if (ignoreUTF8ByteOrderMark)
             {
-                bytes = bytes.Slice(3);
+                var head = new ReadOnlySpan<byte>(UTF8BOM, 0, bytes.Length < UTF8BOM.Length ? bytes.Length : UTF8BOM.Length);
+                if (bytes.StartsWith(head))
+                {
+                    bytes = bytes.Slice(head.Length);
+                }
             }
 
-            if (!bytes.IsEmpty)
-            {
-                tokenizer.ProcessNextChunk(bytes, visitor);
-            }
-
+            tokenizer.ProcessNextChunk(bytes, visitor);
             tokenizer.ProcessEndOfStream(visitor);
         }
     }

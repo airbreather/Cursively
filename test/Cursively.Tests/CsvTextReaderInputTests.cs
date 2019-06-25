@@ -15,12 +15,12 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public void WithoutIgnoringUTF8BOM(string filePath, int chunkLength1, int chunkLength2)
+        public void WithoutIgnoringBOM(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -34,12 +34,12 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public void IgnoreUTF8BOM(string filePath, int chunkLength1, int chunkLength2)
+        public void IgnoreBOM(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -47,18 +47,18 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', true);
+                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
             }
         }
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask WithoutIgnoringUTF8BOMAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async ValueTask WithoutIgnoringBOMAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -72,12 +72,12 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithTwoChunkLengths))]
-        public async ValueTask IgnoreUTF8BOMAsync(string filePath, int chunkLength1, int chunkLength2)
+        public async ValueTask IgnoreBOMAsync(string filePath, int chunkLength1, int chunkLength2)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -85,7 +85,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
+                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
             }
         }
 
@@ -95,8 +95,8 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -105,7 +105,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', true);
+                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
             }
         }
 
@@ -115,8 +115,8 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -125,7 +125,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                RunTest(sut, filePath, (byte)',', true);
+                RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
             }
         }
 
@@ -135,8 +135,8 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -145,7 +145,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
+                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
             }
         }
 
@@ -155,8 +155,8 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            using (var reader = new StreamReader(stream, new UTF8Encoding(false, false), false, chunkLength1))
+            var fileData = new UTF8Encoding(false, false).GetString(File.ReadAllBytes(filePath));
+            using (var reader = new StringReader(fileData))
             {
                 var sut = CsvInput.ForTextReader(reader)
                                   .WithMinReadBufferCharCount(chunkLength2)
@@ -165,7 +165,7 @@ namespace Cursively.Tests
                                   .WithIgnoreByteOrderMark(true);
 
                 // act, assert
-                await RunTestAsync(sut, filePath, (byte)',', true).ConfigureAwait(false);
+                await RunTestAsync(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF').ConfigureAwait(false);
             }
         }
     }

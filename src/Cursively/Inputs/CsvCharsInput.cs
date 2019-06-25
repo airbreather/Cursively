@@ -9,6 +9,8 @@ namespace Cursively.Inputs
     /// </summary>
     public sealed class CsvCharsInput : CsvInput
     {
+        internal static readonly UTF8Encoding TheEncoding = new UTF8Encoding(false, false);
+
         private readonly ReadOnlyMemory<char> _chars;
 
         private readonly int _encodeBatchCharCount;
@@ -74,6 +76,9 @@ namespace Cursively.Inputs
 
         internal static unsafe void ProcessFullSegment(ReadOnlySpan<char> chars, int encodeBatchCharCount, bool ignoreByteOrderMark, MemoryPool<byte> encodeBufferPool, CsvTokenizer tokenizer, CsvReaderVisitorBase visitor)
         {
+            var encoding = TheEncoding;
+            var encoder = encoding.GetEncoder();
+
             if (ignoreByteOrderMark && !chars.IsEmpty && chars[0] == '\uFEFF')
             {
                 chars = chars.Slice(1);
@@ -90,7 +95,7 @@ namespace Cursively.Inputs
                 encodeBatchCharCount = chars.Length;
             }
 
-            int encodeBufferLength = Encoding.UTF8.GetMaxByteCount(encodeBatchCharCount);
+            int encodeBufferLength = encoding.GetMaxByteCount(encodeBatchCharCount);
             Span<byte> encodeBuffer = stackalloc byte[0];
             IMemoryOwner<byte> encodeBufferOwner = null;
             if (encodeBufferLength < 1024)
@@ -109,17 +114,21 @@ namespace Cursively.Inputs
 
             using (encodeBufferOwner)
             {
-                ProcessSegment(tokenizer, visitor, chars, encodeBuffer, encodeBatchCharCount);
+                ProcessSegment(tokenizer, visitor, chars, encodeBuffer, encodeBatchCharCount, encoder, true);
             }
 
             tokenizer.ProcessEndOfStream(visitor);
         }
 
-        internal static unsafe void ProcessSegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ReadOnlySpan<char> chars, Span<byte> encodeBuffer, int encodeBatchCharCount)
+        internal static unsafe void ProcessSegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, ReadOnlySpan<char> chars, Span<byte> encodeBuffer, int encodeBatchCharCount, Encoder encoder, bool lastSegment)
         {
-            var encoding = Encoding.UTF8;
-
             int remainingCharCount = chars.Length;
+            if (remainingCharCount == 0)
+            {
+                ProcessFinalEmptySegment(tokenizer, visitor, encodeBuffer, encoder);
+                return;
+            }
+
             fixed (byte* encodePtr = &encodeBuffer[0])
             fixed (char* decodePtrFixed = &chars[0])
             {
@@ -127,8 +136,8 @@ namespace Cursively.Inputs
 
                 while (remainingCharCount > encodeBatchCharCount)
                 {
-                    int encodeByteCount = encoding.GetByteCount(decodePtr, encodeBatchCharCount);
-                    encoding.GetBytes(decodePtr, encodeBatchCharCount, encodePtr, encodeByteCount);
+                    int encodeByteCount = encoder.GetByteCount(decodePtr, encodeBatchCharCount, false);
+                    encoder.GetBytes(decodePtr, encodeBatchCharCount, encodePtr, encodeByteCount, false);
                     tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(encodePtr, encodeByteCount), visitor);
 
                     remainingCharCount -= encodeBatchCharCount;
@@ -137,10 +146,21 @@ namespace Cursively.Inputs
 
                 if (remainingCharCount > 0)
                 {
-                    int encodeByteCount = encoding.GetByteCount(decodePtr, remainingCharCount);
-                    encoding.GetBytes(decodePtr, remainingCharCount, encodePtr, encodeByteCount);
+                    int encodeByteCount = encoder.GetByteCount(decodePtr, remainingCharCount, lastSegment);
+                    encoder.GetBytes(decodePtr, remainingCharCount, encodePtr, encodeByteCount, lastSegment);
                     tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(encodePtr, encodeByteCount), visitor);
                 }
+            }
+        }
+
+        internal static unsafe void ProcessFinalEmptySegment(CsvTokenizer tokenizer, CsvReaderVisitorBase visitor, Span<byte> encodeBuffer, Encoder encoder)
+        {
+            fixed (byte* encodePtr = &encodeBuffer[0])
+            {
+                char c = '\0';
+                int encodeByteCount = encoder.GetByteCount(&c, 0, true);
+                encoder.GetBytes(&c, 0, encodePtr, encodeByteCount, true);
+                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(encodePtr, encodeByteCount), visitor);
             }
         }
     }

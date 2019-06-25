@@ -33,7 +33,7 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public void WithoutIgnoringUTF8BOM(string filePath, int chunkLength)
+        public void WithoutIgnoringBOM(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -49,7 +49,7 @@ namespace Cursively.Tests
 
         [Theory]
         [MemberData(nameof(TestCsvFilesWithChunkLengths))]
-        public void IgnoreUTF8BOM(string filePath, int chunkLength)
+        public void IgnoreBOM(string filePath, int chunkLength)
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
@@ -60,7 +60,7 @@ namespace Cursively.Tests
                               .WithIgnoreByteOrderMark(true);
 
             // act, assert
-            RunTest(sut, filePath, (byte)',', true);
+            RunTest(sut, filePath, (byte)',', fileData.Length == 0 || fileData[0] == '\uFEFF');
         }
 
         [Theory]

@@ -14,7 +14,7 @@ namespace Cursively.Tests
 
         private int _cutBufferConsumed;
 
-        public StringBufferingVisitor(int fileLength) => _cutBuffer = new byte[fileLength];
+        public StringBufferingVisitor(int fileLength) => _cutBuffer = new byte[Math.Max(fileLength, 3)];
 
         public List<string[]> Records { get; } = new List<string[]>();
 

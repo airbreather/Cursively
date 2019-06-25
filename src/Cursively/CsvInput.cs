@@ -11,6 +11,8 @@ namespace Cursively
     /// </summary>
     public abstract class CsvInput
     {
+        private protected static readonly byte[] UTF8BOM = { 0xEF, 0xBB, 0xBF };
+
         private readonly bool _mustResetAfterProcessing;
 
         private protected bool _alreadyProcessed;
