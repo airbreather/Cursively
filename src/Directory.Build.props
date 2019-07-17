@@ -22,11 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(LGTM)' != 'true' ">
-    <PackageReference Include="GitVersionTask" Version="5.0.0-beta3-4" PrivateAssets="All" />
+    <PackageReference Include="GitVersionTask" Version="5.0.0-beta5.9" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

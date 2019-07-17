@@ -77,6 +77,7 @@ namespace Cursively
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// value indicating whether or not to ignore a leading UTF-8 BOM (true).
         /// </summary>
+        [Obsolete("Always pass in 'false' instead, per airbreather/Cursively#14")]
         protected static readonly bool DefaultIgnoreUTF8IdentifierOnFirstHeaderField = true;
 
         /// <summary>
@@ -104,10 +105,11 @@ namespace Cursively
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvReaderVisitorWithUTF8HeadersBase"/> class.
         /// </summary>
+        [Obsolete("Use the parameterized constructor, passing in 'false' for the flag to ignore a UTF-8 identifier on the first header field; instead, remove UTF-8 identifiers on the input itself.  See airbreather/Cursively#14.")]
         protected CsvReaderVisitorWithUTF8HeadersBase()
             : this(maxHeaderCount: DefaultMaxHeaderCount,
                    maxHeaderLength: DefaultMaxHeaderLength,
-                   ignoreUTF8IdentifierOnFirstHeaderField: DefaultIgnoreUTF8IdentifierOnFirstHeaderField,
+                   ignoreUTF8IdentifierOnFirstHeaderField: true,
                    decoderFallback: DefaultDecoderFallback)
         {
         }
@@ -124,8 +126,15 @@ namespace Cursively
         /// Default: <see cref="DefaultMaxHeaderLength"/>.
         /// </param>
         /// <param name="ignoreUTF8IdentifierOnFirstHeaderField">
+        /// <para>
         /// A value indicating whether or not to ignore a leading UTF-8 BOM.
         /// Default: <see cref="DefaultIgnoreUTF8IdentifierOnFirstHeaderField"/>.
+        /// </para>
+        /// <para>
+        /// This parameter was a mistake (see airbreather/Cursively#14) and will be removed in 2.x.
+        /// Instead, always pass in <see langword="false"/>, and remove UTF-8 identifiers directly
+        /// at the source instead of leaving it up to the visitor.
+        /// </para>
         /// </param>
         /// <param name="decoderFallback">
         /// The fallback logic used when the decoder encounters invalid UTF-8 bytes.
@@ -142,12 +151,16 @@ namespace Cursively
         {
             if (maxHeaderCount < 1)
             {
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentOutOfRangeException(nameof(maxHeaderCount), maxHeaderCount, "Must be greater than zero.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             if (maxHeaderLength < 1)
             {
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentOutOfRangeException(nameof(maxHeaderLength), maxHeaderLength, "Must be greater than zero.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             if (decoderFallback is null)
@@ -196,7 +209,9 @@ namespace Cursively
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void ThrowExceptionWhenHeadersAreStillBeingBuilt() =>
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
             throw new InvalidOperationException("Headers are still being built.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
 
         /// <summary>
         /// Gets the zero-based index of the field that is currently being read.  The value should
@@ -304,7 +319,9 @@ namespace Cursively
             if (_headers.IsDefault)
             {
                 // we will never do this, but a cheeky subclass might.
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new InvalidOperationException("This method is only intended to be called by the base class.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             throw new CursivelyMissingDataFieldsException(_headers.Length, _currentFieldIndex);
@@ -328,7 +345,9 @@ namespace Cursively
             if (_headers.IsDefault)
             {
                 // we will never do this, but a cheeky subclass might.
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new InvalidOperationException("This method is only intended to be called by the base class.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             throw new CursivelyExtraDataFieldsException(_headers.Length);
@@ -375,8 +394,7 @@ namespace Cursively
 
                 if (chunk.IsEmpty)
                 {
-                    // the tokenizer will never do this, but an external caller might.  note that
-                    // the Decoder methods require a non-null pointer, even if the length is zero.
+                    // Decoder methods require a non-null pointer, even if the length is zero.
                     byte b = 0xFF;
                     VisitHeaderChunk(&b, 0, true);
                 }
@@ -419,12 +437,14 @@ namespace Cursively
                 if (_headersBuilder.Count == 0)
                 {
                     // the tokenizer will never do this, but an external caller might.
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
                     throw new InvalidOperationException("No fields were present in the header record.");
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
                 }
 
                 // this is almost equivalent to setting _headers = _headersBuilder.ToImmutable(),
                 // but this does a better job rewarding people for setting the max field count to
-                // the actual field count, which will often be the case.
+                // the actual field count, which could often be the case.
                 _headersBuilder.Capacity = _headersBuilder.Count;
                 _headers = _headersBuilder.MoveToImmutable();
                 _currentFieldIndex = _headers.Length;
