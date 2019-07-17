@@ -114,11 +114,11 @@ public static void ProcessCsvStream(Stream csvStream)
     Console.WriteLine($"Finished reading CSV file.");
 }
 
-public static async ValueTask ProcessCsvStreamAsync(Stream csvStream, IProgress<int> progress = null, CancellationToken cancellationToken = default)
+public static async Task ProcessCsvStreamAsync(Stream csvStream)
 {
     Console.WriteLine($"Started reading CSV file.");
     await CsvAsyncInput.ForStream(csvStream)
-                       .ProcessAsync(new MyVisitor(maxFieldLength: 1000), progress, cancellationToken);
+                       .ProcessAsync(new MyVisitor(maxFieldLength: 1000));
     Console.WriteLine($"Finished reading CSV file.");
 }
 ```
