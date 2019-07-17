@@ -375,6 +375,10 @@ namespace Cursively
                 // slice off the data up to the quote and the next byte that we read.
                 readBuffer = readBuffer.Slice(idx + 2);
             }
+            else if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
+            {
+                HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
+            }
             else
             {
                 // this is expected to be rare: either we were cut between field reads, or we're
@@ -382,12 +386,6 @@ namespace Cursively
                 // the field; by this point, we don't save enough state to remember which case we're
                 // in, so VisitNonstandardQuotedField **MUST** have been correctly called (or not)
                 // before entering this section.
-                if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
-                {
-                    HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
-                    return;
-                }
-
                 for (int idx = 0; idx < readBuffer.Length; idx++)
                 {
                     byte b = readBuffer[idx];
