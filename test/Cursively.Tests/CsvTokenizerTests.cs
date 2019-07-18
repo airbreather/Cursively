@@ -75,7 +75,7 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            var visitor = new StringBufferingVisitor(checked((int)new FileInfo(filePath).Length));
+            var visitor = new StringBufferingVisitor();
 
             // act
             CsvSyncInput.ForMemoryMappedFile(filePath).WithIgnoreUTF8ByteOrderMark(false).Process(visitor);
@@ -134,6 +134,63 @@ Tab ('\t') has an ASCII value of 9, which is perfect for this.  so here's your t
                 var expected = TokenizeCsvFileUsingCsvHelper(fileData, $"{(char)delimiter}");
                 Assert.Equal(expected, actual);
             }
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectOutlandishHeaderLimits()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "valid", "simple.csv"));
+
+            // act, assert
+            const int MaxArrayLength = 0x7FEFFFFF;
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderCount", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: -1, maxHeaderLength: MaxArrayLength));
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderCount", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: 0, maxHeaderLength: MaxArrayLength));
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderCount", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: MaxArrayLength + 1, maxHeaderLength: 1));
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderLength", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: MaxArrayLength, maxHeaderLength: -1));
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderLength", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: MaxArrayLength, maxHeaderLength: 0));
+            Assert.Throws<ArgumentOutOfRangeException>("maxHeaderLength", () => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: MaxArrayLength, maxHeaderLength: MaxArrayLength + 1));
+            TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: MaxArrayLength, maxHeaderLength: MaxArrayLength);
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectTooManyHeaderFields()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "valid", "simple.csv"));
+
+            // act, assert
+            Assert.Throws<CursivelyTooManyHeadersException>(() => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: 1, maxHeaderLength: fileData.Length));
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldHeaderFieldsWithCountBarelyWithinHigherLimit()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "valid", "simple.csv"));
+
+            // act, assert (that it doesn't throw)
+            TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: 3, maxHeaderLength: fileData.Length);
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldRejectOverlongHeaderField()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "valid", "for-header-limit-testing.csv"));
+
+            // act, assert
+            Assert.Throws<CursivelyHeaderIsTooLongException>(() => TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: fileData.Length, maxHeaderLength: 1));
+        }
+
+        [Fact]
+        public void HeaderedCsvTokenizationShouldAcceptHeaderFieldWithLengthBarelyWithinHigherLimit()
+        {
+            // arrange
+            byte[] fileData = File.ReadAllBytes(Path.Combine(TestCsvFilesFolderPath, "with-headers", "valid", "for-header-limit-testing.csv"));
+
+            // act, assert (that it doesn't throw)
+            TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(fileData, fileData.Length, (byte)',', maxHeaderCount: fileData.Length, maxHeaderLength: 101);
         }
 
         [Fact]

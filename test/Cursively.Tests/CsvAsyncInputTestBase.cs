@@ -21,7 +21,7 @@ namespace Cursively.Tests
             // run without progress
             {
                 var sut = sutCreator();
-                var inputVisitor = new StringBufferingVisitor(fileData.Length);
+                var inputVisitor = new StringBufferingVisitor();
 
                 await sut.ProcessAsync(inputVisitor).ConfigureAwait(false);
 
@@ -33,7 +33,7 @@ namespace Cursively.Tests
             // run with progress
             {
                 var sut = sutCreator();
-                var inputVisitor = new StringBufferingVisitor(fileData.Length);
+                var inputVisitor = new StringBufferingVisitor();
 
                 var readSoFar = new List<int>();
                 var progress = new ImmediateProgress<int>(readSoFar.Add);

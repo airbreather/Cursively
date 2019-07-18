@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Cursively
@@ -62,6 +63,34 @@ namespace Cursively
     public abstract class CsvReaderVisitorWithUTF8HeadersBase : CsvReaderVisitorBase
     {
         /// <summary>
+        /// <para>
+        /// The maximum value that's legal for the maximum header count (0x7FEFFFFF).
+        /// </para>
+        /// <para>
+        /// Staying within this limit does not guarantee that you will be immune to
+        /// <see cref="OutOfMemoryException"/> even with enough system virtual memory (that depends
+        /// on your configuration).  This is just the threshold that, if exceeded, guarantees that
+        /// you actually *will* see <see cref="OutOfMemoryException"/> on mainstream frameworks if
+        /// Cursively actually tried to go that high, so this is used as a "fail-fast".
+        /// </para>
+        /// </summary>
+        protected static readonly int MaxMaxHeaderCount = 0x7FEFFFFF;
+
+        /// <summary>
+        /// <para>
+        /// The maximum value that's legal for the maximum header length (0x7FEFFFFF).
+        /// </para>
+        /// <para>
+        /// Staying within this limit does not guarantee that you will be immune to
+        /// <see cref="OutOfMemoryException"/> even with enough system virtual memory (that depends
+        /// on your configuration).  This is just the threshold that, if exceeded, guarantees that
+        /// you actually *will* see <see cref="OutOfMemoryException"/> on mainstream frameworks if
+        /// Cursively actually tried to go that high, so this is used as a "fail-fast".
+        /// </para>
+        /// </summary>
+        protected static readonly int MaxMaxHeaderLength = 0x7FEFFFFF;
+
+        /// <summary>
         /// The value used by <see cref="CsvReaderVisitorWithUTF8HeadersBase()"/> to initialize the
         /// maximum number of headers (1,000).
         /// </summary>
@@ -88,11 +117,15 @@ namespace Cursively
 
         private static readonly UTF8Encoding EncodingToUse = new UTF8Encoding(false, false);
 
+        private readonly int _maxHeaderCount;
+
+        private readonly int _maxHeaderLength;
+
         private readonly Decoder _headerDecoder;
 
-        private readonly ImmutableArray<string>.Builder _headersBuilder;
-
         private readonly bool _ignoreUTF8IdentifierOnFirstHeaderField;
+
+        private ImmutableArray<string>.Builder _headersBuilder;
 
         private char[] _headerBuffer;
 
@@ -145,21 +178,22 @@ namespace Cursively
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when <paramref name="maxHeaderCount"/> or <paramref name="maxHeaderLength"/> is
-        /// less than 1.
+        /// less than 1 or greater than the maximum for that parameter
+        /// (<see cref="MaxMaxHeaderCount"/> / <see cref="MaxMaxHeaderLength"/>).
         /// </exception>
         protected CsvReaderVisitorWithUTF8HeadersBase(int maxHeaderCount, int maxHeaderLength, bool ignoreUTF8IdentifierOnFirstHeaderField, DecoderFallback decoderFallback)
         {
-            if (maxHeaderCount < 1)
+            if (maxHeaderCount < 1 || maxHeaderCount > MaxMaxHeaderCount)
             {
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
-                throw new ArgumentOutOfRangeException(nameof(maxHeaderCount), maxHeaderCount, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(maxHeaderCount), maxHeaderCount, "Must be greater than zero and not greater than MaxMaxHeaderCount.");
 #pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
-            if (maxHeaderLength < 1)
+            if (maxHeaderLength < 1 || maxHeaderLength > MaxMaxHeaderLength)
             {
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
-                throw new ArgumentOutOfRangeException(nameof(maxHeaderLength), maxHeaderLength, "Must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(maxHeaderLength), maxHeaderLength, "Must be greater than zero and not greater than MaxMaxHeaderLength.");
 #pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
@@ -170,9 +204,11 @@ namespace Cursively
 
             _ignoreUTF8IdentifierOnFirstHeaderField = ignoreUTF8IdentifierOnFirstHeaderField;
 
-            _headersBuilder = ImmutableArray.CreateBuilder<string>(maxHeaderCount);
+            _maxHeaderCount = maxHeaderCount;
+            _headersBuilder = ImmutableArray.CreateBuilder<string>();
 
-            _headerBuffer = new char[maxHeaderLength];
+            _maxHeaderLength = maxHeaderLength;
+            _headerBuffer = new char[8];
 
             _headerDecoder = EncodingToUse.GetDecoder();
             _headerDecoder.Fallback = decoderFallback;
@@ -358,18 +394,12 @@ namespace Cursively
         {
             if (_headers.IsDefault)
             {
-                if (_headersBuilder.Capacity == _headersBuilder.Count)
+                if (_headersBuilder.Count == _maxHeaderCount)
                 {
-                    throw new CursivelyTooManyHeadersException(_headersBuilder.Capacity);
+                    throw new CursivelyTooManyHeadersException(_maxHeaderCount);
                 }
 
-                if (chunk.IsEmpty)
-                {
-                    // the tokenizer will never do this, but an external caller might.
-                    return;
-                }
-
-                fixed (byte* b = &chunk[0])
+                fixed (byte* b = &MemoryMarshal.GetReference(chunk))
                 {
                     VisitHeaderChunk(b, chunk.Length, false);
                 }
@@ -387,23 +417,14 @@ namespace Cursively
         {
             if (_headers.IsDefault)
             {
-                if (_headersBuilder.Capacity == _headersBuilder.Count)
+                if (_headersBuilder.Count == _maxHeaderCount)
                 {
-                    throw new CursivelyTooManyHeadersException(_headersBuilder.Capacity);
+                    throw new CursivelyTooManyHeadersException(_maxHeaderCount);
                 }
 
-                if (chunk.IsEmpty)
+                fixed (byte* b = &MemoryMarshal.GetReference(chunk))
                 {
-                    // Decoder methods require a non-null pointer, even if the length is zero.
-                    byte b = 0xFF;
-                    VisitHeaderChunk(&b, 0, true);
-                }
-                else
-                {
-                    fixed (byte* b = &chunk[0])
-                    {
-                        VisitHeaderChunk(b, chunk.Length, true);
-                    }
+                    VisitHeaderChunk(b, chunk.Length, true);
                 }
 
                 int headerBufferOffset = 0;
@@ -442,14 +463,12 @@ namespace Cursively
 #pragma warning restore CA1303 // Do not pass literals as localized parameters
                 }
 
-                // this is almost equivalent to setting _headers = _headersBuilder.ToImmutable(),
-                // but this does a better job rewarding people for setting the max field count to
-                // the actual field count, which could often be the case.
                 _headersBuilder.Capacity = _headersBuilder.Count;
                 _headers = _headersBuilder.MoveToImmutable();
                 _currentFieldIndex = _headers.Length;
 
-                // we're done building headers, so free up our buffer.
+                // we're done building headers, so free up our buffers.
+                _headersBuilder = null;
                 _headerBuffer = null;
 
                 // let the subclass know that the headers are ready, in case it wants to set up some
@@ -472,20 +491,68 @@ namespace Cursively
 
         private unsafe void VisitHeaderChunk(byte* b, int byteCount, bool flush)
         {
+            // Decoder methods require non-null pointers, even if the lengths are zero.  See
+            // dotnet/corefx#32861 for some discussion about the issue.  When it starts making sense
+            // to target netstandard2.1, then we can stop with all the pointer stuff and just use
+            // spans directly.  FWIW, it seems counter-intuitive, but it's actually correct to call
+            // this method unconditionally even if byteCount happens to be 0:
+            // - the tokenizer never calls VisitPartial* with an empty span, so checking before the
+            //   method call in those cases would only benefit external callers of VisitPartial*.
+            // - from VisitEnd*, we need to tell the Decoder that the last chunk we sent it was
+            //   actually the end of what we had so that it can trigger the fallback logic if a
+            //   sequence started off as valid UTF-8 but was terminated abruptly.
+            void* garbageNonNullPointer = (void*)0xDEADBEEF;
+
+            if (byteCount == 0)
+            {
+                b = (byte*)garbageNonNullPointer;
+            }
+
             int charCount = _headerDecoder.GetCharCount(b, byteCount, flush);
-            if (_headerBufferConsumed + charCount <= _headerBuffer.Length)
+
+            int neededLength = _headerBufferConsumed + charCount;
+            int maxLength = _maxHeaderLength;
+            if (neededLength > maxLength)
+            {
+                throw new CursivelyHeaderIsTooLongException(_headerBuffer.Length);
+            }
+
+            EnsureHeaderBufferCapacity(neededLength);
+
+            // at this point, _headerBufferConsumed is guaranteed to be an index in _headerBuffer...
+            // ...unless charCount is 0, in which case it *might* point to one past the end (#16).
+            if (charCount == 0)
+            {
+                _headerDecoder.GetChars(b, byteCount, (char*)garbageNonNullPointer, 0, flush);
+            }
+            else
             {
                 fixed (char* c = &_headerBuffer[_headerBufferConsumed])
                 {
                     _headerDecoder.GetChars(b, byteCount, c, charCount, flush);
                 }
-            }
-            else
-            {
-                throw new CursivelyHeaderIsTooLongException(_headerBuffer.Length);
-            }
 
-            _headerBufferConsumed += charCount;
+                _headerBufferConsumed += charCount;
+            }
+        }
+
+        private void EnsureHeaderBufferCapacity(int neededLength)
+        {
+            if (neededLength > _headerBuffer.Length)
+            {
+                int maxLength = _maxHeaderLength;
+                int newLength = _headerBuffer.Length;
+
+                while (newLength < neededLength)
+                {
+                    // double it until we reach the max length
+                    newLength = maxLength - newLength > newLength
+                        ? newLength + newLength
+                        : maxLength;
+                }
+
+                Array.Resize(ref _headerBuffer, newLength);
+            }
         }
     }
 }

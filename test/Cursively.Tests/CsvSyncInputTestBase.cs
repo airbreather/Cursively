@@ -16,7 +16,7 @@ namespace Cursively.Tests
             (byte[] fileData, _) = GetExpectedCsvData(filePath, ignoreUTF8ByteOrderMark);
             var expected = TokenizeCsvFileUsingCursively(fileData, fileData.Length, (byte)',');
 
-            var inputVisitor = new StringBufferingVisitor(fileData.Length);
+            var inputVisitor = new StringBufferingVisitor();
 
             // act
             sut.Process(inputVisitor);

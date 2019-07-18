@@ -10,11 +10,14 @@ namespace Cursively.Tests
 
         private readonly List<string> _fields = new List<string>();
 
-        private readonly byte[] _cutBuffer;
+        private byte[] _cutBuffer;
 
         private int _cutBufferConsumed;
 
-        public StringBufferingVisitor(int fileLength) => _cutBuffer = new byte[Math.Max(fileLength, 3)];
+        public StringBufferingVisitor()
+        {
+            _cutBuffer = new byte[100];
+        }
 
         public List<string[]> Records { get; } = new List<string[]>();
 
@@ -40,6 +43,7 @@ namespace Cursively.Tests
 
         private void CopyToCutBuffer(ReadOnlySpan<byte> chunk)
         {
+            TestHelpers.EnsureCapacity(ref _cutBuffer, _cutBufferConsumed + chunk.Length);
             chunk.CopyTo(new Span<byte>(_cutBuffer, _cutBufferConsumed, chunk.Length));
             _cutBufferConsumed += chunk.Length;
         }

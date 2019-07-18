@@ -20,7 +20,7 @@ namespace Cursively.Tests
         public static List<string[]> TokenizeCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
         {
             var tokenizer = new CsvTokenizer(delimiter);
-            var visitor = new StringBufferingVisitor(fileData.Length);
+            var visitor = new StringBufferingVisitor();
             while (fileData.Length > chunkLength)
             {
                 tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), visitor);
@@ -35,7 +35,22 @@ namespace Cursively.Tests
         public static List<string[]> TokenizeHeaderedCsvFileUsingCursively(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter)
         {
             var tokenizer = new CsvTokenizer(delimiter);
-            var visitor = new HeaderedStringBufferingVisitor(fileData.Length);
+            var visitor = new HeaderedStringBufferingVisitor(0x7FEFFFFF, 0x7FEFFFFF);
+            while (fileData.Length > chunkLength)
+            {
+                tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), visitor);
+                fileData = fileData.Slice(chunkLength);
+            }
+
+            tokenizer.ProcessNextChunk(fileData, visitor);
+            tokenizer.ProcessEndOfStream(visitor);
+            return visitor.Records;
+        }
+
+        public static List<string[]> TokenizeHeaderedCsvFileUsingCursivelyWithTheseHeaderLimits(ReadOnlySpan<byte> fileData, int chunkLength, byte delimiter, int maxHeaderCount, int maxHeaderLength)
+        {
+            var tokenizer = new CsvTokenizer(delimiter);
+            var visitor = new HeaderedStringBufferingVisitor(maxHeaderCount, maxHeaderLength);
             while (fileData.Length > chunkLength)
             {
                 tokenizer.ProcessNextChunk(fileData.Slice(0, chunkLength), visitor);
@@ -162,6 +177,17 @@ namespace Cursively.Tests
             return (fileData, originalLength);
         }
 
+        public static void EnsureCapacity<T>(ref T[] array, int neededLength)
+        {
+            int newLength = array.Length;
+            while (newLength < neededLength)
+            {
+                newLength += newLength;
+            }
+
+            Array.Resize(ref array, newLength);
+        }
+
         public static IEnumerable<object[]> GetTestCsvFiles(params string[] pathParts) =>
             from filePath in Directory.EnumerateFiles(Path.Combine(TestCsvFilesFolderPath, Path.Combine(pathParts)), "*.csv", SearchOption.AllDirectories)
             let relativePath = Path.GetRelativePath(TestCsvFilesFolderPath, filePath)
@@ -186,14 +212,19 @@ namespace Cursively.Tests
 
             private readonly List<string> _fields = new List<string>();
 
-            private readonly byte[] _cutBuffer;
+            private byte[] _cutBuffer;
 
             private int _cutBufferConsumed;
 
-            public HeaderedStringBufferingVisitor(int fileLength)
-                : base(DefaultMaxHeaderCount, DefaultMaxHeaderLength, false, DefaultDecoderFallback)
+            public HeaderedStringBufferingVisitor()
+                : this(DefaultMaxHeaderCount, DefaultMaxHeaderLength)
             {
-                _cutBuffer = new byte[fileLength];
+            }
+
+            public HeaderedStringBufferingVisitor(int maxHeaderCount, int maxHeaderLength)
+                : base(maxHeaderCount, maxHeaderLength, false, DefaultDecoderFallback)
+            {
+                _cutBuffer = new byte[100];
             }
 
             public List<string[]> Records { get; } = new List<string[]>();
@@ -225,6 +256,7 @@ namespace Cursively.Tests
 
             private void CopyToCutBuffer(ReadOnlySpan<byte> chunk)
             {
+                EnsureCapacity(ref _cutBuffer, _cutBufferConsumed + chunk.Length);
                 chunk.CopyTo(new Span<byte>(_cutBuffer, _cutBufferConsumed, chunk.Length));
                 _cutBufferConsumed += chunk.Length;
             }
