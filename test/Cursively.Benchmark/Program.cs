@@ -13,8 +13,6 @@ using CsvHelper.Configuration;
 
 namespace Cursively.Benchmark
 {
-    [ClrJob]
-    [CoreJob]
     [GcServer(true)]
     [MemoryDiagnoser]
     public class Program
