@@ -70,6 +70,38 @@ references:
   isSpec: "True"
   fullName: Cursively.Csv.ProcessStreamAsync
   nameWithType: Csv.ProcessStreamAsync
+- uid: Cursively.CsvAsyncInput
+  name: CsvAsyncInput
+  href: api/Cursively.CsvAsyncInput.html
+  commentId: T:Cursively.CsvAsyncInput
+  fullName: Cursively.CsvAsyncInput
+  nameWithType: CsvAsyncInput
+- uid: Cursively.CsvAsyncInput.ForPipeReader(System.IO.Pipelines.PipeReader)
+  name: ForPipeReader(PipeReader)
+  href: api/Cursively.CsvAsyncInput.html#Cursively_CsvAsyncInput_ForPipeReader_System_IO_Pipelines_PipeReader_
+  commentId: M:Cursively.CsvAsyncInput.ForPipeReader(System.IO.Pipelines.PipeReader)
+  fullName: Cursively.CsvAsyncInput.ForPipeReader(System.IO.Pipelines.PipeReader)
+  nameWithType: CsvAsyncInput.ForPipeReader(PipeReader)
+- uid: Cursively.CsvAsyncInput.ForPipeReader*
+  name: ForPipeReader
+  href: api/Cursively.CsvAsyncInput.html#Cursively_CsvAsyncInput_ForPipeReader_
+  commentId: Overload:Cursively.CsvAsyncInput.ForPipeReader
+  isSpec: "True"
+  fullName: Cursively.CsvAsyncInput.ForPipeReader
+  nameWithType: CsvAsyncInput.ForPipeReader
+- uid: Cursively.CsvAsyncInput.ForStream(System.IO.Stream)
+  name: ForStream(Stream)
+  href: api/Cursively.CsvAsyncInput.html#Cursively_CsvAsyncInput_ForStream_System_IO_Stream_
+  commentId: M:Cursively.CsvAsyncInput.ForStream(System.IO.Stream)
+  fullName: Cursively.CsvAsyncInput.ForStream(System.IO.Stream)
+  nameWithType: CsvAsyncInput.ForStream(Stream)
+- uid: Cursively.CsvAsyncInput.ForStream*
+  name: ForStream
+  href: api/Cursively.CsvAsyncInput.html#Cursively_CsvAsyncInput_ForStream_
+  commentId: Overload:Cursively.CsvAsyncInput.ForStream
+  isSpec: "True"
+  fullName: Cursively.CsvAsyncInput.ForStream
+  nameWithType: CsvAsyncInput.ForStream
 - uid: Cursively.CsvReaderVisitorBase
   name: CsvReaderVisitorBase
   href: api/Cursively.CsvReaderVisitorBase.html
@@ -215,6 +247,18 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers
   nameWithType: CsvReaderVisitorWithUTF8HeadersBase.Headers
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount
+  name: MaxMaxHeaderCount
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderCount
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount
+- uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength
+  name: MaxMaxHeaderLength
+  href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderLength
+  commentId: F:Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength
+  fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength
+  nameWithType: CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength
 - uid: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan{System.Byte})
   name: VisitEndOfDataField(ReadOnlySpan<Byte>)
   href: api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_System_ReadOnlySpan_System_Byte__
@@ -344,6 +388,70 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
   nameWithType: CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField
+- uid: Cursively.CsvSyncInput
+  name: CsvSyncInput
+  href: api/Cursively.CsvSyncInput.html
+  commentId: T:Cursively.CsvSyncInput
+  fullName: Cursively.CsvSyncInput
+  nameWithType: CsvSyncInput
+- uid: Cursively.CsvSyncInput.ForMemory(System.ReadOnlyMemory{System.Byte})
+  name: ForMemory(ReadOnlyMemory<Byte>)
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForMemory_System_ReadOnlyMemory_System_Byte__
+  commentId: M:Cursively.CsvSyncInput.ForMemory(System.ReadOnlyMemory{System.Byte})
+  name.vb: ForMemory(ReadOnlyMemory(Of Byte))
+  fullName: Cursively.CsvSyncInput.ForMemory(System.ReadOnlyMemory<System.Byte>)
+  fullName.vb: Cursively.CsvSyncInput.ForMemory(System.ReadOnlyMemory(Of System.Byte))
+  nameWithType: CsvSyncInput.ForMemory(ReadOnlyMemory<Byte>)
+  nameWithType.vb: CsvSyncInput.ForMemory(ReadOnlyMemory(Of Byte))
+- uid: Cursively.CsvSyncInput.ForMemory*
+  name: ForMemory
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForMemory_
+  commentId: Overload:Cursively.CsvSyncInput.ForMemory
+  isSpec: "True"
+  fullName: Cursively.CsvSyncInput.ForMemory
+  nameWithType: CsvSyncInput.ForMemory
+- uid: Cursively.CsvSyncInput.ForMemoryMappedFile(System.String)
+  name: ForMemoryMappedFile(String)
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForMemoryMappedFile_System_String_
+  commentId: M:Cursively.CsvSyncInput.ForMemoryMappedFile(System.String)
+  fullName: Cursively.CsvSyncInput.ForMemoryMappedFile(System.String)
+  nameWithType: CsvSyncInput.ForMemoryMappedFile(String)
+- uid: Cursively.CsvSyncInput.ForMemoryMappedFile*
+  name: ForMemoryMappedFile
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForMemoryMappedFile_
+  commentId: Overload:Cursively.CsvSyncInput.ForMemoryMappedFile
+  isSpec: "True"
+  fullName: Cursively.CsvSyncInput.ForMemoryMappedFile
+  nameWithType: CsvSyncInput.ForMemoryMappedFile
+- uid: Cursively.CsvSyncInput.ForSequence(System.Buffers.ReadOnlySequence{System.Byte})
+  name: ForSequence(ReadOnlySequence<Byte>)
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForSequence_System_Buffers_ReadOnlySequence_System_Byte__
+  commentId: M:Cursively.CsvSyncInput.ForSequence(System.Buffers.ReadOnlySequence{System.Byte})
+  name.vb: ForSequence(ReadOnlySequence(Of Byte))
+  fullName: Cursively.CsvSyncInput.ForSequence(System.Buffers.ReadOnlySequence<System.Byte>)
+  fullName.vb: Cursively.CsvSyncInput.ForSequence(System.Buffers.ReadOnlySequence(Of System.Byte))
+  nameWithType: CsvSyncInput.ForSequence(ReadOnlySequence<Byte>)
+  nameWithType.vb: CsvSyncInput.ForSequence(ReadOnlySequence(Of Byte))
+- uid: Cursively.CsvSyncInput.ForSequence*
+  name: ForSequence
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForSequence_
+  commentId: Overload:Cursively.CsvSyncInput.ForSequence
+  isSpec: "True"
+  fullName: Cursively.CsvSyncInput.ForSequence
+  nameWithType: CsvSyncInput.ForSequence
+- uid: Cursively.CsvSyncInput.ForStream(System.IO.Stream)
+  name: ForStream(Stream)
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForStream_System_IO_Stream_
+  commentId: M:Cursively.CsvSyncInput.ForStream(System.IO.Stream)
+  fullName: Cursively.CsvSyncInput.ForStream(System.IO.Stream)
+  nameWithType: CsvSyncInput.ForStream(Stream)
+- uid: Cursively.CsvSyncInput.ForStream*
+  name: ForStream
+  href: api/Cursively.CsvSyncInput.html#Cursively_CsvSyncInput_ForStream_
+  commentId: Overload:Cursively.CsvSyncInput.ForStream
+  isSpec: "True"
+  fullName: Cursively.CsvSyncInput.ForStream
+  nameWithType: CsvSyncInput.ForStream
 - uid: Cursively.CsvTokenizer
   name: CsvTokenizer
   href: api/Cursively.CsvTokenizer.html
@@ -369,6 +477,19 @@ references:
   isSpec: "True"
   fullName: Cursively.CsvTokenizer.CsvTokenizer
   nameWithType: CsvTokenizer.CsvTokenizer
+- uid: Cursively.CsvTokenizer.IsValidDelimiter(System.Byte)
+  name: IsValidDelimiter(Byte)
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_IsValidDelimiter_System_Byte_
+  commentId: M:Cursively.CsvTokenizer.IsValidDelimiter(System.Byte)
+  fullName: Cursively.CsvTokenizer.IsValidDelimiter(System.Byte)
+  nameWithType: CsvTokenizer.IsValidDelimiter(Byte)
+- uid: Cursively.CsvTokenizer.IsValidDelimiter*
+  name: IsValidDelimiter
+  href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_IsValidDelimiter_
+  commentId: Overload:Cursively.CsvTokenizer.IsValidDelimiter
+  isSpec: "True"
+  fullName: Cursively.CsvTokenizer.IsValidDelimiter
+  nameWithType: CsvTokenizer.IsValidDelimiter
 - uid: Cursively.CsvTokenizer.ProcessEndOfStream(Cursively.CsvReaderVisitorBase)
   name: ProcessEndOfStream(CsvReaderVisitorBase)
   href: api/Cursively.CsvTokenizer.html#Cursively_CsvTokenizer_ProcessEndOfStream_Cursively_CsvReaderVisitorBase_
@@ -447,3 +568,439 @@ references:
   commentId: T:Cursively.CursivelyTooManyHeadersException
   fullName: Cursively.CursivelyTooManyHeadersException
   nameWithType: CursivelyTooManyHeadersException
+- uid: Cursively.Inputs
+  name: Cursively.Inputs
+  href: api/Cursively.Inputs.html
+  commentId: N:Cursively.Inputs
+  fullName: Cursively.Inputs
+  nameWithType: Cursively.Inputs
+- uid: Cursively.Inputs.CsvAsyncInputBase
+  name: CsvAsyncInputBase
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html
+  commentId: T:Cursively.Inputs.CsvAsyncInputBase
+  fullName: Cursively.Inputs.CsvAsyncInputBase
+  nameWithType: CsvAsyncInputBase
+- uid: Cursively.Inputs.CsvAsyncInputBase.ProcessAsync(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessAsync(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ProcessAsync_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Inputs.CsvAsyncInputBase.ProcessAsync(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessAsync(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ProcessAsync(Cursively.CsvReaderVisitorBase, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Inputs.CsvAsyncInputBase.ProcessAsync(Cursively.CsvReaderVisitorBase, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: CsvAsyncInputBase.ProcessAsync(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: CsvAsyncInputBase.ProcessAsync(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Inputs.CsvAsyncInputBase.ProcessAsync*
+  name: ProcessAsync
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ProcessAsync_
+  commentId: Overload:Cursively.Inputs.CsvAsyncInputBase.ProcessAsync
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ProcessAsync
+  nameWithType: CsvAsyncInputBase.ProcessAsync
+- uid: Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ProcessAsyncCore_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: CsvAsyncInputBase.ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: CsvAsyncInputBase.ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore*
+  name: ProcessAsyncCore
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ProcessAsyncCore_
+  commentId: Overload:Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ProcessAsyncCore
+  nameWithType: CsvAsyncInputBase.ProcessAsyncCore
+- uid: Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  name: ThrowIfProcessingHasAlreadyStarted()
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ThrowIfProcessingHasAlreadyStarted
+  commentId: M:Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted()
+  nameWithType: CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted()
+- uid: Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted*
+  name: ThrowIfProcessingHasAlreadyStarted
+  href: api/Cursively.Inputs.CsvAsyncInputBase.html#Cursively_Inputs_CsvAsyncInputBase_ThrowIfProcessingHasAlreadyStarted_
+  commentId: Overload:Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  nameWithType: CsvAsyncInputBase.ThrowIfProcessingHasAlreadyStarted
+- uid: Cursively.Inputs.CsvAsyncStreamInput
+  name: CsvAsyncStreamInput
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html
+  commentId: T:Cursively.Inputs.CsvAsyncStreamInput
+  fullName: Cursively.Inputs.CsvAsyncStreamInput
+  nameWithType: CsvAsyncStreamInput
+- uid: Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_ProcessAsyncCore_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: CsvAsyncStreamInput.ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: CsvAsyncStreamInput.ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore*
+  name: ProcessAsyncCore
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_ProcessAsyncCore_
+  commentId: Overload:Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.ProcessAsyncCore
+  nameWithType: CsvAsyncStreamInput.ProcessAsyncCore
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter(System.Byte)
+  nameWithType: CsvAsyncStreamInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithDelimiter
+  nameWithType: CsvAsyncStreamInput.WithDelimiter
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvAsyncStreamInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  name: WithMinReadBufferByteCount(Int32)
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithMinReadBufferByteCount_System_Int32_
+  commentId: M:Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  nameWithType: CsvAsyncStreamInput.WithMinReadBufferByteCount(Int32)
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount*
+  name: WithMinReadBufferByteCount
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithMinReadBufferByteCount_
+  commentId: Overload:Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithMinReadBufferByteCount
+  nameWithType: CsvAsyncStreamInput.WithMinReadBufferByteCount
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool{System.Byte})
+  name: WithReadBufferPool(ArrayPool<Byte>)
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithReadBufferPool_System_Buffers_ArrayPool_System_Byte__
+  commentId: M:Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool{System.Byte})
+  name.vb: WithReadBufferPool(ArrayPool(Of Byte))
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool<System.Byte>)
+  fullName.vb: Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool(Of System.Byte))
+  nameWithType: CsvAsyncStreamInput.WithReadBufferPool(ArrayPool<Byte>)
+  nameWithType.vb: CsvAsyncStreamInput.WithReadBufferPool(ArrayPool(Of Byte))
+- uid: Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool*
+  name: WithReadBufferPool
+  href: api/Cursively.Inputs.CsvAsyncStreamInput.html#Cursively_Inputs_CsvAsyncStreamInput_WithReadBufferPool_
+  commentId: Overload:Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvAsyncStreamInput.WithReadBufferPool
+  nameWithType: CsvAsyncStreamInput.WithReadBufferPool
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput
+  name: CsvMemoryMappedFileInput
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html
+  commentId: T:Cursively.Inputs.CsvMemoryMappedFileInput
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput
+  nameWithType: CsvMemoryMappedFileInput
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  name: ProcessCore(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_ProcessCore_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvMemoryMappedFileInput.ProcessCore(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore*
+  name: ProcessCore
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_ProcessCore_
+  commentId: Overload:Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.ProcessCore
+  nameWithType: CsvMemoryMappedFileInput.ProcessCore
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter(System.Byte)
+  nameWithType: CsvMemoryMappedFileInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.WithDelimiter
+  nameWithType: CsvMemoryMappedFileInput.WithDelimiter
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvMemoryMappedFileInput.html#Cursively_Inputs_CsvMemoryMappedFileInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvMemoryMappedFileInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvPipeReaderInput
+  name: CsvPipeReaderInput
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html
+  commentId: T:Cursively.Inputs.CsvPipeReaderInput
+  fullName: Cursively.Inputs.CsvPipeReaderInput
+  nameWithType: CsvPipeReaderInput
+- uid: Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name: ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_ProcessAsyncCore_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_
+  commentId: M:Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)
+  name.vb: ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+  fullName: Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress<System.Int32>, System.Threading.CancellationToken)
+  fullName.vb: Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore(Cursively.CsvReaderVisitorBase, System.IProgress(Of System.Int32), System.Threading.CancellationToken)
+  nameWithType: CsvPipeReaderInput.ProcessAsyncCore(CsvReaderVisitorBase, IProgress<Int32>, CancellationToken)
+  nameWithType.vb: CsvPipeReaderInput.ProcessAsyncCore(CsvReaderVisitorBase, IProgress(Of Int32), CancellationToken)
+- uid: Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore*
+  name: ProcessAsyncCore
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_ProcessAsyncCore_
+  commentId: Overload:Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvPipeReaderInput.ProcessAsyncCore
+  nameWithType: CsvPipeReaderInput.ProcessAsyncCore
+- uid: Cursively.Inputs.CsvPipeReaderInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvPipeReaderInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvPipeReaderInput.WithDelimiter(System.Byte)
+  nameWithType: CsvPipeReaderInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvPipeReaderInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvPipeReaderInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvPipeReaderInput.WithDelimiter
+  nameWithType: CsvPipeReaderInput.WithDelimiter
+- uid: Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvPipeReaderInput.html#Cursively_Inputs_CsvPipeReaderInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvPipeReaderInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput
+  name: CsvReadOnlyMemoryInput
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html
+  commentId: T:Cursively.Inputs.CsvReadOnlyMemoryInput
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput
+  nameWithType: CsvReadOnlyMemoryInput
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  name: ProcessCore(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_ProcessCore_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvReadOnlyMemoryInput.ProcessCore(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore*
+  name: ProcessCore
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_ProcessCore_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.ProcessCore
+  nameWithType: CsvReadOnlyMemoryInput.ProcessCore
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter(System.Byte)
+  nameWithType: CsvReadOnlyMemoryInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.WithDelimiter
+  nameWithType: CsvReadOnlyMemoryInput.WithDelimiter
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvReadOnlyMemoryInput.html#Cursively_Inputs_CsvReadOnlyMemoryInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvReadOnlyMemoryInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput
+  name: CsvReadOnlySequenceInput
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html
+  commentId: T:Cursively.Inputs.CsvReadOnlySequenceInput
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput
+  nameWithType: CsvReadOnlySequenceInput
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  name: ProcessCore(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_ProcessCore_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvReadOnlySequenceInput.ProcessCore(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore*
+  name: ProcessCore
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_ProcessCore_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.ProcessCore
+  nameWithType: CsvReadOnlySequenceInput.ProcessCore
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter(System.Byte)
+  nameWithType: CsvReadOnlySequenceInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.WithDelimiter
+  nameWithType: CsvReadOnlySequenceInput.WithDelimiter
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvReadOnlySequenceInput.html#Cursively_Inputs_CsvReadOnlySequenceInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvReadOnlySequenceInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvSyncInputBase
+  name: CsvSyncInputBase
+  href: api/Cursively.Inputs.CsvSyncInputBase.html
+  commentId: T:Cursively.Inputs.CsvSyncInputBase
+  fullName: Cursively.Inputs.CsvSyncInputBase
+  nameWithType: CsvSyncInputBase
+- uid: Cursively.Inputs.CsvSyncInputBase.Process(Cursively.CsvReaderVisitorBase)
+  name: Process(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_Process_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvSyncInputBase.Process(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvSyncInputBase.Process(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvSyncInputBase.Process(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvSyncInputBase.Process*
+  name: Process
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_Process_
+  commentId: Overload:Cursively.Inputs.CsvSyncInputBase.Process
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncInputBase.Process
+  nameWithType: CsvSyncInputBase.Process
+- uid: Cursively.Inputs.CsvSyncInputBase.ProcessCore(Cursively.CsvReaderVisitorBase)
+  name: ProcessCore(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_ProcessCore_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvSyncInputBase.ProcessCore(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvSyncInputBase.ProcessCore(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvSyncInputBase.ProcessCore(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvSyncInputBase.ProcessCore*
+  name: ProcessCore
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_ProcessCore_
+  commentId: Overload:Cursively.Inputs.CsvSyncInputBase.ProcessCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncInputBase.ProcessCore
+  nameWithType: CsvSyncInputBase.ProcessCore
+- uid: Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  name: ThrowIfProcessingHasAlreadyStarted()
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_ThrowIfProcessingHasAlreadyStarted
+  commentId: M:Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  fullName: Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted()
+  nameWithType: CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted()
+- uid: Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted*
+  name: ThrowIfProcessingHasAlreadyStarted
+  href: api/Cursively.Inputs.CsvSyncInputBase.html#Cursively_Inputs_CsvSyncInputBase_ThrowIfProcessingHasAlreadyStarted_
+  commentId: Overload:Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted
+  nameWithType: CsvSyncInputBase.ThrowIfProcessingHasAlreadyStarted
+- uid: Cursively.Inputs.CsvSyncStreamInput
+  name: CsvSyncStreamInput
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html
+  commentId: T:Cursively.Inputs.CsvSyncStreamInput
+  fullName: Cursively.Inputs.CsvSyncStreamInput
+  nameWithType: CsvSyncStreamInput
+- uid: Cursively.Inputs.CsvSyncStreamInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  name: ProcessCore(CsvReaderVisitorBase)
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_ProcessCore_Cursively_CsvReaderVisitorBase_
+  commentId: M:Cursively.Inputs.CsvSyncStreamInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  fullName: Cursively.Inputs.CsvSyncStreamInput.ProcessCore(Cursively.CsvReaderVisitorBase)
+  nameWithType: CsvSyncStreamInput.ProcessCore(CsvReaderVisitorBase)
+- uid: Cursively.Inputs.CsvSyncStreamInput.ProcessCore*
+  name: ProcessCore
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_ProcessCore_
+  commentId: Overload:Cursively.Inputs.CsvSyncStreamInput.ProcessCore
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncStreamInput.ProcessCore
+  nameWithType: CsvSyncStreamInput.ProcessCore
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithDelimiter(System.Byte)
+  name: WithDelimiter(Byte)
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithDelimiter_System_Byte_
+  commentId: M:Cursively.Inputs.CsvSyncStreamInput.WithDelimiter(System.Byte)
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithDelimiter(System.Byte)
+  nameWithType: CsvSyncStreamInput.WithDelimiter(Byte)
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithDelimiter*
+  name: WithDelimiter
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithDelimiter_
+  commentId: Overload:Cursively.Inputs.CsvSyncStreamInput.WithDelimiter
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithDelimiter
+  nameWithType: CsvSyncStreamInput.WithDelimiter
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  name: WithIgnoreUTF8ByteOrderMark(Boolean)
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithIgnoreUTF8ByteOrderMark_System_Boolean_
+  commentId: M:Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark(System.Boolean)
+  nameWithType: CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark(Boolean)
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark*
+  name: WithIgnoreUTF8ByteOrderMark
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithIgnoreUTF8ByteOrderMark_
+  commentId: Overload:Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark
+  nameWithType: CsvSyncStreamInput.WithIgnoreUTF8ByteOrderMark
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  name: WithMinReadBufferByteCount(Int32)
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithMinReadBufferByteCount_System_Int32_
+  commentId: M:Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount(System.Int32)
+  nameWithType: CsvSyncStreamInput.WithMinReadBufferByteCount(Int32)
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount*
+  name: WithMinReadBufferByteCount
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithMinReadBufferByteCount_
+  commentId: Overload:Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithMinReadBufferByteCount
+  nameWithType: CsvSyncStreamInput.WithMinReadBufferByteCount
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool{System.Byte})
+  name: WithReadBufferPool(ArrayPool<Byte>)
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithReadBufferPool_System_Buffers_ArrayPool_System_Byte__
+  commentId: M:Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool{System.Byte})
+  name.vb: WithReadBufferPool(ArrayPool(Of Byte))
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool<System.Byte>)
+  fullName.vb: Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool(System.Buffers.ArrayPool(Of System.Byte))
+  nameWithType: CsvSyncStreamInput.WithReadBufferPool(ArrayPool<Byte>)
+  nameWithType.vb: CsvSyncStreamInput.WithReadBufferPool(ArrayPool(Of Byte))
+- uid: Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool*
+  name: WithReadBufferPool
+  href: api/Cursively.Inputs.CsvSyncStreamInput.html#Cursively_Inputs_CsvSyncStreamInput_WithReadBufferPool_
+  commentId: Overload:Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool
+  isSpec: "True"
+  fullName: Cursively.Inputs.CsvSyncStreamInput.WithReadBufferPool
+  nameWithType: CsvSyncStreamInput.WithReadBufferPool

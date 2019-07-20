@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Csv
    | Cursively ">
-    <meta name="generator" content="docfx 2.42.4.0">
+    <meta name="generator" content="docfx 2.43.1.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -119,7 +119,8 @@
   <h6><strong>Assembly</strong>: Cursively.dll</h6>
   <h5 id="Cursively_Csv_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class Csv</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;ProcessFoo methods have been moved to instance methods on dedicated 'input' types for better composability.&quot;)]
+public static class Csv</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
@@ -128,7 +129,7 @@
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_Csv_ProcessFile_System_String_Cursively_CsvReaderVisitorBase_.md&amp;value=---%0Auid%3A%20Cursively.Csv.ProcessFile(System.String%2CCursively.CsvReaderVisitorBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L278">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L254">View Source</a>
   </span>
   <a id="Cursively_Csv_ProcessFile_" data-uid="Cursively.Csv.ProcessFile*"></a>
   <h4 id="Cursively_Csv_ProcessFile_System_String_Cursively_CsvReaderVisitorBase_" data-uid="Cursively.Csv.ProcessFile(System.String,Cursively.CsvReaderVisitorBase)">ProcessFile(String, CsvReaderVisitorBase)</h4>
@@ -138,7 +139,8 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use CsvSyncInput.ForMemoryMappedFile(csvFilePath).Process(visitor).&quot;)]
+public static void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -235,7 +237,7 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_.md&amp;value=---%0Auid%3A%20Cursively.Csv.ProcessStream(System.IO.Stream%2CCursively.CsvReaderVisitorBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L28">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L30">View Source</a>
   </span>
   <a id="Cursively_Csv_ProcessStream_" data-uid="Cursively.Csv.ProcessStream*"></a>
   <h4 id="Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_" data-uid="Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase)">ProcessStream(Stream, CsvReaderVisitorBase)</h4>
@@ -245,7 +247,8 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use CsvSyncInput.ForStream(csvStream).Process(visitor).&quot;)]
+public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -292,7 +295,7 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_.md&amp;value=---%0Auid%3A%20Cursively.Csv.ProcessStream(System.IO.Stream%2CCursively.CsvReaderVisitorBase%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L54">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L63">View Source</a>
   </span>
   <a id="Cursively_Csv_ProcessStream_" data-uid="Cursively.Csv.ProcessStream*"></a>
   <h4 id="Cursively_Csv_ProcessStream_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_" data-uid="Cursively.Csv.ProcessStream(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32)">ProcessStream(Stream, CsvReaderVisitorBase, Int32)</h4>
@@ -302,7 +305,8 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use CsvSyncInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).Process(visitor).&quot;)]
+public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -366,7 +370,7 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_System_IProgress_System_Int32__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Cursively.Csv.ProcessStreamAsync(System.IO.Stream%2CCursively.CsvReaderVisitorBase%2CSystem.Int32%2CSystem.IProgress%7BSystem.Int32%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L197">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L196">View Source</a>
   </span>
   <a id="Cursively_Csv_ProcessStreamAsync_" data-uid="Cursively.Csv.ProcessStreamAsync*"></a>
   <h4 id="Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_Int32_System_IProgress_System_Int32__System_Threading_CancellationToken_" data-uid="Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.Int32,System.IProgress{System.Int32},System.Threading.CancellationToken)">ProcessStreamAsync(Stream, CsvReaderVisitorBase, Int32, IProgress&lt;Int32&gt;, CancellationToken)</h4>
@@ -376,7 +380,8 @@ See <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.io.memory
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize, IProgress&lt;int&gt; progress = null, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use CsvAsyncInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).ProcessAsync(visitor, progress, cancellationToken).&quot;)]
+public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize, IProgress&lt;int&gt; progress = null, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -501,7 +506,7 @@ operation terminates.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Cursively.Csv.ProcessStreamAsync(System.IO.Stream%2CCursively.CsvReaderVisitorBase%2CSystem.IProgress%7BSystem.Int32%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L135">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/Csv.cs/#L126">View Source</a>
   </span>
   <a id="Cursively_Csv_ProcessStreamAsync_" data-uid="Cursively.Csv.ProcessStreamAsync*"></a>
   <h4 id="Cursively_Csv_ProcessStreamAsync_System_IO_Stream_Cursively_CsvReaderVisitorBase_System_IProgress_System_Int32__System_Threading_CancellationToken_" data-uid="Cursively.Csv.ProcessStreamAsync(System.IO.Stream,Cursively.CsvReaderVisitorBase,System.IProgress{System.Int32},System.Threading.CancellationToken)">ProcessStreamAsync(Stream, CsvReaderVisitorBase, IProgress&lt;Int32&gt;, CancellationToken)</h4>
@@ -511,7 +516,8 @@ operation terminates.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, IProgress&lt;int&gt; progress = null, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use CsvAsyncInput.ForStream(csvStream).ProcessAsync(visitor, progress, cancellationToken).&quot;)]
+public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, IProgress&lt;int&gt; progress = null, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">

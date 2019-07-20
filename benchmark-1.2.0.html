@@ -1,0 +1,667 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> | Cursively </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" | Cursively ">
+    <meta name="generator" content="docfx 2.43.1.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>This benchmark tests the simple act of counting how many records are in a CSV file.  It's not a simple count of how many lines are in the text file: line breaks within quoted fields must be treated as data, and multiple line breaks in a row must be treated as one, since each record must have at least one field.  Therefore, assuming correct implementations, this benchmark should test the raw CSV processing speed.</p>
+<p>Cursively eliminates a ton of overhead found in libraries such as CsvHelper by restricting the allowed input encodings and using the visitor pattern as its only means of output.  Cursively can scan through the original bytes of the input to do its work, and it can give slices of the input data directly to the consumer without having to copy or allocate.</p>
+<p>Therefore, these benchmarks are somewhat biased in favor of Cursively, as CsvHelper relies on external code to transform the data to UTF-16.  This isn't as unfair as that makes it sound: the overwhelming majority of input files are probably UTF-8 anyway (or a compatible SBCS), so this transformation is something that practically every user will experience.</p>
+<ul>
+<li>Input files can be found here: <a href="https://github.com/airbreather/Cursively/tree/v1.2.0/test/Cursively.Benchmark/large-csv-files.zip">https://github.com/airbreather/Cursively/tree/v1.2.0/test/Cursively.Benchmark/large-csv-files.zip</a></li>
+<li>Benchmark source code is this: <a href="https://github.com/airbreather/Cursively/tree/v1.2.0/test/Cursively.Benchmark">https://github.com/airbreather/Cursively/tree/v1.2.0/test/Cursively.Benchmark</a></li>
+</ul>
+<p>As of version 1.2.0, these benchmarks no longer run on .NET Framework targets, because earlier benchmarks have shown comparable ratios.</p>
+<p>Raw BenchmarkDotNet output is at the bottom, but here are some numbers derived from it showing the throughput of CsvHelper compared to the throughput of each of five different ways of using Cursively on multiple different kinds of files.  This summary does not indicate anything about the GC pressure:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th style="text-align: right;">Size (bytes)</th>
+<th style="text-align: right;">CsvHelper (MB/s)</th>
+<th style="text-align: right;">Cursively 1* (MB/s)</th>
+<th style="text-align: right;">Cursively 2* (MB/s)</th>
+<th style="text-align: right;">Cursively 3* (MB/s)</th>
+<th style="text-align: right;">Cursively 4* (MB/s)</th>
+<th style="text-align: right;">Cursively 5* (MB/s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100-huge-records</td>
+<td style="text-align: right;">2900444</td>
+<td style="text-align: right;">27.68</td>
+<td style="text-align: right;">482.15 (x17.42)</td>
+<td style="text-align: right;">528.08 (x19.08)</td>
+<td style="text-align: right;">443.99 (x16.04)</td>
+<td style="text-align: right;">448.17 (x16.19)</td>
+<td style="text-align: right;">408.70 (x14.77)</td>
+</tr>
+<tr>
+<td>100-huge-records-quoted</td>
+<td style="text-align: right;">4900444</td>
+<td style="text-align: right;">29.40</td>
+<td style="text-align: right;">304.64 (x10.36)</td>
+<td style="text-align: right;">325.31 (x11.07)</td>
+<td style="text-align: right;">295.21 (x10.04)</td>
+<td style="text-align: right;">293.08 (x09.97)</td>
+<td style="text-align: right;">285.03 (x09.70)</td>
+</tr>
+<tr>
+<td>10k-empty-records</td>
+<td style="text-align: right;">10020000</td>
+<td style="text-align: right;">14.59</td>
+<td style="text-align: right;">311.97 (x21.38)</td>
+<td style="text-align: right;">311.27 (x21.33)</td>
+<td style="text-align: right;">283.40 (x19.42)</td>
+<td style="text-align: right;">297.41 (x20.38)</td>
+<td style="text-align: right;">268.23 (x18.38)</td>
+</tr>
+<tr>
+<td>mocked</td>
+<td style="text-align: right;">12731500</td>
+<td style="text-align: right;">74.29</td>
+<td style="text-align: right;">3871.72 (x52.11)</td>
+<td style="text-align: right;">3771.89 (x50.77)</td>
+<td style="text-align: right;">1748.01 (x23.53)</td>
+<td style="text-align: right;">2103.55 (x28.31)</td>
+<td style="text-align: right;">1240.09 (x16.69)</td>
+</tr>
+<tr>
+<td>worldcitiespop</td>
+<td style="text-align: right;">151492068</td>
+<td style="text-align: right;">39.39</td>
+<td style="text-align: right;">622.85 (x15.81)</td>
+<td style="text-align: right;">617.22 (x15.67)</td>
+<td style="text-align: right;">518.00 (x13.15)</td>
+<td style="text-align: right;">538.54 (x13.67)</td>
+<td style="text-align: right;">450.63 (x11.44)</td>
+</tr>
+</tbody>
+</table>
+<p>*Different Cursively methods are:</p>
+<ol>
+<li>Directly using <code>CsvTokenizer</code></li>
+<li><code>CsvSyncInput.ForMemory</code></li>
+<li><code>CsvSyncInput.ForMemoryMappedFile</code></li>
+<li><code>CsvSyncInput.ForStream</code> (using a <code>FileStream</code>)</li>
+<li><code>CsvAsyncInput.ForStream</code> (using a <code>FileStream</code> opened in asynchronous mode)</li>
+</ol>
+<p>Raw BenchmarkDotNet output:</p>
+<pre><code class="lang-ini">
+BenchmarkDotNet=v0.11.5, OS=Windows 10.0.18362
+Intel Core i7-6850K CPU 3.60GHz (Skylake), 1 CPU, 12 logical and 6 physical cores
+.NET Core SDK=3.0.100-preview6-012264
+  [Host]     : .NET Core 2.2.6 (CoreCLR 4.6.27817.03, CoreFX 4.6.27818.02), 64bit RyuJIT
+  Job-UPPUKA : .NET Core 2.2.6 (CoreCLR 4.6.27817.03, CoreFX 4.6.27818.02), 64bit RyuJIT
+
+Server=True  
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>csvFile</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Error</th>
+<th style="text-align: right;">StdDev</th>
+<th style="text-align: right;">Ratio</th>
+<th style="text-align: right;">RatioSD</th>
+<th style="text-align: right;">Gen 0</th>
+<th style="text-align: right;">Gen 1</th>
+<th style="text-align: right;">Gen 2</th>
+<th style="text-align: right;">Allocated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CountRowsUsingCursivelyRaw</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">5.737 ms</td>
+<td style="text-align: right;">0.0037 ms</td>
+<td style="text-align: right;">0.0033 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">48 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyArrayInput</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">5.238 ms</td>
+<td style="text-align: right;">0.0066 ms</td>
+<td style="text-align: right;">0.0062 ms</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">96 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyMemoryMappedFileInput</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">6.230 ms</td>
+<td style="text-align: right;">0.0159 ms</td>
+<td style="text-align: right;">0.0141 ms</td>
+<td style="text-align: right;">1.09</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">544 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyFileStreamInput</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">6.172 ms</td>
+<td style="text-align: right;">0.0080 ms</td>
+<td style="text-align: right;">0.0067 ms</td>
+<td style="text-align: right;">1.08</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">272 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyAsyncFileStreamInput</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">6.768 ms</td>
+<td style="text-align: right;">0.1349 ms</td>
+<td style="text-align: right;">0.1262 ms</td>
+<td style="text-align: right;">1.18</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">1360 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCsvHelper</td>
+<td>100-huge-records</td>
+<td style="text-align: right;">99.938 ms</td>
+<td style="text-align: right;">0.3319 ms</td>
+<td style="text-align: right;">0.3105 ms</td>
+<td style="text-align: right;">17.42</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">400.0000</td>
+<td style="text-align: right;">200.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">110256320 B</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyRaw</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">15.341 ms</td>
+<td style="text-align: right;">0.0305 ms</td>
+<td style="text-align: right;">0.0255 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">48 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyArrayInput</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">14.366 ms</td>
+<td style="text-align: right;">0.0167 ms</td>
+<td style="text-align: right;">0.0156 ms</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">96 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyMemoryMappedFileInput</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">15.831 ms</td>
+<td style="text-align: right;">0.0487 ms</td>
+<td style="text-align: right;">0.0455 ms</td>
+<td style="text-align: right;">1.03</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">544 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyFileStreamInput</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">15.946 ms</td>
+<td style="text-align: right;">0.0383 ms</td>
+<td style="text-align: right;">0.0358 ms</td>
+<td style="text-align: right;">1.04</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">272 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyAsyncFileStreamInput</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">16.396 ms</td>
+<td style="text-align: right;">0.2821 ms</td>
+<td style="text-align: right;">0.2771 ms</td>
+<td style="text-align: right;">1.07</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">1360 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCsvHelper</td>
+<td>100-h(...)uoted [23]</td>
+<td style="text-align: right;">158.968 ms</td>
+<td style="text-align: right;">0.1382 ms</td>
+<td style="text-align: right;">0.1154 ms</td>
+<td style="text-align: right;">10.36</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">333.3333</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">153579848 B</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyRaw</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">30.631 ms</td>
+<td style="text-align: right;">0.1009 ms</td>
+<td style="text-align: right;">0.0894 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">48 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyArrayInput</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">30.699 ms</td>
+<td style="text-align: right;">0.0624 ms</td>
+<td style="text-align: right;">0.0584 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">96 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyMemoryMappedFileInput</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">33.718 ms</td>
+<td style="text-align: right;">0.0873 ms</td>
+<td style="text-align: right;">0.0817 ms</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">544 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyFileStreamInput</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">32.130 ms</td>
+<td style="text-align: right;">0.0944 ms</td>
+<td style="text-align: right;">0.0737 ms</td>
+<td style="text-align: right;">1.05</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">272 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyAsyncFileStreamInput</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">35.625 ms</td>
+<td style="text-align: right;">0.7018 ms</td>
+<td style="text-align: right;">0.7801 ms</td>
+<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">1360 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCsvHelper</td>
+<td>10k-empty-records</td>
+<td style="text-align: right;">654.743 ms</td>
+<td style="text-align: right;">13.0238 ms</td>
+<td style="text-align: right;">16.9346 ms</td>
+<td style="text-align: right;">21.42</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">2000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">420832856 B</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyRaw</td>
+<td>mocked</td>
+<td style="text-align: right;">3.136 ms</td>
+<td style="text-align: right;">0.0038 ms</td>
+<td style="text-align: right;">0.0034 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">48 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyArrayInput</td>
+<td>mocked</td>
+<td style="text-align: right;">3.219 ms</td>
+<td style="text-align: right;">0.0623 ms</td>
+<td style="text-align: right;">0.0741 ms</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">96 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyMemoryMappedFileInput</td>
+<td>mocked</td>
+<td style="text-align: right;">6.946 ms</td>
+<td style="text-align: right;">0.0553 ms</td>
+<td style="text-align: right;">0.0490 ms</td>
+<td style="text-align: right;">2.21</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">544 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyFileStreamInput</td>
+<td>mocked</td>
+<td style="text-align: right;">5.772 ms</td>
+<td style="text-align: right;">0.0365 ms</td>
+<td style="text-align: right;">0.0324 ms</td>
+<td style="text-align: right;">1.84</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">272 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyAsyncFileStreamInput</td>
+<td>mocked</td>
+<td style="text-align: right;">9.791 ms</td>
+<td style="text-align: right;">0.1129 ms</td>
+<td style="text-align: right;">0.1056 ms</td>
+<td style="text-align: right;">3.12</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">1360 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCsvHelper</td>
+<td>mocked</td>
+<td style="text-align: right;">163.426 ms</td>
+<td style="text-align: right;">3.2351 ms</td>
+<td style="text-align: right;">3.1773 ms</td>
+<td style="text-align: right;">52.08</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">333.3333</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">115757736 B</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyRaw</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">231.955 ms</td>
+<td style="text-align: right;">1.0755 ms</td>
+<td style="text-align: right;">0.9534 ms</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">48 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyArrayInput</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">234.071 ms</td>
+<td style="text-align: right;">1.0749 ms</td>
+<td style="text-align: right;">0.9529 ms</td>
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">96 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyMemoryMappedFileInput</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">278.909 ms</td>
+<td style="text-align: right;">3.0866 ms</td>
+<td style="text-align: right;">2.8872 ms</td>
+<td style="text-align: right;">1.20</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">544 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyFileStreamInput</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">268.271 ms</td>
+<td style="text-align: right;">3.4632 ms</td>
+<td style="text-align: right;">2.8920 ms</td>
+<td style="text-align: right;">1.16</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">272 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCursivelyAsyncFileStreamInput</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">320.606 ms</td>
+<td style="text-align: right;">1.6204 ms</td>
+<td style="text-align: right;">1.5157 ms</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">1360 B</td>
+</tr>
+<tr>
+<td>CountRowsUsingCsvHelper</td>
+<td>worldcitiespop</td>
+<td style="text-align: right;">3,667.940 ms</td>
+<td style="text-align: right;">60.8394 ms</td>
+<td style="text-align: right;">56.9092 ms</td>
+<td style="text-align: right;">15.82</td>
+<td style="text-align: right;">0.24</td>
+<td style="text-align: right;">15000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">3096694312 B</td>
+</tr>
+</tbody>
+</table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/airbreather/Cursively/blob/master/doc/benchmark-1.2.0.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

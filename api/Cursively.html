@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Cursively
    | Cursively ">
-    <meta name="generator" content="docfx 2.42.4.0">
+    <meta name="generator" content="docfx 2.43.1.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -90,6 +90,9 @@
       <h4><a class="xref" href="Cursively.Csv.html">Csv</a></h4>
       <section><p>Contains helper methods for CSV processing.</p>
 </section>
+      <h4><a class="xref" href="Cursively.CsvAsyncInput.html">CsvAsyncInput</a></h4>
+      <section><p>Helpers to create inputs that describe CSV data streams asynchronously.</p>
+</section>
       <h4><a class="xref" href="Cursively.CsvReaderVisitorBase.html">CsvReaderVisitorBase</a></h4>
       <section><p>Base class for listeners that process a stream of RFC 4180 (CSV) tokens from an instance of
 <a class="xref" href="Cursively.CsvTokenizer.html">CsvTokenizer</a>.</p>
@@ -108,6 +111,9 @@ Each instance of this visitor has an upper-bound on the maximum number of header
 maximum length of each header.  CSV streams that exceed these limits will cause this class
 to throw exceptions, and behavior of a particular instance is undefined once this happens.
 </p>
+</section>
+      <h4><a class="xref" href="Cursively.CsvSyncInput.html">CsvSyncInput</a></h4>
+      <section><p>Helpers to create inputs that describe CSV data streams synchronously.</p>
 </section>
       <h4><a class="xref" href="Cursively.CsvTokenizer.html">CsvTokenizer</a></h4>
       <section><p>Tokenizes a byte stream into CSV fields.  The processing follows the guidelines set out in

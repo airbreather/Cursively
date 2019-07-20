@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "benchmark-1.0.0.html",
-          "hash": "ClZeAOCUW4Cx9ZVDZp3R5A=="
+          "hash": "ZuqQeia46whazvkjysj/BQ=="
         }
       },
       "is_incremental": false,
@@ -30,7 +30,19 @@
       "output": {
         ".html": {
           "relative_path": "benchmark-1.1.0.html",
-          "hash": "23WKckKph7/kmrPUaKj2Uw=="
+          "hash": "brTVb6VsgYFM0ceYvlF77g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "benchmark-1.2.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "benchmark-1.2.0.html",
+          "hash": "KfBt4h5nSduKPpbfP9b5PA=="
         }
       },
       "is_incremental": false,
@@ -42,7 +54,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "xngcxOfbjUm9uzBNaeKy6g=="
+          "hash": "AHIMBxcp+oOZE5NvrH3YMg=="
         }
       },
       "is_incremental": false,
@@ -54,7 +66,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.Csv.html",
-          "hash": "1ReWd8zHI8HnsLdZ2coAIQ=="
+          "hash": "xh4+xFBFeVyTpLfCCA5WzQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CsvAsyncInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CsvAsyncInput.html",
+          "hash": "55H/X2/DLRcL+s6rlIBvng=="
         }
       },
       "is_incremental": false,
@@ -66,7 +90,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CsvReaderVisitorBase.html",
-          "hash": "ERC5nXIXs1pLCRmWwYPDgA=="
+          "hash": "dHDsN6L5ogbc0iefSEFvQw=="
         }
       },
       "is_incremental": false,
@@ -78,7 +102,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CsvReaderVisitorWithUTF8HeadersBase.html",
-          "hash": "gau1E3SpeIintFr7xxi0Zg=="
+          "hash": "9Rm55+Yt5xL+FEUi3aJmIA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.CsvSyncInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.CsvSyncInput.html",
+          "hash": "WVQ4sMMkGNNVceCN+SS9aw=="
         }
       },
       "is_incremental": false,
@@ -90,7 +126,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CsvTokenizer.html",
-          "hash": "8GIsr0kI8yasjKieL5/bTw=="
+          "hash": "fYILwjhmRWVPHGqO3pzv5g=="
         }
       },
       "is_incremental": false,
@@ -102,7 +138,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyDataStreamException.html",
-          "hash": "U7r92DPwoPzIUgfmxvUYrQ=="
+          "hash": "FahxTfz5AL2eFwvYzGz7Lg=="
         }
       },
       "is_incremental": false,
@@ -114,7 +150,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyExtraDataFieldsException.html",
-          "hash": "3bWjfiKCpxP7BJr61xJuTQ=="
+          "hash": "avW5+bSlUeNRKMMUwk4Grw=="
         }
       },
       "is_incremental": false,
@@ -126,7 +162,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyHeaderIsTooLongException.html",
-          "hash": "RqfbfVPWiMJJ0G5blY3h0g=="
+          "hash": "40aULGbTZhn9VCFL3CRXQQ=="
         }
       },
       "is_incremental": false,
@@ -138,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyHeadersAreNotUTF8Exception.html",
-          "hash": "+0CkIz7lNsHGeDLEen7P0Q=="
+          "hash": "2HOAtKhSdCFWBAM/DkQFmA=="
         }
       },
       "is_incremental": false,
@@ -150,7 +186,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyMissingDataFieldsException.html",
-          "hash": "dBJNOUTIs81wcAivFopA+w=="
+          "hash": "QXBl/OYW669pNARHgRXdXw=="
         }
       },
       "is_incremental": false,
@@ -162,7 +198,115 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.CursivelyTooManyHeadersException.html",
-          "hash": "qYA4vj4bk3FiGN2DOzkYsA=="
+          "hash": "X3qciPyfvSVteH4mleq36A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvAsyncInputBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvAsyncInputBase.html",
+          "hash": "ar14b5qaisq2AoZtHAL8fA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvAsyncStreamInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvAsyncStreamInput.html",
+          "hash": "nNqJEeCiMBdn789qV+rN8A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvMemoryMappedFileInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvMemoryMappedFileInput.html",
+          "hash": "uvtZXZFPnV/11472dKLwMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvPipeReaderInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvPipeReaderInput.html",
+          "hash": "nzD4oWyi+zVkxJDO/PqlGg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvReadOnlyMemoryInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvReadOnlyMemoryInput.html",
+          "hash": "iXlIg4wL77E04bydYcFB3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvReadOnlySequenceInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvReadOnlySequenceInput.html",
+          "hash": "+HkwFuJb7MJ8CWekjGB47g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvSyncInputBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvSyncInputBase.html",
+          "hash": "R4ktvLP0ZnB/RFIF6cSG+g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.CsvSyncStreamInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.CsvSyncStreamInput.html",
+          "hash": "dbdiCq4FsiomeWT+3HB6jQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Cursively.Inputs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Cursively.Inputs.html",
+          "hash": "k+xy2b9vSvSQXLmzb6fVyA=="
         }
       },
       "is_incremental": false,
@@ -174,7 +318,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Cursively.html",
-          "hash": "LTMhQVMQqEMKuR7yB8OXCw=="
+          "hash": "tTqGAhrXqdbU4WNCqNDsFQ=="
         }
       },
       "is_incremental": false,
@@ -186,7 +330,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "p0PYvcSZz8Sy20pZpppa/g=="
+          "hash": "mdYkwDalm2sO3zQIHMVg2Q=="
         }
       },
       "is_incremental": false,
@@ -198,7 +342,7 @@
       "output": {
         ".html": {
           "relative_path": "release-notes.html",
-          "hash": "uJCylHxNQgQSsFJ4t+Q3OQ=="
+          "hash": "iyr2FMGHh877CSQGEU14FA=="
         }
       },
       "is_incremental": false,
@@ -210,7 +354,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "bKT57/4FXwsfcq3CTs7WYQ=="
+          "hash": "yVQoXvTzlJy/glVLgznaPA=="
         }
       },
       "is_incremental": false,
@@ -231,13 +375,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 4,
+          "total_file_count": 5,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 11,
+          "total_file_count": 22,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class CsvReaderVisitorWithUTF8HeadersBase
    | Cursively ">
-    <meta name="generator" content="docfx 2.42.4.0">
+    <meta name="generator" content="docfx 2.43.1.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -169,7 +169,7 @@ fields than the header record.
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L107">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L141">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor">CsvReaderVisitorWithUTF8HeadersBase()</h4>
@@ -178,14 +178,15 @@ fields than the header record.
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected CsvReaderVisitorWithUTF8HeadersBase()</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use the parameterized constructor, passing in 'false' for the flag to ignore a UTF-8 identifier on the first header field; instead, remove UTF-8 identifiers on the input itself.  See airbreather/Cursively#14.&quot;)]
+protected CsvReaderVisitorWithUTF8HeadersBase()</code></pre>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_System_Int32_System_Int32_System_Boolean_System_Text_DecoderFallback_.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.%23ctor(System.Int32%2CSystem.Int32%2CSystem.Boolean%2CSystem.Text.DecoderFallback)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L141">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L184">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor_System_Int32_System_Int32_System_Boolean_System_Text_DecoderFallback_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.#ctor(System.Int32,System.Int32,System.Boolean,System.Text.DecoderFallback)">CsvReaderVisitorWithUTF8HeadersBase(Int32, Int32, Boolean, DecoderFallback)</h4>
@@ -223,8 +224,15 @@ Default: <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.htm
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">ignoreUTF8IdentifierOnFirstHeaderField</span></td>
-        <td><p>A value indicating whether or not to ignore a leading UTF-8 BOM.
-Default: <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultIgnoreUTF8IdentifierOnFirstHeaderField">DefaultIgnoreUTF8IdentifierOnFirstHeaderField</a>.</p>
+        <td><p>
+A value indicating whether or not to ignore a leading UTF-8 BOM.
+Default: <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultIgnoreUTF8IdentifierOnFirstHeaderField">DefaultIgnoreUTF8IdentifierOnFirstHeaderField</a>.
+</p>
+<p>
+This parameter was a mistake (see airbreather/Cursively#14) and will be removed in 2.x.
+Instead, always pass in <span class="xref">false</span>, and remove UTF-8 identifiers directly
+at the source instead of leaving it up to the visitor.
+</p>
 </td>
       </tr>
       <tr>
@@ -253,7 +261,8 @@ Default: <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.htm
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
         <td><p>Thrown when <code data-dev-comment-type="paramref" class="paramref">maxHeaderCount</code> or <code data-dev-comment-type="paramref" class="paramref">maxHeaderLength</code> is
-less than 1.</p>
+less than 1 or greater than the maximum for that parameter
+(<a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderCount">MaxMaxHeaderCount</a> / <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderLength">MaxMaxHeaderLength</a>).</p>
 </td>
       </tr>
     </tbody>
@@ -265,7 +274,7 @@ less than 1.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultDecoderFallback.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L86">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L116">View Source</a>
   </span>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultDecoderFallback" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultDecoderFallback">DefaultDecoderFallback</h4>
   <div class="markdown level1 summary"><p>The value used by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor">CsvReaderVisitorWithUTF8HeadersBase()</a> to initialize the
@@ -296,7 +305,7 @@ fallback logic when the decoder encounters invalid UTF-8 bytes (throw an excepti
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultIgnoreUTF8IdentifierOnFirstHeaderField.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L80">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L110">View Source</a>
   </span>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultIgnoreUTF8IdentifierOnFirstHeaderField" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultIgnoreUTF8IdentifierOnFirstHeaderField">DefaultIgnoreUTF8IdentifierOnFirstHeaderField</h4>
   <div class="markdown level1 summary"><p>The value used by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor">CsvReaderVisitorWithUTF8HeadersBase()</a> to initialize the
@@ -305,7 +314,8 @@ value indicating whether or not to ignore a leading UTF-8 BOM (true).</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected static readonly bool DefaultIgnoreUTF8IdentifierOnFirstHeaderField</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Always pass in 'false' instead, per airbreather/Cursively#14&quot;)]
+protected static readonly bool DefaultIgnoreUTF8IdentifierOnFirstHeaderField</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -327,7 +337,7 @@ value indicating whether or not to ignore a leading UTF-8 BOM (true).</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderCount.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L68">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L97">View Source</a>
   </span>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderCount" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderCount">DefaultMaxHeaderCount</h4>
   <div class="markdown level1 summary"><p>The value used by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor">CsvReaderVisitorWithUTF8HeadersBase()</a> to initialize the
@@ -358,7 +368,7 @@ maximum number of headers (1,000).</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderLength.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L74">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L103">View Source</a>
   </span>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_DefaultMaxHeaderLength" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.DefaultMaxHeaderLength">DefaultMaxHeaderLength</h4>
   <div class="markdown level1 summary"><p>The value used by <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8HeadersBase.html#Cursively_CsvReaderVisitorWithUTF8HeadersBase__ctor">CsvReaderVisitorWithUTF8HeadersBase()</a> to initialize the
@@ -384,6 +394,84 @@ maximum length, in UTF-16 code units, of a single header (100).</p>
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderCount.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L77">View Source</a>
+  </span>
+  <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderCount" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderCount">MaxMaxHeaderCount</h4>
+  <div class="markdown level1 summary"><p>
+The maximum value that&apos;s legal for the maximum header count (0x7FEFFFFF).
+</p>
+<p>
+Staying within this limit does not guarantee that you will be immune to
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a> even with enough system virtual memory (that depends
+on your configuration).  This is just the threshold that, if exceeded, guarantees that
+you actually *will* see <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a> on mainstream frameworks if
+Cursively actually tried to go that high, so this is used as a &quot;fail-fast&quot;.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static readonly int MaxMaxHeaderCount</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderLength.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L91">View Source</a>
+  </span>
+  <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_MaxMaxHeaderLength" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.MaxMaxHeaderLength">MaxMaxHeaderLength</h4>
+  <div class="markdown level1 summary"><p>
+The maximum value that&apos;s legal for the maximum header length (0x7FEFFFFF).
+</p>
+<p>
+Staying within this limit does not guarantee that you will be immune to
+<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a> even with enough system virtual memory (that depends
+on your configuration).  This is just the threshold that, if exceeded, guarantees that
+you actually *will* see <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.outofmemoryexception">OutOfMemoryException</a> on mainstream frameworks if
+Cursively actually tried to go that high, so this is used as a &quot;fail-fast&quot;.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static readonly int MaxMaxHeaderLength</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <span class="small pull-right mobile-hide">
@@ -391,7 +479,7 @@ maximum length, in UTF-16 code units, of a single header (100).</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_CurrentFieldIndex.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L207">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L258">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_CurrentFieldIndex_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_CurrentFieldIndex" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.CurrentFieldIndex">CurrentFieldIndex</h4>
@@ -425,7 +513,7 @@ be the length of <a class="xref" href="Cursively.CsvReaderVisitorWithUTF8Headers
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_Headers.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L184">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L233">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_Headers_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_Headers" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.Headers">Headers</h4>
@@ -484,7 +572,7 @@ been called.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L282">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L333">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataField_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataField(System.ReadOnlySpan{System.Byte})">VisitEndOfDataField(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -522,7 +610,7 @@ details about when and how this method will be called.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataRecord.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L291">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L342">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataRecord_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfDataRecord" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfDataRecord">VisitEndOfDataRecord()</h4>
@@ -542,7 +630,7 @@ details about when and how this method will be called.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L223">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L274">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfField_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfField_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfField(System.ReadOnlySpan{System.Byte})">VisitEndOfField(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -591,7 +679,7 @@ call, if the field&apos;s entire data is contained within the given chunk.
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfHeaderRecord.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L258">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L309">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfHeaderRecord_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfHeaderRecord" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfHeaderRecord">VisitEndOfHeaderRecord()</h4>
@@ -612,7 +700,7 @@ The default behavior is to do nothing.
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfRecord.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L237">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L288">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfRecord_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitEndOfRecord" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitEndOfRecord">VisitEndOfRecord()</h4>
@@ -640,7 +728,7 @@ called directly after a call to this method.
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitMissingDataFields.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L302">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L353">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitMissingDataFields_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitMissingDataFields" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitMissingDataFields">VisitMissingDataFields()</h4>
@@ -662,7 +750,7 @@ The default behavior is to throw <a class="xref" href="Cursively.CursivelyMissin
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialDataFieldContents_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L270">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L321">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialDataFieldContents_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialDataFieldContents_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialDataFieldContents(System.ReadOnlySpan{System.Byte})">VisitPartialDataFieldContents(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -700,7 +788,7 @@ details about when and how this method will be called.</p>
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L210">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L261">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialFieldContents_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitPartialFieldContents_System_ReadOnlySpan_System_Byte__" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitPartialFieldContents(System.ReadOnlySpan{System.Byte})">VisitPartialFieldContents(ReadOnlySpan&lt;Byte&gt;)</h4>
@@ -760,7 +848,7 @@ Stream does not conform to RFC 4180, and optimizing such streams to avoid this c
     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitUnexpectedDataField.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L326">View Source</a>
+    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L379">View Source</a>
   </span>
   <a id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitUnexpectedDataField_" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField*"></a>
   <h4 id="Cursively_CsvReaderVisitorWithUTF8HeadersBase_VisitUnexpectedDataField" data-uid="Cursively.CsvReaderVisitorWithUTF8HeadersBase.VisitUnexpectedDataField">VisitUnexpectedDataField()</h4>
@@ -792,7 +880,7 @@ The default behavior is to throw <a class="xref" href="Cursively.CursivelyExtraD
                     <a href="https://github.com/airbreather/Cursively/new/master/doc/overwrite/new?filename=Cursively_CsvReaderVisitorWithUTF8HeadersBase.md&amp;value=---%0Auid%3A%20Cursively.CsvReaderVisitorWithUTF8HeadersBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L62" class="contribution-link">View Source</a>
+                    <a href="https://github.com/airbreather/Cursively/blob/master/src/Cursively/CsvReaderVisitorWithUTF8HeadersBase.cs/#L63" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
