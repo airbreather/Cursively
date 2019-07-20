@@ -94,28 +94,31 @@ public static void ProcessCsvFile(string csvFilePath)
 
 ### Simpler
 1. Create a new instance of your visitor.
-1. Call one of the `Csv.Process*` methods, passing in whatever format your data is in along with your visitor.
+1. Use one of the `CsvSyncInput` or `CsvAsyncInput` methods to create an input object you can use to describe the data to your visitor.
 
 Examples:
 ```csharp
 public static void ProcessCsvFile(string csvFilePath)
 {
     Console.WriteLine($"Started reading '{csvFilePath}'.");
-    Csv.ProcessFile(csvFilePath, new MyVisitor(maxFieldLength: 1000));
+    CsvSyncInput.ForMemoryMappedFile(csvFilePath)
+                .Process(new MyVisitor(maxFieldLength: 1000));
     Console.WriteLine($"Finished reading '{csvFilePath}'.");
 }
 
 public static void ProcessCsvStream(Stream csvStream)
 {
-    Console.WriteLine($"Started reading '{csvFilePath}'.");
-    Csv.ProcessStream(csvStream, new MyVisitor(maxFieldLength: 1000));
-    Console.WriteLine($"Finished reading '{csvFilePath}'.");
+    Console.WriteLine($"Started reading CSV file.");
+    CsvSyncInput.ForStream(csvStream)
+                .Process(new MyVisitor(maxFieldLength: 1000));
+    Console.WriteLine($"Finished reading CSV file.");
 }
 
-public static async ValueTask ProcessCsvStreamAsync(Stream csvStream, IProgress<int> progress = null, CancellationToken cancellationToken = default)
+public static async Task ProcessCsvStreamAsync(Stream csvStream)
 {
-    Console.WriteLine($"Started reading '{csvFilePath}'.");
-    await Csv.ProcessStreamAsync(csvStream, new MyVisitor(maxFieldLength: 1000), progress, cancellationToken);
-    Console.WriteLine($"Finished reading '{csvFilePath}'.");
+    Console.WriteLine($"Started reading CSV file.");
+    await CsvAsyncInput.ForStream(csvStream)
+                       .ProcessAsync(new MyVisitor(maxFieldLength: 1000));
+    Console.WriteLine($"Finished reading CSV file.");
 }
 ```

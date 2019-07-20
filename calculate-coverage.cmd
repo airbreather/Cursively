@@ -9,6 +9,7 @@ tools\OpenCover.4.7.922\tools\OpenCover.Console.exe ^
     "-target:%DotNetPath%" ^
     "-targetArgs:test -c Release --no-build" ^
     "-filter:+[Cursively]* +[Cursively.*]* -[Cursively.Tests]*" ^
+    -excludebyattribute:System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute ^
     -output:tools\raw-coverage-results.xml ^
     -register:user ^
     -oldstyle

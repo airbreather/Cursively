@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Cursively
@@ -173,17 +174,14 @@ namespace Cursively
         /// </exception>
         public CsvTokenizer(byte delimiter)
         {
-            switch (delimiter)
+            if (!IsValidDelimiter(delimiter))
             {
-                case CR:
-                case LF:
-                case QUOTE:
-                    throw new ArgumentException("Must not be a carriage return, linefeed, or double-quote.", nameof(delimiter));
-
-                default:
-                    _delimiter = delimiter;
-                    break;
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
+                throw new ArgumentException("Must not be a carriage return, linefeed, or double-quote.", nameof(delimiter));
+#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
+
+            _delimiter = delimiter;
         }
 
         [Flags]
@@ -195,6 +193,32 @@ namespace Cursively
             CurrentFieldStartedWithQuote = 0b00000100,
             QuotedFieldDataEnded = 0b00001000,
             CutAtPotentiallyTerminalDoubleQuote = 0b00010000,
+        }
+
+        /// <summary>
+        /// Checks if a particular byte value is legal for <see cref="CsvTokenizer(byte)"/>, i.e.,
+        /// that it is not <code>0x0A</code>, <code>0x0D</code>, or <code>0x22</code>.
+        /// </summary>
+        /// <param name="delimiter">
+        /// The single byte to expect to see between fields of the same record.  This may not be an
+        /// end-of-line or double-quote character, as those have special meanings.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the delimiter is legal for <see cref="CsvTokenizer(byte)"/>,
+        /// <see langword="false"/> otherwise.
+        /// </returns>
+        public static bool IsValidDelimiter(byte delimiter)
+        {
+            switch (delimiter)
+            {
+                case CR:
+                case LF:
+                case QUOTE:
+                    return false;
+
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
@@ -211,13 +235,11 @@ namespace Cursively
         /// <remarks>
         /// If <paramref name="chunk"/> is empty, this method will do nothing.
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")] // Microsoft.CodeAnalysis.FxCopAnalyzers 2.9.3 has a false positive.  Remove when fixed
         public void ProcessNextChunk(ReadOnlySpan<byte> chunk, CsvReaderVisitorBase visitor)
         {
-            if (visitor is null)
-            {
-                // "null object" pattern.
-                visitor = CsvReaderVisitorBase.Null;
-            }
+            // "null object" pattern.
+            visitor = visitor ?? CsvReaderVisitorBase.Null;
 
             byte delimiter = _delimiter;
 
@@ -299,13 +321,11 @@ namespace Cursively
         /// the last time that this method was called), then this method will do nothing.
         /// </para>
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")] // Microsoft.CodeAnalysis.FxCopAnalyzers 2.9.3 has a false positive.  Remove when fixed
         public void ProcessEndOfStream(CsvReaderVisitorBase visitor)
         {
-            if (visitor is null)
-            {
-                visitor = CsvReaderVisitorBase.Null;
-            }
-
+            // "null object" pattern.
+            visitor = visitor ?? CsvReaderVisitorBase.Null;
             ProcessEndOfRecord(default, visitor);
         }
 
@@ -375,6 +395,10 @@ namespace Cursively
                 // slice off the data up to the quote and the next byte that we read.
                 readBuffer = readBuffer.Slice(idx + 2);
             }
+            else if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
+            {
+                HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
+            }
             else
             {
                 // this is expected to be rare: either we were cut between field reads, or we're
@@ -382,12 +406,6 @@ namespace Cursively
                 // the field; by this point, we don't save enough state to remember which case we're
                 // in, so VisitNonstandardQuotedField **MUST** have been correctly called (or not)
                 // before entering this section.
-                if ((_parserFlags & ParserFlags.CutAtPotentiallyTerminalDoubleQuote) != 0)
-                {
-                    HandleBufferCutAtPotentiallyTerminalDoubleQuote(ref readBuffer, visitor);
-                    return;
-                }
-
                 for (int idx = 0; idx < readBuffer.Length; idx++)
                 {
                     byte b = readBuffer[idx];

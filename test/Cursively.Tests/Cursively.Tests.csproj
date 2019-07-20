@@ -9,11 +9,12 @@
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)src\Cursively\Cursively.csproj" />
 
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" PrivateAssets="All" />
 
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.0.22" />
   </ItemGroup>
 
   <ItemGroup>

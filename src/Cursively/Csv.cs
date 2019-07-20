@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +10,8 @@ namespace Cursively
     /// <summary>
     /// Contains helper methods for CSV processing.
     /// </summary>
+    [ExcludeFromCodeCoverage]
+    [Obsolete("ProcessFoo methods have been moved to instance methods on dedicated 'input' types for better composability.")]
     public static class Csv
     {
         /// <summary>
@@ -25,8 +27,15 @@ namespace Cursively
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="csvStream"/> is <see langword="null"/>.
         /// </exception>
-        public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor) =>
-            ProcessStream(csvStream, visitor, 81920);
+        [Obsolete("Use CsvSyncInput.ForStream(csvStream).Process(visitor).")]
+        public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor)
+        {
+            CsvSyncInput.ForStream(csvStream)
+                        .WithMinReadBufferByteCount(81920)
+                        .WithReadBufferPool(null)
+                        .WithIgnoreUTF8ByteOrderMark(false)
+                        .Process(visitor);
+        }
 
         /// <summary>
         /// Describes the contents of a CSV stream to the given instance of the
@@ -51,32 +60,14 @@ namespace Cursively
         /// Thrown when <paramref name="csvStream"/> does not support reading (i.e.,
         /// <see cref="Stream.CanRead"/> is <see langword="false"/>).
         /// </exception>
+        [Obsolete("Use CsvSyncInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).Process(visitor).")]
         public static void ProcessStream(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize)
         {
-            if (csvStream is null)
-            {
-                throw new ArgumentNullException(nameof(csvStream));
-            }
-
-            if (bufferSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(bufferSize), bufferSize, "Must be greater than zero.");
-            }
-
-            if (!csvStream.CanRead)
-            {
-                throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
-            }
-
-            byte[] buffer = new byte[bufferSize];
-            var tokenizer = new CsvTokenizer();
-            int cnt;
-            while ((cnt = csvStream.Read(buffer, 0, buffer.Length)) != 0)
-            {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
-            }
-
-            tokenizer.ProcessEndOfStream(visitor);
+            CsvSyncInput.ForStream(csvStream)
+                        .WithMinReadBufferByteCount(bufferSize)
+                        .WithReadBufferPool(null)
+                        .WithIgnoreUTF8ByteOrderMark(false)
+                        .Process(visitor);
         }
 
         /// <summary>
@@ -132,8 +123,16 @@ namespace Cursively
         /// object backing <paramref name="cancellationToken"/> is disposed before the asynchronous
         /// operation terminates.
         /// </exception>
-        public static ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, IProgress<int> progress = null, CancellationToken cancellationToken = default) =>
-            ProcessStreamAsync(csvStream, visitor, 81920, progress, cancellationToken);
+        [Obsolete("Use CsvAsyncInput.ForStream(csvStream).ProcessAsync(visitor, progress, cancellationToken).")]
+        public static async ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, IProgress<int> progress = null, CancellationToken cancellationToken = default)
+        {
+            await CsvAsyncInput.ForStream(csvStream)
+                               .WithMinReadBufferByteCount(81920)
+                               .WithReadBufferPool(null)
+                               .WithIgnoreUTF8ByteOrderMark(false)
+                               .ProcessAsync(visitor, progress, cancellationToken)
+                               .ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Describes the contents of a CSV stream to the given instance of the
@@ -194,38 +193,15 @@ namespace Cursively
         /// object backing <paramref name="cancellationToken"/> is disposed before the asynchronous
         /// operation terminates.
         /// </exception>
+        [Obsolete("Use CsvAsyncInput.ForStream(csvStream).WithMinReadBufferByteCount(bufferSize).ProcessAsync(visitor, progress, cancellationToken).")]
         public static async ValueTask ProcessStreamAsync(Stream csvStream, CsvReaderVisitorBase visitor, int bufferSize, IProgress<int> progress = null, CancellationToken cancellationToken = default)
         {
-            if (csvStream is null)
-            {
-                throw new ArgumentNullException(nameof(csvStream));
-            }
-
-            if (bufferSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(bufferSize), bufferSize, "Must be greater than zero.");
-            }
-
-            if (!csvStream.CanRead)
-            {
-                throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
-            }
-
-            byte[] buffer = new byte[bufferSize];
-            var tokenizer = new CsvTokenizer();
-            int cnt;
-            while ((cnt = await csvStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)) != 0)
-            {
-                tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(buffer, 0, cnt), visitor);
-                progress?.Report(cnt);
-
-                // not all streams support cancellation, so we might as well do this ourselves.  it
-                // does involve a volatile read, so don't go overboard.
-                cancellationToken.ThrowIfCancellationRequested();
-            }
-
-            tokenizer.ProcessEndOfStream(visitor);
-            progress?.Report(0);
+            await CsvAsyncInput.ForStream(csvStream)
+                               .WithMinReadBufferByteCount(bufferSize)
+                               .WithReadBufferPool(null)
+                               .WithIgnoreUTF8ByteOrderMark(false)
+                               .ProcessAsync(visitor, progress, cancellationToken)
+                               .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -275,45 +251,12 @@ namespace Cursively
         /// <exception cref="PathTooLongException">
         /// See <see cref="FileStream(string, FileMode, FileAccess, FileShare, int, FileOptions)"/>.
         /// </exception>
-        public static unsafe void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)
+        [Obsolete("Use CsvSyncInput.ForMemoryMappedFile(csvFilePath).Process(visitor).")]
+        public static void ProcessFile(string csvFilePath, CsvReaderVisitorBase visitor)
         {
-            using (var fl = new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
-            {
-                long length = fl.Length;
-                if (length == 0)
-                {
-                    return;
-                }
-
-                var tokenizer = new CsvTokenizer();
-                using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(fl, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, leaveOpen: true))
-                using (var accessor = memoryMappedFile.CreateViewAccessor(0, 0, MemoryMappedFileAccess.Read))
-                {
-                    var handle = accessor.SafeMemoryMappedViewHandle;
-                    byte* ptr = null;
-                    RuntimeHelpers.PrepareConstrainedRegions();
-                    try
-                    {
-                        handle.AcquirePointer(ref ptr);
-                        while (length > int.MaxValue)
-                        {
-                            tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(ptr, int.MaxValue), visitor);
-                            length -= int.MaxValue;
-                            ptr += int.MaxValue;
-                        }
-
-                        tokenizer.ProcessNextChunk(new ReadOnlySpan<byte>(ptr, unchecked((int)length)), visitor);
-                        tokenizer.ProcessEndOfStream(visitor);
-                    }
-                    finally
-                    {
-                        if (ptr != null)
-                        {
-                            handle.ReleasePointer();
-                        }
-                    }
-                }
-            }
+            CsvSyncInput.ForMemoryMappedFile(csvFilePath)
+                        .WithIgnoreUTF8ByteOrderMark(false)
+                        .Process(visitor);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
@@ -12,8 +13,6 @@ using CsvHelper.Configuration;
 
 namespace Cursively.Benchmark
 {
-    [ClrJob]
-    [CoreJob]
     [GcServer(true)]
     [MemoryDiagnoser]
     public class Program
@@ -22,12 +21,56 @@ namespace Cursively.Benchmark
 
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(CsvFiles))]
-        public long CountRowsUsingCursively(CsvFile csvFile)
+        public long CountRowsUsingCursivelyRaw(CsvFile csvFile)
         {
             var visitor = new RowCountingVisitor();
             var tokenizer = new CsvTokenizer();
             tokenizer.ProcessNextChunk(csvFile.FileData, visitor);
             tokenizer.ProcessEndOfStream(visitor);
+            return visitor.RowCount;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(CsvFiles))]
+        public long CountRowsUsingCursivelyArrayInput(CsvFile csvFile)
+        {
+            var visitor = new RowCountingVisitor();
+            CsvSyncInput.ForMemory(csvFile.FileData).Process(visitor);
+            return visitor.RowCount;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(CsvFiles))]
+        public long CountRowsUsingCursivelyMemoryMappedFileInput(CsvFile csvFile)
+        {
+            var visitor = new RowCountingVisitor();
+            CsvSyncInput.ForMemoryMappedFile(csvFile.FullPath).Process(visitor);
+            return visitor.RowCount;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(CsvFiles))]
+        public long CountRowsUsingCursivelyFileStreamInput(CsvFile csvFile)
+        {
+            var visitor = new RowCountingVisitor();
+            using (var stream = new FileStream(csvFile.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
+            {
+                CsvSyncInput.ForStream(stream).Process(visitor);
+            }
+
+            return visitor.RowCount;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(CsvFiles))]
+        public async Task<long> CountRowsUsingCursivelyAsyncFileStreamInput(CsvFile csvFile)
+        {
+            var visitor = new RowCountingVisitor();
+            using (var stream = new FileStream(csvFile.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous | FileOptions.SequentialScan))
+            {
+                await CsvAsyncInput.ForStream(stream).ProcessAsync(visitor);
+            }
+
             return visitor.RowCount;
         }
 
@@ -49,13 +92,17 @@ namespace Cursively.Benchmark
             }
         }
 
-        private static int Main()
+        private static async Task<int> Main()
         {
             var prog = new Program();
             foreach (var csvFile in CsvFiles)
             {
-                long rowCount = prog.CountRowsUsingCursively(csvFile);
-                if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount)
+                long rowCount = prog.CountRowsUsingCursivelyRaw(csvFile);
+                if (prog.CountRowsUsingCsvHelper(csvFile) != rowCount ||
+                    prog.CountRowsUsingCursivelyArrayInput(csvFile) != rowCount ||
+                    prog.CountRowsUsingCursivelyMemoryMappedFileInput(csvFile) != rowCount ||
+                    prog.CountRowsUsingCursivelyFileStreamInput(csvFile) != rowCount ||
+                    await prog.CountRowsUsingCursivelyAsyncFileStreamInput(csvFile) != rowCount)
                 {
                     Console.Error.WriteLine($"Failed on {csvFile}.");
                     return 1;

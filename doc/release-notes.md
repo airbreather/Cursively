@@ -1,5 +1,13 @@
 # Cursively Release Notes
 
+## [1.2.0](https://github.com/airbreather/Cursively/milestone/4)
+- Added fluent helpers to replace the `Csv.ProcessFoo` methods with something that's easier to maintain without being meaningfully less convenient to use ([#15](https://github.com/airbreather/Cursively/issues/15)).
+- Deprecated the ability to ignore a leading UTF-8 byte order mark inside the header-aware visitor, per [#14](https://github.com/airbreather/Cursively/issues/14).
+    - Instead, it's up to the source of the input to skip (or not skip) sending a leading UTF-8 BOM to the tokenizer in the first place.
+    - By default, all the fluent helpers from the previous bullet point will ignore a leading UTF-8 BOM if present.  This behavior may be disabled by chaining `.WithIgnoreUTF8ByteOrderMark(false)`.
+- Improved how the header-aware visitor behaves when the creator requests very high limits ([#17](https://github.com/airbreather/Cursively/issues/17)).
+- Fixed a rare off-by-one issue in the header-aware visitor that would happen when a header is exactly as long as the configured maximum **and** its last byte is exactly the last byte of the input chunk that happens to contain it ([#16](https://github.com/airbreather/Cursively/issues/16)).
+
 ## [1.1.0](https://github.com/airbreather/Cursively/milestone/1)
 - Several further performance optimizations.  Most significantly, inlining and tuning a critical `ReadOnlySpan<T>` extension method.
     - In some cases, this increased throughput by a factor of 3.
