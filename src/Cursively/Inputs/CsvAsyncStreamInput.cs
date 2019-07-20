@@ -236,7 +236,7 @@ namespace Cursively.Inputs
                 byteCount += readLength;
             }
 
-            var buf = new Memory<byte>(readBuffer, 0, byteCount);
+            var buf = new ReadOnlyMemory<byte>(readBuffer, 0, byteCount);
             if (buf.Span.StartsWith(UTF8BOM))
             {
                 buf = buf.Slice(3);
