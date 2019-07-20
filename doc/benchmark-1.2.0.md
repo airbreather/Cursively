@@ -9,7 +9,7 @@ Therefore, these benchmarks are somewhat biased in favor of Cursively, as CsvHel
 
 As of version 1.2.0, these benchmarks no longer run on .NET Framework targets, because earlier benchmarks have shown comparable ratios.
 
-Raw BenchmarkDotNet output is at the bottom, but here are some numbers derived from it.  This summary does not indicate anything about the GC pressure:
+Raw BenchmarkDotNet output is at the bottom, but here are some numbers derived from it showing the throughput of CsvHelper compared to the throughput of each of five different ways of using Cursively on multiple different kinds of files.  This summary does not indicate anything about the GC pressure:
 
 | File                    | Size (bytes) | CsvHelper (MB/s) | Cursively 1* (MB/s) | Cursively 2* (MB/s) | Cursively 3* (MB/s) | Cursively 4* (MB/s) | Cursively 5* (MB/s) |
 |-------------------------|-------------:|-----------------:|--------------------:|--------------------:|--------------------:|--------------------:|--------------------:|
