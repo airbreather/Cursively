@@ -73,8 +73,6 @@ namespace Cursively
 
             public override void Complete(Exception exception = null) { }
 
-            public override void OnWriterCompleted(Action<Exception, object> callback, object state) { }
-
             public override ValueTask<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
             {
                 TryRead(out var result);

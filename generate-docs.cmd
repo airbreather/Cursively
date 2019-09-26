@@ -2,7 +2,7 @@
 REM ===========================================================================
 REM Regenerates the https://airbreather.github.io/Cursively content locally
 REM ===========================================================================
-set DOCFX_PACKAGE_VERSION=2.43.1
+set DOCFX_PACKAGE_VERSION=2.45.1
 pushd %~dp0
 REM incremental / cached builds tweak things about the output, so let's do it
 REM all fresh if we can help it...

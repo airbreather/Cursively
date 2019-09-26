@@ -1,6 +1,6 @@
 pushd %~dp0
 nuget install OpenCover -Version 4.7.922 -OutputDirectory tools
-nuget install ReportGenerator -Version 4.1.4 -OutputDirectory tools
+nuget install ReportGenerator -Version 4.2.20 -OutputDirectory tools
 dotnet build -c Release
 for /F "tokens=* USEBACKQ" %%D in (`where dotnet`) do (
 set DotNetPath=%%D
@@ -16,7 +16,7 @@ tools\OpenCover.4.7.922\tools\OpenCover.Console.exe ^
 
 dotnet clean -c Release
 
-dotnet tools\ReportGenerator.4.1.4\tools\netcoreapp2.1\ReportGenerator.dll ^
+dotnet tools\ReportGenerator.4.2.20\tools\netcoreapp2.1\ReportGenerator.dll ^
     -reports:tools\raw-coverage-results.xml ^
     -targetdir:tools\results
 
