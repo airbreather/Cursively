@@ -52,9 +52,7 @@ namespace Cursively.Inputs
         {
             if (!CsvTokenizer.IsValidDelimiter(delimiter))
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Must not be a carriage return, linefeed, or double-quote.", nameof(delimiter));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             ThrowIfProcessingHasAlreadyStarted();
@@ -94,9 +92,7 @@ namespace Cursively.Inputs
         {
             if (minReadBufferByteCount < 1)
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentOutOfRangeException(nameof(minReadBufferByteCount), minReadBufferByteCount, "Must be greater than zero.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             ThrowIfProcessingHasAlreadyStarted();

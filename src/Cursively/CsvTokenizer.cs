@@ -176,9 +176,7 @@ namespace Cursively
         {
             if (!IsValidDelimiter(delimiter))
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Must not be a carriage return, linefeed, or double-quote.", nameof(delimiter));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             _delimiter = delimiter;

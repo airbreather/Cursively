@@ -32,9 +32,7 @@ namespace Cursively
             csvStream = csvStream ?? Stream.Null;
             if (!csvStream.CanRead)
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             return new CsvSyncStreamInput((byte)',', csvStream, 65536, ArrayPool<byte>.Shared, true);
@@ -72,9 +70,7 @@ namespace Cursively
 
             if (string.IsNullOrWhiteSpace(csvFilePath))
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Cannot be blank", nameof(csvFilePath));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             return new CsvMemoryMappedFileInput((byte)',', csvFilePath, true);

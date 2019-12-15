@@ -35,9 +35,7 @@ namespace Cursively
             csvStream = csvStream ?? Stream.Null;
             if (!csvStream.CanRead)
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Stream does not support reading.", nameof(csvStream));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             return new CsvAsyncStreamInput((byte)',', csvStream, 65536, ArrayPool<byte>.Shared, true);

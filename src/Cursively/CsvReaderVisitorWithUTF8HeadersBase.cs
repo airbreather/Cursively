@@ -185,16 +185,12 @@ namespace Cursively
         {
             if (maxHeaderCount < 1 || maxHeaderCount > MaxMaxHeaderCount)
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentOutOfRangeException(nameof(maxHeaderCount), maxHeaderCount, "Must be greater than zero and not greater than MaxMaxHeaderCount.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             if (maxHeaderLength < 1 || maxHeaderLength > MaxMaxHeaderLength)
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentOutOfRangeException(nameof(maxHeaderLength), maxHeaderLength, "Must be greater than zero and not greater than MaxMaxHeaderLength.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             if (decoderFallback is null)
@@ -245,9 +241,7 @@ namespace Cursively
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void ThrowExceptionWhenHeadersAreStillBeingBuilt() =>
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
             throw new InvalidOperationException("Headers are still being built.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
 
         /// <summary>
         /// Gets the zero-based index of the field that is currently being read.  The value should
@@ -355,9 +349,7 @@ namespace Cursively
             if (_headers.IsDefault)
             {
                 // we will never do this, but a cheeky subclass might.
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new InvalidOperationException("This method is only intended to be called by the base class.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             throw new CursivelyMissingDataFieldsException(_headers.Length, _currentFieldIndex);
@@ -381,9 +373,7 @@ namespace Cursively
             if (_headers.IsDefault)
             {
                 // we will never do this, but a cheeky subclass might.
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new InvalidOperationException("This method is only intended to be called by the base class.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             throw new CursivelyExtraDataFieldsException(_headers.Length);
@@ -458,9 +448,7 @@ namespace Cursively
                 if (_headersBuilder.Count == 0)
                 {
                     // the tokenizer will never do this, but an external caller might.
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                     throw new InvalidOperationException("No fields were present in the header record.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
                 }
 
                 _headersBuilder.Capacity = _headersBuilder.Count;

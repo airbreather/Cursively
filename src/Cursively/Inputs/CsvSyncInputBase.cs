@@ -59,8 +59,6 @@ namespace Cursively.Inputs
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void ThrowProcessingHasAlreadyStartedException() =>
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
             throw new InvalidOperationException("Processing has already been started.");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
     }
 }
