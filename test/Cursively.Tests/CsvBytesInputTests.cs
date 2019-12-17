@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
 using static Cursively.Tests.TestHelpers;
@@ -62,6 +63,11 @@ namespace Cursively.Tests
 
             // act, assert
             RunTest(sut, filePath, true);
+
+            sut = CsvSyncInput.ForMemory(fileData)
+                              .WithIgnoreUTF8ByteOrderMark(true);
+            string[][] s = sut.AsEnumerableFromUTF8().Select(Enumerable.ToArray).ToArray();
+            Assert.NotNull(s);
         }
     }
 }

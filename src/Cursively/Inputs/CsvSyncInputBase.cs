@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 
 namespace Cursively.Inputs
@@ -35,6 +37,30 @@ namespace Cursively.Inputs
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IEnumerable<string>> AsEnumerableFromUTF8()
+        {
+            return AsEnumerableFromUTF8(UTF8FieldDecodingParameters.Default);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public IEnumerable<IEnumerable<string>> AsEnumerableFromUTF8(UTF8FieldDecodingParameters parameters)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            return AsEnumerableFromUTF8Core(parameters);
+        }
+
+        /// <summary>
         /// Implements the inner logic for <see cref="Process"/>.
         /// </summary>
         /// <param name="visitor">
@@ -44,6 +70,42 @@ namespace Cursively.Inputs
         /// The base class will call this method at most once per instance.
         /// </remarks>
         protected abstract void ProcessCore(CsvReaderVisitorBase visitor);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        protected virtual IEnumerable<IEnumerable<string>> AsEnumerableFromUTF8Core(UTF8FieldDecodingParameters parameters)
+        {
+            var th = new Thread(obj =>
+            {
+                var stateMachine = (SyncEnumerableStateMachine)obj;
+                var decoder = new UTF8FieldDecoder(parameters);
+                var innerVisitor = new EnumerableStateMachineVisitor(parameters);
+
+                // our state machine is **very** sensitive to being called incorrectly
+                var visitor = new ValidatingCsvReaderVisitorWrapper(innerVisitor);
+
+                // all exceptions get marshaled to the thread that's running the loop.
+#pragma warning disable CA1031 // Do not catch general exception types
+                try
+                {
+                    Process(visitor);
+                    innerVisitor.StateMachine.EndOfFile();
+                }
+                catch (Exception ex)
+                {
+                    innerVisitor.StateMachine.Error(ExceptionDispatchInfo.Capture(ex));
+                }
+#pragma warning restore CA1031 // Do not catch general exception types
+            });
+
+            th.IsBackground = true;
+            var result = new SyncEnumerableStateMachine();
+            th.Start(result);
+            return result;
+        }
 
         /// <summary>
         /// Throws if <see cref="Process"/> has already been called for this instance.
@@ -60,5 +122,43 @@ namespace Cursively.Inputs
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void ThrowProcessingHasAlreadyStartedException() =>
             throw new InvalidOperationException("Processing has already been started.");
+
+        private sealed class EnumerableStateMachineVisitor : CsvReaderVisitorBase
+        {
+            private readonly UTF8FieldDecoder _decoder;
+
+            public EnumerableStateMachineVisitor(UTF8FieldDecodingParameters parameters)
+            {
+                _decoder = new UTF8FieldDecoder(parameters);
+            }
+
+            public SyncEnumerableStateMachine StateMachine { get; } = new SyncEnumerableStateMachine();
+
+            public override void VisitPartialFieldContents(ReadOnlySpan<byte> chunk)
+            {
+                if (!_decoder.TryAppendPartial(chunk))
+                {
+                    StateMachine.Error(ExceptionDispatchInfo.Capture(new CursivelyFieldIsTooLongException(_decoder.MaxFieldLength)));
+                }
+            }
+
+            public override void VisitEndOfField(ReadOnlySpan<byte> chunk)
+            {
+                if (_decoder.TryFinish(chunk, out var chars))
+                {
+                    StateMachine.Receive(chars.ToString());
+                    StateMachine.InputConsumedWaiter.WaitOne();
+                }
+                else
+                {
+                    StateMachine.Error(ExceptionDispatchInfo.Capture(new CursivelyFieldIsTooLongException(_decoder.MaxFieldLength)));
+                }
+            }
+
+            public override void VisitEndOfRecord()
+            {
+                StateMachine.EndOfRecord();
+            }
+        }
     }
 }

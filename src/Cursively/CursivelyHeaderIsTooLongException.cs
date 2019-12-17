@@ -10,7 +10,7 @@ namespace Cursively
     /// </summary>
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
-    public sealed class CursivelyHeaderIsTooLongException : CursivelyDataStreamException
+    public sealed class CursivelyHeaderIsTooLongException : CursivelyFieldIsTooLongException
     {
         internal CursivelyHeaderIsTooLongException(int maxLength)
             : base($"CSV stream contains a header that is longer than the configured max length of {maxLength}.")
