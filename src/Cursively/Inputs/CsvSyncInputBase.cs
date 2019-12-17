@@ -80,9 +80,7 @@ namespace Cursively.Inputs
         {
             var th = new Thread(obj =>
             {
-                var stateMachine = (SyncEnumerableStateMachine)obj;
-                var decoder = new UTF8FieldDecoder(parameters);
-                var innerVisitor = new EnumerableStateMachineVisitor(parameters);
+                var innerVisitor = (EnumerableStateMachineVisitor)obj;
 
                 // our state machine is **very** sensitive to being called incorrectly
                 var visitor = new ValidatingCsvReaderVisitorWrapper(innerVisitor);
@@ -102,9 +100,9 @@ namespace Cursively.Inputs
             });
 
             th.IsBackground = true;
-            var result = new SyncEnumerableStateMachine();
-            th.Start(result);
-            return result;
+            var vis = new EnumerableStateMachineVisitor(parameters);
+            th.Start(vis);
+            return vis.StateMachine;
         }
 
         /// <summary>
