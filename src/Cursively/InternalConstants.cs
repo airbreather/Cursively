@@ -11,5 +11,7 @@ namespace Cursively
         public const int DefaultMaxFieldLengthInChars = 100;
 
         public static readonly DecoderFallback DefaultDecoderFallback = new CursivelyDecoderExceptionFallback();
+
+        public static readonly DecoderFallback ReplacementDecoderFallback = Encoding.UTF8.DecoderFallback;
     }
 }

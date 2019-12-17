@@ -14,6 +14,11 @@ namespace Cursively
         /// </summary>
         public static readonly UTF8FieldDecodingParameters Default = new UTF8FieldDecodingParameters(InternalConstants.DefaultMaxFieldLengthInChars, InternalConstants.DefaultDecoderFallback);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly UTF8FieldDecodingParameters MostPermissive = new UTF8FieldDecodingParameters(InternalConstants.MaxArrayLengthOnMostRuntimes, InternalConstants.ReplacementDecoderFallback);
+
         private static readonly UTF8Encoding EncodingToUse = new UTF8Encoding(false, false);
 
         private UTF8FieldDecodingParameters(int maxFieldLength, DecoderFallback decoderFallback)
