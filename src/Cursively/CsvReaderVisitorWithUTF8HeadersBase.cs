@@ -48,7 +48,7 @@ namespace Cursively
     /// </item>
     /// <item>
     /// <description>
-    /// <see cref="CursivelyMissingDataFieldsException"/>, by default, if a data record contains more
+    /// <see cref="CursivelyMissingDataFieldsException"/>, by default, if a data record contains fewer
     /// fields than the header record.
     /// </description>
     /// </item>
