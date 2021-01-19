@@ -47,11 +47,12 @@ namespace Cursively.Tests
         public override void Close() => _inner.Close();
         public override void CopyTo(Stream destination, int bufferSize) => _inner.CopyTo(destination, bufferSize);
         public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken) => _inner.CopyToAsync(destination, bufferSize, cancellationToken);
+        public override ValueTask DisposeAsync() => _inner.DisposeAsync();
         public override int EndRead(IAsyncResult asyncResult) => _inner.EndRead(asyncResult);
         public override void EndWrite(IAsyncResult asyncResult) => _inner.EndWrite(asyncResult);
         public override void Flush() => _inner.Flush();
         public override Task FlushAsync(CancellationToken cancellationToken) => _inner.FlushAsync(cancellationToken);
-        public override object InitializeLifetimeService() => _inner.InitializeLifetimeService();
+        [Obsolete] public override object InitializeLifetimeService() => _inner.InitializeLifetimeService();
         public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
         public override int Read(Span<byte> buffer) => _inner.Read(buffer);
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) => _inner.ReadAsync(buffer, offset, count, cancellationToken);

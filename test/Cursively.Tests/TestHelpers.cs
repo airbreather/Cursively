@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -66,7 +67,7 @@ namespace Cursively.Tests
         {
             string txt = new UTF8Encoding(false, false).GetString(csvData);
             using (var stringReader = new StringReader(txt))
-            using (var csvReader = new CsvReader(stringReader, new Configuration { BadDataFound = null, Delimiter = delimiter }))
+            using (var csvReader = new CsvReader(stringReader, new CsvConfiguration(CultureInfo.InvariantCulture) { BadDataFound = null, Delimiter = delimiter }))
             {
                 while (csvReader.Read())
                 {

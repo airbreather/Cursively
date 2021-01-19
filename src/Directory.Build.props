@@ -9,6 +9,8 @@
     <Company>airbreather</Company>
     <Copyright>Copyright © 2019 - $([System.DateTime]::UtcNow.Year) airbreather</Copyright>
 
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -22,11 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(LGTM)' != 'true' ">
-    <PackageReference Include="GitVersionTask" Version="5.1.2" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All" />
+    <PackageReference Include="GitVersion.MSBuild" Version="5.6.3" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

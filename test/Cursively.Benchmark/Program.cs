@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.CompilerServices;
@@ -17,6 +18,11 @@ namespace Cursively.Benchmark
     [MemoryDiagnoser]
     public class Program
     {
+        private static readonly CsvConfiguration CsvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            BadDataFound = null,
+        };
+
         public static CsvFile[] CsvFiles => GetCsvFiles();
 
         [Benchmark(Baseline = true)]
@@ -80,7 +86,7 @@ namespace Cursively.Benchmark
         {
             using (var ms = new MemoryStream(csvFile.FileData, false))
             using (var tr = new StreamReader(ms, new UTF8Encoding(false, true), false))
-            using (var rd = new CsvReader(tr, new Configuration { BadDataFound = null }))
+            using (var rd = new CsvReader(tr, CsvConfiguration))
             {
                 long cnt = 0;
                 while (rd.Read())
