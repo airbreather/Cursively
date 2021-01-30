@@ -1,5 +1,5 @@
 # Cursively Release Notes
-## [1.3.0] (https://github.com/airbreather/Cursively/milestone/5)
+## [1.3.0](https://github.com/airbreather/Cursively/milestone/5)
 - Fixed a couple of issues where streams that do not conform to the RFC 4180 rules for quoted fields would be improperly marked as such when the buffers are cut between reads ([#24](https://github.com/airbreather/Cursively/issues/24)).
 
 ## [1.2.0](https://github.com/airbreather/Cursively/milestone/4)
