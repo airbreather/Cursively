@@ -10,6 +10,9 @@
     <Copyright>Copyright © 2019 - $([System.DateTime]::UtcNow.Year) airbreather</Copyright>
 
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -23,8 +26,16 @@
     <GenerateGitVersionInformation>false</GenerateGitVersionInformation>
   </PropertyGroup>
 
+  <!--
+  Point-in-time: the latest version of .NET SDK, 5.0.102, does not include the fix for
+  dotnet/roslyn-analyzers#3685, which affects this project.  Use the NuGet package for now.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
   <ItemGroup Condition=" '$(LGTM)' != 'true' ">
-    <PackageReference Include="GitVersion.MSBuild" Version="5.6.3" PrivateAssets="All" />
+    <PackageReference Include="GitVersion.MSBuild" Version="5.6.4" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

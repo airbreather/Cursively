@@ -21,6 +21,7 @@ namespace Cursively.Benchmark
         private static readonly CsvConfiguration CsvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             BadDataFound = null,
+            LeaveOpen = true,
         };
 
         public static CsvFile[] CsvFiles => GetCsvFiles();
@@ -84,18 +85,16 @@ namespace Cursively.Benchmark
         [ArgumentsSource(nameof(CsvFiles))]
         public long CountRowsUsingCsvHelper(CsvFile csvFile)
         {
-            using (var ms = new MemoryStream(csvFile.FileData, false))
-            using (var tr = new StreamReader(ms, new UTF8Encoding(false, true), false))
-            using (var rd = new CsvReader(tr, CsvConfiguration))
+            using var ms = new MemoryStream(csvFile.FileData, false);
+            using var tr = new StreamReader(ms, new UTF8Encoding(false, true), false);
+            using var rd = new CsvParser(tr, CsvConfiguration);
+            long cnt = 0;
+            while (rd.Read())
             {
-                long cnt = 0;
-                while (rd.Read())
-                {
-                    ++cnt;
-                }
-
-                return cnt;
+                ++cnt;
             }
+
+            return cnt;
         }
 
         private static async Task<int> Main()

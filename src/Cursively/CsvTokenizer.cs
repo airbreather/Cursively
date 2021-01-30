@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Cursively
@@ -233,7 +232,6 @@ namespace Cursively
         /// <remarks>
         /// If <paramref name="chunk"/> is empty, this method will do nothing.
         /// </remarks>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")] // Microsoft.CodeAnalysis.FxCopAnalyzers 2.9.3 has a false positive.  Remove when fixed
         public void ProcessNextChunk(ReadOnlySpan<byte> chunk, CsvReaderVisitorBase visitor)
         {
             // "null object" pattern.
@@ -300,7 +298,7 @@ namespace Cursively
                 visitor.VisitPartialFieldContents(chunk);
                 break;
 
-                nextLoop:;
+            nextLoop:;
             }
         }
 
@@ -319,7 +317,6 @@ namespace Cursively
         /// the last time that this method was called), then this method will do nothing.
         /// </para>
         /// </remarks>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")] // Microsoft.CodeAnalysis.FxCopAnalyzers 2.9.3 has a false positive.  Remove when fixed
         public void ProcessEndOfStream(CsvReaderVisitorBase visitor)
         {
             // "null object" pattern.

@@ -9,7 +9,7 @@ namespace Cursively
     /// actual contents of a CSV stream.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Exception is not intended to be created externally.")]
     public abstract class CursivelyDataStreamException : Exception
     {
         private protected CursivelyDataStreamException(string message)
@@ -22,7 +22,7 @@ namespace Cursively
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2229:ImplementSerializationConstructors")]
+        [SuppressMessage("Usage", "CA2229:Implement serialization constructors", Justification = "Exception is not intended to be created externally.")]
         private protected CursivelyDataStreamException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

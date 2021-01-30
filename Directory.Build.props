@@ -6,20 +6,12 @@
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentation>true</GenerateDocumentation>
-
-    <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
-
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(APPVEYOR)' == 'True' ">
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
-  </ItemGroup>
 
   <ItemGroup Condition=" '$(LGTM)' != 'true' ">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />

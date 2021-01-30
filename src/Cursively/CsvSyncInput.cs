@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Cursively.Inputs;
@@ -26,7 +25,6 @@ namespace Cursively
         /// Thrown when <paramref name="csvStream"/> is non-<see langword="null"/> and its
         /// <see cref="Stream.CanRead"/> is <see langword="false"/>.
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")] // Microsoft.CodeAnalysis.FxCopAnalyzers 2.9.3 has a false positive.  Remove when fixed
         public static CsvSyncStreamInput ForStream(Stream csvStream)
         {
             csvStream = csvStream ?? Stream.Null;

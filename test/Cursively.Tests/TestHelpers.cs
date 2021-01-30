@@ -66,13 +66,11 @@ namespace Cursively.Tests
         public static IEnumerable<string[]> TokenizeCsvFileUsingCsvHelper(byte[] csvData, string delimiter)
         {
             string txt = new UTF8Encoding(false, false).GetString(csvData);
-            using (var stringReader = new StringReader(txt))
-            using (var csvReader = new CsvReader(stringReader, new CsvConfiguration(CultureInfo.InvariantCulture) { BadDataFound = null, Delimiter = delimiter }))
+            using var stringReader = new StringReader(txt);
+            using var csvParser = new CsvParser(stringReader, new CsvConfiguration(CultureInfo.InvariantCulture) { BadDataFound = null, Delimiter = delimiter });
+            while (csvParser.Read())
             {
-                while (csvReader.Read())
-                {
-                    yield return csvReader.Context.Record;
-                }
+                yield return csvParser.Record;
             }
         }
 

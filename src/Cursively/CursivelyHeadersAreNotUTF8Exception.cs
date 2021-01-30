@@ -10,7 +10,7 @@ namespace Cursively
     /// record contains invalid UTF-8 bytes.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Exception is not intended to be created externally.")]
     public sealed class CursivelyHeadersAreNotUTF8Exception : CursivelyDataStreamException
     {
         internal CursivelyHeadersAreNotUTF8Exception(DecoderFallbackException innerException)

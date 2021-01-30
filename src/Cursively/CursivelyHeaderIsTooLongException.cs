@@ -9,7 +9,7 @@ namespace Cursively
     /// exceeds the configured maximum.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Exception is not intended to be created externally.")]
     public sealed class CursivelyHeaderIsTooLongException : CursivelyDataStreamException
     {
         internal CursivelyHeaderIsTooLongException(int maxLength)

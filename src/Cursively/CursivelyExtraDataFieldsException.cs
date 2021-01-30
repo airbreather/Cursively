@@ -9,7 +9,7 @@ namespace Cursively
     /// contains more fields than the header record.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "Exception is not intended to be created externally.")]
     public sealed class CursivelyExtraDataFieldsException : CursivelyDataStreamException
     {
         internal CursivelyExtraDataFieldsException(int headerFieldCount)

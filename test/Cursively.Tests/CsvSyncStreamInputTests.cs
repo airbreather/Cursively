@@ -16,11 +16,9 @@ namespace Cursively.Tests
         public void ShouldFailForUnreadableStream()
         {
             // arrange
-            using (var stream = new TweakableStream(Stream.Null))
-            {
-                stream.SetCanRead(false);
-                Assert.Throws<ArgumentException>("csvStream", () => CsvSyncInput.ForStream(stream));
-            }
+            using var stream = new TweakableStream(Stream.Null);
+            stream.SetCanRead(false);
+            Assert.Throws<ArgumentException>("csvStream", () => CsvSyncInput.ForStream(stream));
         }
 
         [Fact]
@@ -55,15 +53,13 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                var sut = CsvSyncInput.ForStream(stream)
-                                      .WithMinReadBufferByteCount(chunkLength)
-                                      .WithIgnoreUTF8ByteOrderMark(false);
+            using var stream = File.OpenRead(filePath);
+            var sut = CsvSyncInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithIgnoreUTF8ByteOrderMark(false);
 
-                // act, assert
-                RunTest(sut, filePath, false);
-            }
+            // act, assert
+            RunTest(sut, filePath, false);
         }
 
         [Theory]
@@ -72,15 +68,13 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                var sut = CsvSyncInput.ForStream(stream)
-                                      .WithMinReadBufferByteCount(chunkLength)
-                                      .WithIgnoreUTF8ByteOrderMark(true);
+            using var stream = File.OpenRead(filePath);
+            var sut = CsvSyncInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithIgnoreUTF8ByteOrderMark(true);
 
-                // act, assert
-                RunTest(sut, filePath, true);
-            }
+            // act, assert
+            RunTest(sut, filePath, true);
         }
 
         [Theory]
@@ -89,16 +83,14 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                var sut = CsvSyncInput.ForStream(stream)
-                                      .WithMinReadBufferByteCount(chunkLength)
-                                      .WithReadBufferPool(null)
-                                      .WithIgnoreUTF8ByteOrderMark(true);
+            using var stream = File.OpenRead(filePath);
+            var sut = CsvSyncInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithReadBufferPool(null)
+                                  .WithIgnoreUTF8ByteOrderMark(true);
 
-                // act, assert
-                RunTest(sut, filePath, true);
-            }
+            // act, assert
+            RunTest(sut, filePath, true);
         }
 
         [Theory]
@@ -107,16 +99,14 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = new TweakableStream(File.OpenRead(filePath)))
-            {
-                stream.SetCanSeek(false);
-                var sut = CsvSyncInput.ForStream(stream)
-                                      .WithMinReadBufferByteCount(chunkLength)
-                                      .WithIgnoreUTF8ByteOrderMark(false);
+            using var stream = new TweakableStream(File.OpenRead(filePath));
+            stream.SetCanSeek(false);
+            var sut = CsvSyncInput.ForStream(stream)
+                                  .WithMinReadBufferByteCount(chunkLength)
+                                  .WithIgnoreUTF8ByteOrderMark(false);
 
-                // act, assert
-                RunTest(sut, filePath, false);
-            }
+            // act, assert
+            RunTest(sut, filePath, false);
         }
     }
 }

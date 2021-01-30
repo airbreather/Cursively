@@ -21,6 +21,19 @@
     <PackageReference Include="System.IO.Pipelines" Version="4.5.3" />
     <PackageReference Include="System.Memory" Version="4.5.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3" />
+
+    <!--
+    Point-in-time: the latest version of .NET SDK, 5.0.102, does not include the fix for
+    dotnet/roslyn-analyzers#3685, which affects this project.  Use the NuGet package for now.
+    -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- LiteralAssemblyAttribute is used by a custom target in Directory.Build.targets -->
+    <LiteralAssemblyAttribute Include="System.CLSCompliantAttribute">
+      <_Parameters>true</_Parameters>
+    </LiteralAssemblyAttribute>
   </ItemGroup>
 
 </Project>

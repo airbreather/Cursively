@@ -18,11 +18,9 @@ namespace Cursively.Tests
         [Fact]
         public void ShouldFailForUnreadableStream()
         {
-            using (var stream = new TweakableStream(Stream.Null))
-            {
-                stream.SetCanRead(false);
-                Assert.Throws<ArgumentException>("csvStream", () => CsvAsyncInput.ForStream(stream));
-            }
+            using var stream = new TweakableStream(Stream.Null);
+            stream.SetCanRead(false);
+            Assert.Throws<ArgumentException>("csvStream", () => CsvAsyncInput.ForStream(stream));
         }
 
         [Fact]
@@ -57,18 +55,16 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                // act, assert
-                await RunTestAsync(CreateSut, filePath, false).ConfigureAwait(true);
+            using var stream = File.OpenRead(filePath);
+            // act, assert
+            await RunTestAsync(CreateSut, filePath, false).ConfigureAwait(true);
 
-                CsvAsyncInputBase CreateSut()
-                {
-                    stream.Position = 0;
-                    return CsvAsyncInput.ForStream(stream)
-                                        .WithMinReadBufferByteCount(chunkLength)
-                                        .WithIgnoreUTF8ByteOrderMark(false);
-                }
+            CsvAsyncInputBase CreateSut()
+            {
+                stream.Position = 0;
+                return CsvAsyncInput.ForStream(stream)
+                                    .WithMinReadBufferByteCount(chunkLength)
+                                    .WithIgnoreUTF8ByteOrderMark(false);
             }
         }
 
@@ -78,18 +74,16 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                // act, assert
-                await RunTestAsync(CreateSut, filePath, true).ConfigureAwait(true);
+            using var stream = File.OpenRead(filePath);
+            // act, assert
+            await RunTestAsync(CreateSut, filePath, true).ConfigureAwait(true);
 
-                CsvAsyncInputBase CreateSut()
-                {
-                    stream.Position = 0;
-                    return CsvAsyncInput.ForStream(stream)
-                                        .WithMinReadBufferByteCount(chunkLength)
-                                        .WithIgnoreUTF8ByteOrderMark(true);
-                }
+            CsvAsyncInputBase CreateSut()
+            {
+                stream.Position = 0;
+                return CsvAsyncInput.ForStream(stream)
+                                    .WithMinReadBufferByteCount(chunkLength)
+                                    .WithIgnoreUTF8ByteOrderMark(true);
             }
         }
 
@@ -99,19 +93,17 @@ namespace Cursively.Tests
         {
             // arrange
             filePath = Path.Combine(TestCsvFilesFolderPath, filePath);
-            using (var stream = File.OpenRead(filePath))
-            {
-                // act, assert
-                await RunTestAsync(CreateSut, filePath, true).ConfigureAwait(true);
+            using var stream = File.OpenRead(filePath);
+            // act, assert
+            await RunTestAsync(CreateSut, filePath, true).ConfigureAwait(true);
 
-                CsvAsyncInputBase CreateSut()
-                {
-                    stream.Position = 0;
-                    return CsvAsyncInput.ForStream(stream)
-                                        .WithMinReadBufferByteCount(chunkLength)
-                                        .WithReadBufferPool(null)
-                                        .WithIgnoreUTF8ByteOrderMark(true);
-                }
+            CsvAsyncInputBase CreateSut()
+            {
+                stream.Position = 0;
+                return CsvAsyncInput.ForStream(stream)
+                                    .WithMinReadBufferByteCount(chunkLength)
+                                    .WithReadBufferPool(null)
+                                    .WithIgnoreUTF8ByteOrderMark(true);
             }
         }
     }
