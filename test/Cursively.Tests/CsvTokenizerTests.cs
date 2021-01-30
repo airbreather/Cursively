@@ -17,6 +17,8 @@ namespace Cursively.Tests
 
         public static IEnumerable<object[]> TestValidHeaderedCsvFilesWithChunkLengthsAndDelimiters => GetTestCsvFilesWithChunkLengthsAndDelimiters("with-headers", "valid");
 
+        public static IEnumerable<object[]> AllPossibleChunkLengthsForNonstandardTestFile => GetAllPossibleChunkLengthsForFile("nonstandard.csv");
+
         [Theory]
         [InlineData((byte)0x0A)]
         [InlineData((byte)0x0D)]
@@ -86,15 +88,26 @@ namespace Cursively.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void NonstandardQuotedFieldsShouldNotify()
+        [Theory]
+        [MemberData(nameof(AllPossibleChunkLengthsForNonstandardTestFile))]
+        [Trait("Regression", "#24")]
+        public void NonstandardQuotedFieldsShouldNotify(int chunkLength)
         {
             // arrange
             string csvFilePath = Path.Combine(TestCsvFilesFolderPath, "nonstandard.csv");
             var visitor = new NonstandardFieldVisitor(checked((int)new FileInfo(csvFilePath).Length));
 
             // act
-            CsvSyncInput.ForMemoryMappedFile(csvFilePath).WithIgnoreUTF8ByteOrderMark(false).Process(visitor);
+            ReadOnlySpan<byte> data = File.ReadAllBytes(csvFilePath);
+            var tokenizer = new CsvTokenizer();
+            while (!data.IsEmpty)
+            {
+                var nextChunk = data.Slice(0, Math.Min(chunkLength, data.Length));
+                data = data.Slice(nextChunk.Length);
+                tokenizer.ProcessNextChunk(nextChunk, visitor);
+            }
+
+            tokenizer.ProcessEndOfStream(visitor);
 
             // assert
             string[] expectedContentsBeforeNonstandardFields =
@@ -102,9 +115,7 @@ namespace Cursively.Tests
                 "hello ",
                 "hello ",
                 "good\"",
-                @"100% coverage, with the version of Roslyn shipped with the .NET Core 3.0 Preview 4 SDK version, is impossible...
-...unless I do something like making the byte immediately after this quoted field something with an ASCII value less than 13 that's not 10.
-Tab ('\t') has an ASCII value of 9, which is perfect for this.  so here's your tab:	",
+                "100% coverage demands <13, != 10; this is 9:	",
             };
             Assert.Equal(expectedContentsBeforeNonstandardFields, visitor.ContentsBeforeNonstandardFields);
         }

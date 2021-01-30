@@ -205,6 +205,10 @@ namespace Cursively.Tests
             from delimiter in TestDelimiters
             select new object[] { relativePath, chunkLength, delimiter };
 
+        public static IEnumerable<object[]> GetAllPossibleChunkLengthsForFile(params string[] pathParts) =>
+            from i in Enumerable.Range(1, checked((int)new FileInfo(Path.Combine(TestCsvFilesFolderPath, Path.Combine(pathParts))).Length))
+            select new object[] { i };
+
         private sealed class HeaderedStringBufferingVisitor : CsvReaderVisitorWithUTF8HeadersBase
         {
             private static readonly UTF8Encoding TheEncoding = new UTF8Encoding(false, false);
